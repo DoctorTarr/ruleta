@@ -545,7 +545,7 @@ label_6:;
     private void InitializeComponent()
     {
       this.components = (IContainer) new Container();
-      ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof (FrmPanel));
+      var resources = new ComponentResourceManager(typeof (FrmPanel));
       this.btnPuertoOnOff = new Button();
       this.pnlPanel = new Panel();
       this.btnNumero = new Button();
@@ -577,6 +577,9 @@ label_6:;
       this.pnlProtocoloTest.SuspendLayout();
       this.mnuSystemTray.SuspendLayout();
       this.SuspendLayout();
+      // 
+      // btnPuertoOnOff
+      // 
       this.btnPuertoOnOff.FlatStyle = FlatStyle.Flat;
       this.btnPuertoOnOff.Location = new Point(12, 32);
       this.btnPuertoOnOff.Name = "btnPuertoOnOff";
@@ -585,6 +588,9 @@ label_6:;
       this.btnPuertoOnOff.Text = "Abrir Puerto COM";
       this.btnPuertoOnOff.UseVisualStyleBackColor = true;
       this.btnPuertoOnOff.Click += new EventHandler(this.btnPuertoOnOff_Click);
+      // 
+      // pnlPanel
+      // 
       this.pnlPanel.Controls.Add((Control) this.btnIniciarDemo);
       this.pnlPanel.Controls.Add((Control) this.btnNumero);
       this.pnlPanel.Controls.Add((Control) this.btnEstadoX);
@@ -608,6 +614,9 @@ label_6:;
       this.pnlPanel.Name = "pnlPanel";
       this.pnlPanel.Size = new Size(453, 584);
       this.pnlPanel.TabIndex = 1;
+      // 
+      // btnNumero
+      // 
       this.btnNumero.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnNumero.BackColor = Color.Black;
       this.btnNumero.FlatStyle = FlatStyle.Flat;
@@ -620,6 +629,9 @@ label_6:;
       this.btnNumero.UseVisualStyleBackColor = false;
       this.btnNumero.Visible = false;
       this.btnNumero.Click += new EventHandler(this.btnNumero_Click);
+      // 
+      // btnEstadoX
+      // 
       this.btnEstadoX.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnEstadoX.BackColor = Color.Black;
       this.btnEstadoX.FlatStyle = FlatStyle.Flat;
@@ -632,6 +644,9 @@ label_6:;
       this.btnEstadoX.UseVisualStyleBackColor = false;
       this.btnEstadoX.Visible = false;
       this.btnEstadoX.Click += new EventHandler(this.btnEstadoX_Click);
+      // 
+      // btnError
+      // 
       this.btnError.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnError.BackColor = Color.Black;
       this.btnError.FlatStyle = FlatStyle.Flat;
@@ -644,6 +659,9 @@ label_6:;
       this.btnError.UseVisualStyleBackColor = false;
       this.btnError.Visible = false;
       this.btnError.Click += new EventHandler(this.btnError_Click);
+      // 
+      // btnEstado5
+      // 
       this.btnEstado5.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnEstado5.BackColor = Color.Black;
       this.btnEstado5.FlatStyle = FlatStyle.Flat;
@@ -656,6 +674,9 @@ label_6:;
       this.btnEstado5.UseVisualStyleBackColor = false;
       this.btnEstado5.Visible = false;
       this.btnEstado5.Click += new EventHandler(this.btnEstado5_Click);
+      // 
+      // btnEstado4
+      // 
       this.btnEstado4.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnEstado4.BackColor = Color.Black;
       this.btnEstado4.FlatStyle = FlatStyle.Flat;
@@ -668,21 +689,30 @@ label_6:;
       this.btnEstado4.UseVisualStyleBackColor = false;
       this.btnEstado4.Visible = false;
       this.btnEstado4.Click += new EventHandler(this.btnEstado4_Click);
+      // 
+      // pictureBox1
+      // 
       this.pictureBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-      this.pictureBox1.BackgroundImage = (Image) componentResourceManager.GetObject("pictureBox1.BackgroundImage");
+      this.pictureBox1.BackgroundImage = (Image) resources.GetObject("pictureBox1.BackgroundImage");
       this.pictureBox1.BackgroundImageLayout = ImageLayout.Stretch;
       this.pictureBox1.Location = new Point(348, 530);
       this.pictureBox1.Name = "pictureBox1";
       this.pictureBox1.Size = new Size(87, 51);
       this.pictureBox1.TabIndex = 15;
       this.pictureBox1.TabStop = false;
+      // 
+      // pnlNapsaPie
+      // 
       this.pnlNapsaPie.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-      this.pnlNapsaPie.BackgroundImage = (Image) componentResourceManager.GetObject("pnlNapsaPie.BackgroundImage");
+      this.pnlNapsaPie.BackgroundImage = (Image) resources.GetObject("pnlNapsaPie.BackgroundImage");
       this.pnlNapsaPie.BackgroundImageLayout = ImageLayout.Stretch;
       this.pnlNapsaPie.Location = new Point(12, 530);
       this.pnlNapsaPie.Name = "pnlNapsaPie";
       this.pnlNapsaPie.Size = new Size(423, 51);
       this.pnlNapsaPie.TabIndex = 16;
+      // 
+      // label3
+      // 
       this.label3.AutoSize = true;
       this.label3.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Bold, GraphicsUnit.Point, (byte) 0);
       this.label3.Location = new Point(194, 65);
@@ -690,6 +720,9 @@ label_6:;
       this.label3.Size = new Size(104, 13);
       this.label3.TabIndex = 13;
       this.label3.Text = "Parseo Protocolo";
+      // 
+      // lblLine
+      // 
       this.lblLine.AutoSize = true;
       this.lblLine.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Bold, GraphicsUnit.Point, (byte) 0);
       this.lblLine.Location = new Point(9, 65);
@@ -697,6 +730,9 @@ label_6:;
       this.lblLine.Size = new Size(89, 13);
       this.lblLine.TabIndex = 12;
       this.lblLine.Text = "Línea recibida";
+      // 
+      // btnSimular
+      // 
       this.btnSimular.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
       this.btnSimular.FlatStyle = FlatStyle.Flat;
       this.btnSimular.Location = new Point(397, 450);
@@ -706,6 +742,9 @@ label_6:;
       this.btnSimular.Text = "Sim";
       this.btnSimular.UseVisualStyleBackColor = true;
       this.btnSimular.Click += new EventHandler(this.btnSimular_Click);
+      // 
+      // lvwMensajes
+      // 
       this.lvwMensajes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
       this.lvwMensajes.BackColor = Color.LightGray;
       this.lvwMensajes.Location = new Point(12, 81);
@@ -715,6 +754,9 @@ label_6:;
       this.lvwMensajes.UseCompatibleStateImageBehavior = false;
       this.lvwMensajes.View = View.Details;
       this.lvwMensajes.DoubleClick += new EventHandler(this.lvwMensajes_DoubleClick);
+      // 
+      // lblEstadoCOM
+      // 
       this.lblEstadoCOM.AutoSize = true;
       this.lblEstadoCOM.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Bold, GraphicsUnit.Point, (byte) 0);
       this.lblEstadoCOM.Location = new Point(9, 9);
@@ -722,18 +764,27 @@ label_6:;
       this.lblEstadoCOM.Size = new Size(123, 13);
       this.lblEstadoCOM.TabIndex = 7;
       this.lblEstadoCOM.Text = "Puerto COM Cerrado";
+      // 
+      // pnlProtocoloTest
+      // 
       this.pnlProtocoloTest.Controls.Add((Control) this.txtCadenaOriginal);
       this.pnlProtocoloTest.Controls.Add((Control) this.btnProbarCadena);
       this.pnlProtocoloTest.Location = new Point(222, 3);
       this.pnlProtocoloTest.Name = "pnlProtocoloTest";
       this.pnlProtocoloTest.Size = new Size(217, 57);
       this.pnlProtocoloTest.TabIndex = 4;
+      // 
+      // txtCadenaOriginal
+      // 
       this.txtCadenaOriginal.BorderStyle = BorderStyle.FixedSingle;
       this.txtCadenaOriginal.Location = new Point(3, 3);
       this.txtCadenaOriginal.Name = "txtCadenaOriginal";
       this.txtCadenaOriginal.Size = new Size(208, 20);
       this.txtCadenaOriginal.TabIndex = 4;
       this.txtCadenaOriginal.KeyPress += new KeyPressEventHandler(this.txtCadenaOriginal_KeyPress);
+      // 
+      // btnProbarCadena
+      // 
       this.btnProbarCadena.FlatStyle = FlatStyle.Flat;
       this.btnProbarCadena.Location = new Point(55, 29);
       this.btnProbarCadena.Name = "btnProbarCadena";
@@ -742,6 +793,9 @@ label_6:;
       this.btnProbarCadena.Text = "Intentar Parsear Cadena";
       this.btnProbarCadena.UseVisualStyleBackColor = true;
       this.btnProbarCadena.Click += new EventHandler(this.btnProbarCadena_Click);
+      // 
+      // txtProtocolo
+      // 
       this.txtProtocolo.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
       this.txtProtocolo.BorderStyle = BorderStyle.FixedSingle;
       this.txtProtocolo.Location = new Point(197, 81);
@@ -749,6 +803,9 @@ label_6:;
       this.txtProtocolo.Name = "txtProtocolo";
       this.txtProtocolo.Size = new Size(242, 363);
       this.txtProtocolo.TabIndex = 6;
+      // 
+      // lblTips
+      // 
       this.lblTips.AutoSize = true;
       this.lblTips.Location = new Point(10, 488);
       this.lblTips.Name = "lblTips";
@@ -756,15 +813,24 @@ label_6:;
       this.lblTips.TabIndex = 14;
       this.lblTips.Text = "N | S | Nro | Nro | Estado | Velocidad | Velocidad | SentidoGiro | Error | CR(13)\r\nN | N | Nro | Nro | | | | | CheckSum | CR(13)";
       this.lblTips.Visible = false;
+      // 
+      // tmrSimulacro
+      // 
       this.tmrSimulacro.Interval = 500;
       this.tmrSimulacro.Tick += new EventHandler(this.tmrSimulacro_Tick);
+      // 
+      // notifyIcon1
+      // 
       this.notifyIcon1.BalloonTipText = "Recolector de datos.";
       this.notifyIcon1.BalloonTipTitle = "NAPSA";
       this.notifyIcon1.ContextMenuStrip = this.mnuSystemTray;
-      this.notifyIcon1.Icon = (Icon) componentResourceManager.GetObject("notifyIcon1.Icon");
+      this.notifyIcon1.Icon = (Icon) resources.GetObject("notifyIcon1.Icon");
       this.notifyIcon1.Text = "Recolector de datos NAPSA";
       this.notifyIcon1.Visible = true;
       this.notifyIcon1.MouseDoubleClick += new MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+      // 
+      // mnuSystemTray
+      // 
       this.mnuSystemTray.BackColor = Color.FromArgb(25, 23, 26);
       this.mnuSystemTray.Items.AddRange(new ToolStripItem[1]
       {
@@ -772,12 +838,17 @@ label_6:;
       });
       this.mnuSystemTray.Name = "mnuSystemTray";
       this.mnuSystemTray.Size = new Size(117, 26);
+      // 
+      // cerrarToolStripMenuItem
+      // 
       this.cerrarToolStripMenuItem.ForeColor = Color.White;
       this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
       this.cerrarToolStripMenuItem.Size = new Size(116, 22);
       this.cerrarToolStripMenuItem.Text = "Cerrar";
       this.cerrarToolStripMenuItem.Click += new EventHandler(this.cerrarToolStripMenuItem_Click);
-      this.btnIniciarDemo.FlatStyle = FlatStyle.Flat;
+      // 
+      // btnIniciarDemo
+      // 
       this.btnIniciarDemo.Location = new Point(94, 32);
       this.btnIniciarDemo.Name = "btnIniciarDemo";
       this.btnIniciarDemo.Size = new Size(97, 23);
@@ -785,8 +856,14 @@ label_6:;
       this.btnIniciarDemo.Text = "Iniciar Demo";
       this.btnIniciarDemo.UseVisualStyleBackColor = true;
       this.btnIniciarDemo.Click += new EventHandler(this.btnIniciarDemo_Click);
+      // 
+      // tmrDemo
+      // 
       this.tmrDemo.Interval = 500;
       this.tmrDemo.Tick += new EventHandler(this.tmrDemo_Tick);
+      // 
+      // visorPopUp1
+      // 
       this.visorPopUp1.BackColor = SystemColors.Control;
       this.visorPopUp1.BorderStyle = BorderStyle.FixedSingle;
       this.visorPopUp1.Dock = DockStyle.Bottom;
@@ -795,13 +872,17 @@ label_6:;
       this.visorPopUp1.Name = "visorPopUp1";
       this.visorPopUp1.Size = new Size(453, 0);
       this.visorPopUp1.TabIndex = 1;
+
+      // 
+      // FrmPanel2
+      // 
       this.AutoScaleDimensions = new SizeF(6f, 13f);
       this.AutoScaleMode = AutoScaleMode.Font;
       this.BackColor = Color.FromArgb(25, 23, 26);
       this.ClientSize = new Size(453, 584);
       this.Controls.Add((Control) this.pnlPanel);
       this.ForeColor = Color.White;
-      this.Icon = (Icon) componentResourceManager.GetObject("$this.Icon");
+      this.Icon = (Icon) resources.GetObject("$this.Icon");
       this.Name = "FrmPanel";
       this.Text = "Panel del Recolector II";
       this.WindowState = FormWindowState.Minimized;

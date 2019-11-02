@@ -29,30 +29,30 @@ namespace DASYS.GUI
 
     public VisorPopUp(int altura)
     {
-      this.InitializeComponent();
-      this.visorPopUp(altura, false);
+      //this.InitializeComponent();
+      //this.visorPopUp(altura, false);
     }
 
     public VisorPopUp(int altura, bool borde)
     {
-      this.InitializeComponent();
-      this.visorPopUp(altura, borde);
+      //this.InitializeComponent();
+      //this.visorPopUp(altura, borde);
     }
 
     private void visorPopUp(int altura, bool borde)
     {
-      try
-      {
-        VisorPopUp.Altura = altura;
-        this.Height = VisorPopUp.Altura;
-        if (!borde)
-          return;
-        this.pnlVisorPopUp.BorderStyle = BorderStyle.FixedSingle;
-      }
-      catch (Exception ex)
-      {
-        Mensajero mensajero = new Mensajero("Error en el Popup de avisos.", ex, true);
-      }
+      //try
+      //{
+      //  VisorPopUp.Altura = altura;
+      //  this.Height = VisorPopUp.Altura;
+      //  if (!borde)
+      //    return;
+      //  this.pnlVisorPopUp.BorderStyle = BorderStyle.FixedSingle;
+      //}
+      //catch (Exception ex)
+      //{
+      //  Mensajero mensajero = new Mensajero("Error en el Popup de avisos.", ex, true);
+      //}
     }
 
     public void MostrarMensaje(string mensaje)
