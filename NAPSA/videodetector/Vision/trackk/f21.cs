@@ -6,24 +6,24 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using AForge.Imaging;
-using AForge.Imaging.Filters;
-using AForge;
-using AForge.Video.DirectShow;
+using Accord.Imaging;
+using Accord.Imaging.Filters;
+using Accord;
+using Accord.Video.DirectShow;
 using System.Drawing.Imaging;
 using System.Threading;
 using System.IO;
-
+using Accord.Video;
 
 namespace trackk
 {
     public partial class f21 : Form
     {
-        string d = "";
+        //string d = "";
         private FilterInfoCollection videoDevices;
         EuclideanColorFiltering filter = new EuclideanColorFiltering();
         Color color = Color.Black;
-        GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
+        //GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
         BlobCounter blobCounter = new BlobCounter();
         int range = 120;
         public f21()
@@ -73,25 +73,40 @@ namespace trackk
         
         }
 
-        private void videoSourcePlayer1_NewFrame(object sender, ref Bitmap image)
+        private void videoSourcePlayer1_NewFrame(object sender, NewFrameEventArgs args)
+        {
+            //DateTime now = DateTime.Now;
+            //Graphics g = Graphics.FromImage(args.Frame);
+
+            //// paint current time
+            //SolidBrush brush = new SolidBrush(Color.Red);
+            //g.DrawString(now.ToString(), this.Font, brush, new PointF(5, 5));
+            //brush.Dispose();
+
+            //g.Dispose();
+
+        }
+
+
+        private void videoSourcePlayer2_NewFrame(object sender, NewFrameEventArgs args)
         {
             Bitmap objectsImage = null;
             Bitmap mImage = null;
-            mImage=(Bitmap)image.Clone();            
-           filter.CenterColor = Color.FromArgb(color.ToArgb());
+            mImage=(Bitmap)args.Frame.Clone();
+            filter.CenterColor = new RGB(color);
             filter.Radius =(short)range;
            
-            objectsImage = image;
+            objectsImage = args.Frame;
             filter.ApplyInPlace(objectsImage);
 
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, image.Width, image.Height),
-            ImageLockMode.ReadOnly, image.PixelFormat);
-            UnmanagedImage grayImage = grayscaleFilter.Apply(new UnmanagedImage(objectsData));
+            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
+            ImageLockMode.ReadOnly, args.Frame.PixelFormat);
+            UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
             objectsImage.UnlockBits(objectsData);
 
             
             blobCounter.ProcessImage(grayImage);
-            Rectangle[] rects = blobCounter.GetObjectRectangles();
+            Rectangle[] rects = blobCounter.GetObjectsRectangles();
            
             if (rects.Length > 0)
             {
@@ -108,56 +123,57 @@ namespace trackk
                 }
             }
 
-            image = mImage;
+            args.Frame = mImage;
         }
-        private void videoSourcePlayer3_NewFrame(object sender, ref Bitmap image)
+
+        private void videoSourcePlayer3_NewFrame(object sender, NewFrameEventArgs args)
         {
             Bitmap objectsImage = null;
       
                 
                   // set center colol and radius
-                  filter.CenterColor = Color.FromArgb(color.ToArgb());
+                  filter.CenterColor = new RGB(color);
                   filter.Radius = (short)range;
                   // apply the filter
-                  objectsImage = image;
-                  filter.ApplyInPlace(image);
+                  objectsImage = args.Frame;
+                  filter.ApplyInPlace(args.Frame);
 
             // lock image for further processing
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, image.Width, image.Height),
-                ImageLockMode.ReadOnly, image.PixelFormat);
+            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
+                ImageLockMode.ReadOnly, args.Frame.PixelFormat);
 
             // grayscaling
-            UnmanagedImage grayImage = grayscaleFilter.Apply(new UnmanagedImage(objectsData));
+            UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
 
             // unlock image
             objectsImage.UnlockBits(objectsData);
 
             // locate blobs 
             blobCounter.ProcessImage(grayImage);
-            Rectangle[] rects = blobCounter.GetObjectRectangles();
+            Rectangle[] rects = blobCounter.GetObjectsRectangles();
           
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
 
                 // draw rectangle around derected object
-                Graphics g = Graphics.FromImage(image);
+                Graphics g = Graphics.FromImage(args.Frame);
 
                 using (Pen pen = new Pen(Color.FromArgb(160, 255, 160), 5))
                 {
                     g.DrawRectangle(pen, objectRect);
                 }
               g.Dispose();
-                int objectX = objectRect.X + objectRect.Width / 2 - image.Width / 2;
-                int objectY = image.Height / 2 - (objectRect.Y + objectRect.Height / 2);
+                int objectX = objectRect.X + objectRect.Width / 2 - args.Frame.Width / 2;
+                int objectY = args.Frame.Height / 2 - (objectRect.Y + objectRect.Height / 2);
                 ParameterizedThreadStart t = new ParameterizedThreadStart(p);
                Thread aa = new Thread(t);
                aa.Start(rects[0]);               
             }
-            Graphics g1 = Graphics.FromImage(image);
+            Graphics g1 = Graphics.FromImage(args.Frame);
             Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-            g1.DrawLine(pen1,image.Width/2,0,image.Width/2,image.Width);
-            g1.DrawLine(pen1, image.Width , image.Height / 2, 0, image.Height / 2);
+            g1.DrawLine(pen1, args.Frame.Width/2,0, args.Frame.Width/2, args.Frame.Width);
+            g1.DrawLine(pen1, args.Frame.Width , args.Frame.Height / 2, 0, args.Frame.Height / 2);
             g1.Dispose();
        }
 
@@ -209,8 +225,8 @@ namespace trackk
             videoSourcePlayer3.WaitForStop();
             // videoDevices = null;
             VideoCaptureDevice videoSource = new VideoCaptureDevice(videoDevices[camerasCombo.SelectedIndex].MonikerString);
-            videoSource.DesiredFrameSize = new Size(320, 240);
-            videoSource.DesiredFrameRate = 12;
+            videoSource.VideoResolution = videoSource.VideoCapabilities[0]; // new Size(320, 240);
+            //videoSource.DesiredFrameRate = 12;
 
             videoSourcePlayer1.VideoSource = videoSource;
             videoSourcePlayer1.Start();

@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.videoSourcePlayer1 = new AForge.Controls.VideoSourcePlayer();
-            this.videoSourcePlayer2 = new AForge.Controls.VideoSourcePlayer();
+            this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
+            this.videoSourcePlayer2 = new Accord.Controls.VideoSourcePlayer();
             this.camerasCombo = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.videoSourcePlayer3 = new AForge.Controls.VideoSourcePlayer();
+            this.videoSourcePlayer3 = new Accord.Controls.VideoSourcePlayer();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -64,6 +64,7 @@
             this.videoSourcePlayer1.TabIndex = 3;
             this.videoSourcePlayer1.Text = "videoSourcePlayer1";
             this.videoSourcePlayer1.VideoSource = null;
+            this.videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer1_NewFrame);
             // 
             // videoSourcePlayer2
             // 
@@ -73,7 +74,8 @@
             this.videoSourcePlayer2.TabIndex = 4;
             this.videoSourcePlayer2.Text = "videoSourcePlayer2";
             this.videoSourcePlayer2.VideoSource = null;
-            this.videoSourcePlayer2.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer1_NewFrame);
+            this.videoSourcePlayer2.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer2_NewFrame);
+            //this.videoSourcePlayer2.NewFrame += new Accord.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer1_NewFrame);
             // 
             // camerasCombo
             // 
@@ -102,7 +104,8 @@
             this.videoSourcePlayer3.TabIndex = 7;
             this.videoSourcePlayer3.Text = "videoSourcePlayer3";
             this.videoSourcePlayer3.VideoSource = null;
-            this.videoSourcePlayer3.NewFrame += new AForge.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer3_NewFrame);
+            this.videoSourcePlayer3.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer3_NewFrame);
+            //this.videoSourcePlayer3.NewFrame += new Accord.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer3_NewFrame);
             // 
             // pictureBox1
             // 
@@ -319,11 +322,11 @@
 
         #endregion
 
-        private AForge.Controls.VideoSourcePlayer videoSourcePlayer1;
-        private AForge.Controls.VideoSourcePlayer videoSourcePlayer2;
+        private Accord.Controls.VideoSourcePlayer videoSourcePlayer1;
+        private Accord.Controls.VideoSourcePlayer videoSourcePlayer2;
         private System.Windows.Forms.ComboBox camerasCombo;
         private System.Windows.Forms.Button button1;
-        private AForge.Controls.VideoSourcePlayer videoSourcePlayer3;
+        private Accord.Controls.VideoSourcePlayer videoSourcePlayer3;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button button2;
