@@ -47,7 +47,7 @@ namespace trackk
                 {
                     camerasCombo.Items.Add(device.Name);
                 }
-
+                camerasCombo.Items.Add("HikVision Camera");
                 camerasCombo.SelectedIndex = 0;
             }
             catch (ApplicationException)
@@ -224,8 +224,25 @@ namespace trackk
             videoSourcePlayer3.SignalToStop();
             videoSourcePlayer3.WaitForStop();
             // videoDevices = null;
-            VideoCaptureDevice videoSource = new VideoCaptureDevice(videoDevices[camerasCombo.SelectedIndex].MonikerString);
-            videoSource.VideoResolution = videoSource.VideoCapabilities[0]; // new Size(320, 240);
+//            VideoCaptureDevice videoSource = new VideoCaptureDevice(videoDevices[camerasCombo.SelectedIndex].MonikerString);
+            // create video source
+            MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/1/httppreview");
+            videoSource.Login = "admin";
+            videoSource.Password = "Qwer1234";
+
+            //for (int i = 0; i < videoSource.VideoCapabilities.Length; i++)
+            //{
+
+            //    String resolution = "Resolution Number " + Convert.ToString(i);
+            //    String resolution_size = videoSource.VideoCapabilities[i].FrameSize.ToString();
+            //    //System.Windows.Forms.MessageBox.Show(resolution + ":" + resolution_size);
+            //    Console.WriteLine(resolution + ":" + resolution_size);
+            //}
+
+
+
+            //mjpegSource.VideoResolution = videoSource.VideoCapabilities[0]; // new Size(320, 240);
+            
             //videoSource.DesiredFrameRate = 12;
 
             videoSourcePlayer1.VideoSource = videoSource;
