@@ -17,7 +17,7 @@ using AForge.Video.DirectShow;
 using AForge.Imaging.Filters;
 using AForge.Math.Geometry;
 
-namespace _2016310249_ObjectDetecting
+namespace ObjectDetecting
 {
     public partial class Form1 : Form
     {

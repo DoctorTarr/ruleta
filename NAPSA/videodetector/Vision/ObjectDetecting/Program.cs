@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace _2016310249_ObjectDetecting
+namespace ObjectDetecting
 {
     static class Program
     {
         /// <summary>
-        /// 해당 응용 프로그램의 주 진입점입니다.
+        /// The main entry point for that application.
         /// </summary>
         [STAThread]
         static void Main()
