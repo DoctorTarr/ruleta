@@ -7,11 +7,7 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -19,7 +15,6 @@ using Accord.Video;
 using Accord.Video.DirectShow;
 using System.Drawing.Imaging;
 using Accord.Imaging;
-using Accord;
 
 namespace SampleApp
 {

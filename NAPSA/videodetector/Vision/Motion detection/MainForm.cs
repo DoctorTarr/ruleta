@@ -8,15 +8,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-
-using AForge;
 using Accord.Imaging;
 using Accord.Video;
 using Accord.Video.VFW;
