@@ -205,13 +205,11 @@ namespace trackk
                richTextBox1.Text = a.Location.ToString() + "\n" + richTextBox1.Text + "\n"; ;
            });
        }
-       catch (Exception faa)
+       catch (Exception ex)
        {
-           Thread.CurrentThread.Abort();
+            Console.WriteLine(ex.ToString());
+            Thread.CurrentThread.Abort();
        }
-
-
-       Thread.CurrentThread.Abort();
    }
         
         private void button1_Click(object sender, EventArgs e)
@@ -288,10 +286,7 @@ namespace trackk
             color = colorDialog1.Color;
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-            range = Convert.ToInt32(numericUpDown1.Value) ;
-        }
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e) => range = Convert.ToInt32(numericUpDown1.Value);
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
