@@ -10,12 +10,12 @@ using System.Windows.Forms;
 using System.Threading;
 
 using System.Drawing.Imaging;
-using AForge;
-using AForge.Imaging;
-using AForge.Video;
-using AForge.Video.DirectShow;
-using AForge.Imaging.Filters;
-using AForge.Math.Geometry;
+using Accord;
+using Accord.Imaging;
+using Accord.Video;
+using Accord.Video.DirectShow;
+using Accord.Imaging.Filters;
+using Accord.Math.Geometry;
 
 namespace ObjectDetecting
 {
@@ -373,7 +373,7 @@ namespace ObjectDetecting
             {
                 List<IntPoint> _edgePoint = _blobCounter.GetBlobsEdgePoints(_blobPoints[i]);
                 List<IntPoint> _corners = null;
-                AForge.Point _center;
+                Accord.Point _center;
                 float _radius;
                 #region detecting Rectangle
                 ///
