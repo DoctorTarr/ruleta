@@ -47,6 +47,7 @@
             this.sbBlueColor = new System.Windows.Forms.HScrollBar();
             this.sbRadius = new System.Windows.Forms.HScrollBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -57,18 +58,18 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(12, 12);
+            this.comboBox1.Location = new System.Drawing.Point(10, 13);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(220, 20);
+            this.comboBox1.Size = new System.Drawing.Size(189, 21);
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(238, 36);
+            this.pictureBox1.Location = new System.Drawing.Point(205, 41);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox1.Size = new System.Drawing.Size(275, 260);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
@@ -77,20 +78,21 @@
             // listBox1
             // 
             this.listBox1.BackColor = System.Drawing.Color.Black;
-            this.listBox1.Font = new System.Drawing.Font("돋움체", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.listBox1.ForeColor = System.Drawing.Color.Lime;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(12, 38);
+            this.listBox1.ItemHeight = 16;
+            this.listBox1.Location = new System.Drawing.Point(10, 41);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(220, 238);
+            this.listBox1.Size = new System.Drawing.Size(189, 244);
             this.listBox1.TabIndex = 12;
             // 
             // pictureBox2
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(564, 38);
+            this.pictureBox2.Location = new System.Drawing.Point(486, 41);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox2.Size = new System.Drawing.Size(275, 260);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 13;
             this.pictureBox2.TabStop = false;
@@ -98,9 +100,9 @@
             // pictureBox3
             // 
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox3.Location = new System.Drawing.Point(238, 282);
+            this.pictureBox3.Location = new System.Drawing.Point(202, 345);
             this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox3.Size = new System.Drawing.Size(275, 260);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox3.TabIndex = 14;
             this.pictureBox3.TabStop = false;
@@ -108,9 +110,9 @@
             // pictureBox4
             // 
             this.pictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox4.Location = new System.Drawing.Point(564, 282);
+            this.pictureBox4.Location = new System.Drawing.Point(483, 345);
             this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox4.Size = new System.Drawing.Size(275, 260);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox4.TabIndex = 15;
             this.pictureBox4.TabStop = false;
@@ -118,9 +120,9 @@
             // cbBlur
             // 
             this.cbBlur.AutoSize = true;
-            this.cbBlur.Location = new System.Drawing.Point(250, 14);
+            this.cbBlur.Location = new System.Drawing.Point(214, 15);
             this.cbBlur.Name = "cbBlur";
-            this.cbBlur.Size = new System.Drawing.Size(81, 16);
+            this.cbBlur.Size = new System.Drawing.Size(72, 17);
             this.cbBlur.TabIndex = 16;
             this.cbBlur.Text = "Blur apply";
             this.cbBlur.UseVisualStyleBackColor = true;
@@ -128,10 +130,10 @@
             // 
             // sbThreshold
             // 
-            this.sbThreshold.Location = new System.Drawing.Point(71, 17);
+            this.sbThreshold.Location = new System.Drawing.Point(61, 18);
             this.sbThreshold.Maximum = 255;
             this.sbThreshold.Name = "sbThreshold";
-            this.sbThreshold.Size = new System.Drawing.Size(146, 22);
+            this.sbThreshold.Size = new System.Drawing.Size(125, 22);
             this.sbThreshold.TabIndex = 17;
             this.sbThreshold.Value = 40;
             this.sbThreshold.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sbThreshold_Scroll);
@@ -139,9 +141,9 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 20);
+            this.label1.Location = new System.Drawing.Point(5, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 12);
+            this.label1.Size = new System.Drawing.Size(54, 13);
             this.label1.TabIndex = 18;
             this.label1.Text = "Threshold";
             // 
@@ -157,9 +159,9 @@
             this.groupBox1.Controls.Add(this.sbBlueColor);
             this.groupBox1.Controls.Add(this.sbRadius);
             this.groupBox1.Controls.Add(this.sbThreshold);
-            this.groupBox1.Location = new System.Drawing.Point(12, 282);
+            this.groupBox1.Location = new System.Drawing.Point(10, 306);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(220, 176);
+            this.groupBox1.Size = new System.Drawing.Size(189, 191);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Option";
@@ -167,9 +169,9 @@
             // rbGreen
             // 
             this.rbGreen.AutoSize = true;
-            this.rbGreen.Location = new System.Drawing.Point(6, 151);
+            this.rbGreen.Location = new System.Drawing.Point(5, 164);
             this.rbGreen.Name = "rbGreen";
-            this.rbGreen.Size = new System.Drawing.Size(57, 16);
+            this.rbGreen.Size = new System.Drawing.Size(54, 17);
             this.rbGreen.TabIndex = 20;
             this.rbGreen.TabStop = true;
             this.rbGreen.Text = "Green";
@@ -179,18 +181,18 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 51);
+            this.label2.Location = new System.Drawing.Point(5, 55);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 12);
+            this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 18;
-            this.label2.Text = "Raudis";
+            this.label2.Text = "Radius";
             // 
             // rbBlue
             // 
             this.rbBlue.AutoSize = true;
-            this.rbBlue.Location = new System.Drawing.Point(6, 115);
+            this.rbBlue.Location = new System.Drawing.Point(5, 125);
             this.rbBlue.Name = "rbBlue";
-            this.rbBlue.Size = new System.Drawing.Size(48, 16);
+            this.rbBlue.Size = new System.Drawing.Size(46, 17);
             this.rbBlue.TabIndex = 20;
             this.rbBlue.TabStop = true;
             this.rbBlue.Text = "Blue";
@@ -199,10 +201,10 @@
             // 
             // sbGreenColor
             // 
-            this.sbGreenColor.Location = new System.Drawing.Point(71, 145);
+            this.sbGreenColor.Location = new System.Drawing.Point(61, 157);
             this.sbGreenColor.Maximum = 255;
             this.sbGreenColor.Name = "sbGreenColor";
-            this.sbGreenColor.Size = new System.Drawing.Size(146, 22);
+            this.sbGreenColor.Size = new System.Drawing.Size(125, 22);
             this.sbGreenColor.TabIndex = 17;
             this.sbGreenColor.Value = 30;
             this.sbGreenColor.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sbGreenColor_Scroll);
@@ -211,9 +213,9 @@
             // 
             this.rbRed.AutoSize = true;
             this.rbRed.Checked = true;
-            this.rbRed.Location = new System.Drawing.Point(6, 81);
+            this.rbRed.Location = new System.Drawing.Point(5, 88);
             this.rbRed.Name = "rbRed";
-            this.rbRed.Size = new System.Drawing.Size(45, 16);
+            this.rbRed.Size = new System.Drawing.Size(45, 17);
             this.rbRed.TabIndex = 19;
             this.rbRed.TabStop = true;
             this.rbRed.Text = "Red";
@@ -222,30 +224,30 @@
             // 
             // sbRedColor
             // 
-            this.sbRedColor.Location = new System.Drawing.Point(71, 81);
+            this.sbRedColor.Location = new System.Drawing.Point(61, 88);
             this.sbRedColor.Maximum = 255;
             this.sbRedColor.Name = "sbRedColor";
-            this.sbRedColor.Size = new System.Drawing.Size(146, 22);
+            this.sbRedColor.Size = new System.Drawing.Size(125, 22);
             this.sbRedColor.TabIndex = 17;
             this.sbRedColor.Value = 220;
             this.sbRedColor.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sbRedColor_Scroll);
             // 
             // sbBlueColor
             // 
-            this.sbBlueColor.Location = new System.Drawing.Point(71, 115);
+            this.sbBlueColor.Location = new System.Drawing.Point(61, 125);
             this.sbBlueColor.Maximum = 255;
             this.sbBlueColor.Name = "sbBlueColor";
-            this.sbBlueColor.Size = new System.Drawing.Size(146, 22);
+            this.sbBlueColor.Size = new System.Drawing.Size(125, 22);
             this.sbBlueColor.TabIndex = 17;
             this.sbBlueColor.Value = 30;
             this.sbBlueColor.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sbBlueColor_Scroll);
             // 
             // sbRadius
             // 
-            this.sbRadius.Location = new System.Drawing.Point(71, 48);
+            this.sbRadius.Location = new System.Drawing.Point(61, 52);
             this.sbRadius.Maximum = 450;
             this.sbRadius.Name = "sbRadius";
-            this.sbRadius.Size = new System.Drawing.Size(146, 22);
+            this.sbRadius.Size = new System.Drawing.Size(125, 22);
             this.sbRadius.TabIndex = 17;
             this.sbRadius.Value = 100;
             this.sbRadius.Scroll += new System.Windows.Forms.ScrollEventHandler(this.sbRadius_Scroll);
@@ -253,17 +255,27 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Font = new System.Drawing.Font("굴림", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox1.Location = new System.Drawing.Point(238, 252);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.textBox1.Location = new System.Drawing.Point(205, 313);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(178, 26);
+            this.textBox1.Size = new System.Drawing.Size(153, 26);
             this.textBox1.TabIndex = 20;
+            // 
+            // videoSourcePlayer1
+            // 
+            this.videoSourcePlayer1.Location = new System.Drawing.Point(10, 514);
+            this.videoSourcePlayer1.Name = "videoSourcePlayer1";
+            this.videoSourcePlayer1.Size = new System.Drawing.Size(186, 91);
+            this.videoSourcePlayer1.TabIndex = 21;
+            this.videoSourcePlayer1.Text = "videoSourcePlayer1";
+            this.videoSourcePlayer1.VideoSource = null;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(892, 570);
+            this.ClientSize = new System.Drawing.Size(765, 618);
+            this.Controls.Add(this.videoSourcePlayer1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbBlur);
@@ -309,6 +321,7 @@
         private System.Windows.Forms.HScrollBar sbBlueColor;
         private System.Windows.Forms.HScrollBar sbRedColor;
         private System.Windows.Forms.TextBox textBox1;
+        private Accord.Controls.VideoSourcePlayer videoSourcePlayer1;
     }
 }
 

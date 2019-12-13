@@ -37,6 +37,9 @@
     <Reference Include="Accord">
       <HintPath>..\..\packages\Accord.3.8.2-alpha\lib\net46\Accord.dll</HintPath>
     </Reference>
+    <Reference Include="Accord.Controls.Imaging">
+      <HintPath>..\..\packages\Accord.Controls.Imaging.3.8.2-alpha\lib\net46\Accord.Controls.Imaging.dll</HintPath>
+    </Reference>
     <Reference Include="Accord.Imaging">
       <HintPath>..\..\packages\Accord.Imaging.3.8.2-alpha\lib\net46\Accord.Imaging.dll</HintPath>
     </Reference>

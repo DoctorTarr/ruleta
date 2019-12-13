@@ -14,7 +14,7 @@ namespace ObjectDetecting
     public partial class Form1 : Form
     {
         FilterInfoCollection _device;
-        VideoCaptureDevice _CaptureDevice;
+        //VideoCaptureDevice _CaptureDevice;
         Bitmap _bitmapEdgeImage, _bitmapBinaryImage, _bitmapGreyImage, _bitmapBlurImage, _colorFilterImage;
         //ColorFiltering _colorFilter = new ColorFiltering();
         EuclideanColorFiltering _colorFilter = new EuclideanColorFiltering();
@@ -66,10 +66,18 @@ namespace ObjectDetecting
         {
             try
             {
-                _CaptureDevice = new VideoCaptureDevice(_device[deviceindex].MonikerString);
-                _CaptureDevice.NewFrame += new NewFrameEventHandler(get_Frame);
-                //Start the Capture Device
-                _CaptureDevice.Start();
+                //_CaptureDevice = new VideoCaptureDevice(_device[deviceindex].MonikerString);
+                //_CaptureDevice.NewFrame += new NewFrameEventHandler(get_Frame);
+                ////Start the Capture Device
+                //_CaptureDevice.Start();
+                // IP Camera
+                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/1/httppreview");
+                videoSource.Login = "admin";
+                videoSource.Password = "Qwer1234";
+                videoSourcePlayer1.VideoSource = videoSource;
+                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(get_Frame);
+
+                videoSourcePlayer1.Start();
 
                 listBox1.Items.Add("Webcam connect");
                 ScrollDown();
@@ -84,7 +92,7 @@ namespace ObjectDetecting
         {
             try
             {
-                _CaptureDevice.Stop();
+                videoSourcePlayer1.Stop();
             }
             catch (Exception)
             {
