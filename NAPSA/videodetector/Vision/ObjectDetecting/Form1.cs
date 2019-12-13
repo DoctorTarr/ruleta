@@ -62,7 +62,7 @@ namespace ObjectDetecting
         #endregion
              
         #region MyMethods
-        private void SrartCameras(int deviceindex)
+        private void StartCameras(int deviceindex)
         {
             try
             {
@@ -236,7 +236,7 @@ namespace ObjectDetecting
             try
             {
                 StopCameras();
-                SrartCameras(comboBox1.SelectedIndex);
+                StartCameras(comboBox1.SelectedIndex);
                 //CaptureDevi.NewFrame += new NewFrameEventHandler(CaptureDevi_NewFrame);
             }
             catch (Exception ex)
