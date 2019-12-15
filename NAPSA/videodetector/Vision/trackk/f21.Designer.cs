@@ -277,7 +277,6 @@
             this.linkLabel1.Size = new System.Drawing.Size(0, 13);
             this.linkLabel1.TabIndex = 1;
             this.linkLabel1.VisitedLinkColor = System.Drawing.Color.Black;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label1
             // 
