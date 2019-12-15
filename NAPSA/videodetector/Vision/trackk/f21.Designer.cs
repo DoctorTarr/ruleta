@@ -50,6 +50,7 @@
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
@@ -58,9 +59,9 @@
             // 
             // videoSourcePlayer1
             // 
-            this.videoSourcePlayer1.Location = new System.Drawing.Point(22, 12);
+            this.videoSourcePlayer1.Location = new System.Drawing.Point(21, 13);
             this.videoSourcePlayer1.Name = "videoSourcePlayer1";
-            this.videoSourcePlayer1.Size = new System.Drawing.Size(392, 385);
+            this.videoSourcePlayer1.Size = new System.Drawing.Size(278, 284);
             this.videoSourcePlayer1.TabIndex = 3;
             this.videoSourcePlayer1.Text = "videoSourcePlayer1";
             this.videoSourcePlayer1.VideoSource = null;
@@ -68,14 +69,13 @@
             // 
             // videoSourcePlayer2
             // 
-            this.videoSourcePlayer2.Location = new System.Drawing.Point(420, 12);
+            this.videoSourcePlayer2.Location = new System.Drawing.Point(315, 13);
             this.videoSourcePlayer2.Name = "videoSourcePlayer2";
-            this.videoSourcePlayer2.Size = new System.Drawing.Size(392, 385);
+            this.videoSourcePlayer2.Size = new System.Drawing.Size(300, 284);
             this.videoSourcePlayer2.TabIndex = 4;
             this.videoSourcePlayer2.Text = "videoSourcePlayer2";
             this.videoSourcePlayer2.VideoSource = null;
             this.videoSourcePlayer2.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer2_NewFrame);
-            //this.videoSourcePlayer2.NewFrame += new Accord.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer1_NewFrame);
             // 
             // camerasCombo
             // 
@@ -98,21 +98,20 @@
             // 
             // videoSourcePlayer3
             // 
-            this.videoSourcePlayer3.Location = new System.Drawing.Point(22, 418);
+            this.videoSourcePlayer3.Location = new System.Drawing.Point(21, 303);
             this.videoSourcePlayer3.Name = "videoSourcePlayer3";
-            this.videoSourcePlayer3.Size = new System.Drawing.Size(392, 385);
+            this.videoSourcePlayer3.Size = new System.Drawing.Size(278, 242);
             this.videoSourcePlayer3.TabIndex = 7;
             this.videoSourcePlayer3.Text = "videoSourcePlayer3";
             this.videoSourcePlayer3.VideoSource = null;
             this.videoSourcePlayer3.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer3_NewFrame);
-            //this.videoSourcePlayer3.NewFrame += new Accord.Controls.VideoSourcePlayer.NewFrameHandler(this.videoSourcePlayer3_NewFrame);
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(420, 418);
+            this.pictureBox1.Location = new System.Drawing.Point(315, 303);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(391, 385);
+            this.pictureBox1.Size = new System.Drawing.Size(300, 242);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
@@ -121,7 +120,7 @@
             // 
             this.richTextBox1.Location = new System.Drawing.Point(827, 322);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(202, 481);
+            this.richTextBox1.Size = new System.Drawing.Size(202, 225);
             this.richTextBox1.TabIndex = 9;
             this.richTextBox1.Text = "";
             // 
@@ -149,9 +148,13 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.videoSourcePlayer2);
+            this.groupBox3.Controls.Add(this.videoSourcePlayer3);
+            this.groupBox3.Controls.Add(this.pictureBox1);
+            this.groupBox3.Controls.Add(this.videoSourcePlayer1);
             this.groupBox3.Location = new System.Drawing.Point(1, -1);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(822, 804);
+            this.groupBox3.Size = new System.Drawing.Size(629, 548);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "view";
@@ -295,14 +298,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1048, 812);
+            this.ClientSize = new System.Drawing.Size(1048, 562);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.videoSourcePlayer3);
-            this.Controls.Add(this.videoSourcePlayer2);
-            this.Controls.Add(this.videoSourcePlayer1);
             this.Controls.Add(this.groupBox3);
             this.Name = "f21";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -311,6 +310,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.f21_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();

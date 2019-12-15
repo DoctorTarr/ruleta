@@ -143,12 +143,19 @@ namespace ObjectDetecting
             return array;
         }
 
+        private void DisplayRGB()
+        {
+            textBox2.Text = ("RGB: (" + sbRedColor.Value + ", " + sbGreenColor.Value + ", " + sbBlueColor.Value + ")");
+        }
+
         private void sbRedColor_Scroll(object sender, ScrollEventArgs e)
         {
             iRedValue = sbRedColor.Value;
 
             listBox1.Items.Add("Red: " + iRedValue.ToString());
             ScrollDown();
+
+            DisplayRGB();
         }
 
         private void sbBlueColor_Scroll(object sender, ScrollEventArgs e)
@@ -157,19 +164,17 @@ namespace ObjectDetecting
 
             listBox1.Items.Add("Blue: " + iBlueValue.ToString());
             ScrollDown();
+
+            DisplayRGB();
         }
 
         private void sbGreenColor_Scroll(object sender, ScrollEventArgs e)
         {
             iGreenValue = sbGreenColor.Value;
-
             listBox1.Items.Add("Green: " + iGreenValue.ToString());
             ScrollDown();
-        }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
+            DisplayRGB();
         }
 
         private void rbRed_CheckedChanged(object sender, EventArgs e)
@@ -186,7 +191,9 @@ namespace ObjectDetecting
 
                 listBox1.Items.Add("Red: " + iRedValue.ToString());
                 ScrollDown();
-            }            
+
+                DisplayRGB();
+            }
         }
 
         private void rbBlue_CheckedChanged(object sender, EventArgs e)
@@ -203,6 +210,8 @@ namespace ObjectDetecting
 
                 listBox1.Items.Add("Blue: " + iBlueValue.ToString());
                 ScrollDown();
+
+                DisplayRGB();
             }
         }
 
@@ -220,6 +229,8 @@ namespace ObjectDetecting
 
                 listBox1.Items.Add("Green: " + iGreenValue.ToString());
                 ScrollDown();
+
+                DisplayRGB();
             }
         }       
 
@@ -355,7 +366,7 @@ namespace ObjectDetecting
             _bitmapBinaryImage = _threshold.Apply(_bitmapEdgeImage);
 
             ///
-            /// blob counter algorithm initailze. 
+            /// blob counter algorithm initialize. 
             /// BlobCounter.MinWidth and MinHeight -> for the defined minimum region
             ///
             BlobCounter _blobCounter = new BlobCounter();
@@ -387,7 +398,7 @@ namespace ObjectDetecting
                                                    (float)10, (float)10);
 
                     // Drawing setting for outline of detected object
-                    Rectangle[] _rects = _blobCounter.GetObjectsRectangles();                   
+                    Rectangle[] _rects = _blobCounter.GetObjectsRectangles();
                     System.Drawing.Point[] _coordinates = ToPointsArray(_corners);
                     Pen _pen = new Pen(Color.Blue, ipenWidth);
                     int _x = _coordinates[0].X;
@@ -395,7 +406,7 @@ namespace ObjectDetecting
 
                     // Drawing setting for centroid of detected object
                     int _centroid_X = (int)_blobPoints[0].CenterOfGravity.X;
-                    int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;                                        
+                    int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;
 
                     //Drawing the centroid point of object
                     _g.DrawEllipse(_pen, (float)(_centroid_X), (float)(_centroid_Y), (float)10, (float)10);

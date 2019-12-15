@@ -48,6 +48,7 @@
             this.sbRadius = new System.Windows.Forms.HScrollBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -73,7 +74,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 11;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // listBox1
             // 
@@ -82,9 +82,9 @@
             this.listBox1.ForeColor = System.Drawing.Color.Lime;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(10, 41);
+            this.listBox1.Location = new System.Drawing.Point(10, 138);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(189, 244);
+            this.listBox1.Size = new System.Drawing.Size(189, 148);
             this.listBox1.TabIndex = 12;
             // 
             // pictureBox2
@@ -100,7 +100,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox3.Location = new System.Drawing.Point(202, 345);
+            this.pictureBox3.Location = new System.Drawing.Point(205, 307);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(275, 260);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -110,7 +110,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox4.Location = new System.Drawing.Point(483, 345);
+            this.pictureBox4.Location = new System.Drawing.Point(483, 307);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(275, 260);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -255,26 +255,36 @@
             // textBox1
             // 
             this.textBox1.Enabled = false;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.textBox1.Location = new System.Drawing.Point(205, 313);
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(292, 8);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(153, 26);
+            this.textBox1.Size = new System.Drawing.Size(188, 22);
             this.textBox1.TabIndex = 20;
             // 
             // videoSourcePlayer1
             // 
-            this.videoSourcePlayer1.Location = new System.Drawing.Point(10, 514);
+            this.videoSourcePlayer1.Location = new System.Drawing.Point(10, 41);
             this.videoSourcePlayer1.Name = "videoSourcePlayer1";
             this.videoSourcePlayer1.Size = new System.Drawing.Size(186, 91);
             this.videoSourcePlayer1.TabIndex = 21;
             this.videoSourcePlayer1.Text = "videoSourcePlayer1";
             this.videoSourcePlayer1.VideoSource = null;
             // 
+            // textBox2
+            // 
+            this.textBox2.Enabled = false;
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.Location = new System.Drawing.Point(486, 8);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(153, 22);
+            this.textBox2.TabIndex = 22;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 618);
+            this.ClientSize = new System.Drawing.Size(772, 574);
+            this.Controls.Add(this.textBox2);
             this.Controls.Add(this.videoSourcePlayer1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.groupBox1);
@@ -286,7 +296,7 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.comboBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Object Detection";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -322,6 +332,7 @@
         private System.Windows.Forms.HScrollBar sbRedColor;
         private System.Windows.Forms.TextBox textBox1;
         private Accord.Controls.VideoSourcePlayer videoSourcePlayer1;
+        private System.Windows.Forms.TextBox textBox2;
     }
 }
 

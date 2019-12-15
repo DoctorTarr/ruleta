@@ -124,12 +124,12 @@ namespace trackk
             Bitmap objectsImage = null;
       
                 
-                  // set center colol and radius
-                  filter.CenterColor = new RGB(color);
-                  filter.Radius = (short)range;
-                  // apply the filter
-                  objectsImage = args.Frame;
-                  filter.ApplyInPlace(args.Frame);
+            // set center colol and radius
+            filter.CenterColor = new RGB(color);
+            filter.Radius = (short)range;
+            // apply the filter
+            objectsImage = args.Frame;
+            filter.ApplyInPlace(args.Frame);
 
             // lock image for further processing
             BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
@@ -156,7 +156,7 @@ namespace trackk
                 {
                     g.DrawRectangle(pen, objectRect);
                 }
-              g.Dispose();
+                g.Dispose();
                 int objectX = objectRect.X + objectRect.Width / 2 - args.Frame.Width / 2;
                 int objectY = args.Frame.Height / 2 - (objectRect.Y + objectRect.Height / 2);
                 ParameterizedThreadStart t = new ParameterizedThreadStart(p);
@@ -173,37 +173,37 @@ namespace trackk
   
 
 
-   void p(object r)
-   {
-       try
+       void p(object r)
        {
-          
-       Bitmap b = new Bitmap(pictureBox1.Image);
-       Rectangle a = (Rectangle)r;
-       Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-       Graphics g2 = Graphics.FromImage(b);
-       pen1 = new Pen(color, 3);
-       // Brush b5 = null;
-       SolidBrush b5 = new SolidBrush(color);
-       //   g2.Clear(Color.Black);
-
-
-       Font f = new Font(Font, FontStyle.Bold);
-
-       g2.DrawString("o", f, b5, a.Location);
-       g2.Dispose();
-       pictureBox1.Image = (System.Drawing.Image)b;
-       this.Invoke((MethodInvoker)delegate
+           try
            {
-               richTextBox1.Text = a.Location.ToString() + "\n" + richTextBox1.Text + "\n"; ;
-           });
+          
+           Bitmap b = new Bitmap(pictureBox1.Image);
+           Rectangle a = (Rectangle)r;
+           Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
+           Graphics g2 = Graphics.FromImage(b);
+           pen1 = new Pen(color, 3);
+           // Brush b5 = null;
+           SolidBrush b5 = new SolidBrush(color);
+           //   g2.Clear(Color.Black);
+
+
+           Font f = new Font(Font, FontStyle.Bold);
+
+           g2.DrawString("o", f, b5, a.Location);
+           g2.Dispose();
+           pictureBox1.Image = (System.Drawing.Image)b;
+           this.Invoke((MethodInvoker)delegate
+               {
+                   richTextBox1.Text = a.Location.ToString() + "\n" + richTextBox1.Text + "\n"; ;
+               });
+           }
+           catch (Exception ex)
+           {
+                Console.WriteLine(ex.ToString());
+                Thread.CurrentThread.Abort();
+           }
        }
-       catch (Exception ex)
-       {
-            Console.WriteLine(ex.ToString());
-            Thread.CurrentThread.Abort();
-       }
-   }
         
         private void button1_Click(object sender, EventArgs e)
         {
