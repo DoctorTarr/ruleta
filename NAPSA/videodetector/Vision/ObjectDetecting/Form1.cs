@@ -115,7 +115,7 @@ namespace ObjectDetecting
 
         private void get_Frame(object sender, NewFrameEventArgs eventArgs)
         {
-            //Insert image into Picuture Box
+            //Insert image into Picture Box
             Bitmap _BsourceFrame = (Bitmap)eventArgs.Frame.Clone();
             pictureBox1.Image = BlobDetection(_BsourceFrame);
             pictureBox2.Image = _bitmapEdgeImage;
