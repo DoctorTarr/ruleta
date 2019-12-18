@@ -278,7 +278,7 @@ namespace trackk
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
-            blobCounter.MaxWidth = Convert.ToInt32(numericUpDown2.Value);
+            blobCounter.MinHeight = Convert.ToInt32(numericUpDown2.Value);
         }
 
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
