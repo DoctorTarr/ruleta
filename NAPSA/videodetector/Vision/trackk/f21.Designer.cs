@@ -109,9 +109,9 @@
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(424, 300);
+            this.pictureBox1.Location = new System.Drawing.Point(424, 303);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(390, 245);
+            this.pictureBox1.Size = new System.Drawing.Size(390, 242);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
@@ -188,7 +188,7 @@
             this.numericUpDown3.Size = new System.Drawing.Size(48, 20);
             this.numericUpDown3.TabIndex = 7;
             this.numericUpDown3.Value = new decimal(new int[] {
-            2,
+            8,
             0,
             0,
             0});
@@ -216,7 +216,7 @@
             this.numericUpDown2.Size = new System.Drawing.Size(48, 20);
             this.numericUpDown2.TabIndex = 5;
             this.numericUpDown2.Value = new decimal(new int[] {
-            2,
+            8,
             0,
             0,
             0});
@@ -249,7 +249,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 3;
             this.numericUpDown1.Value = new decimal(new int[] {
-            120,
+            100,
             0,
             0,
             0});
@@ -283,9 +283,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 69);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 13);
+            this.label1.Size = new System.Drawing.Size(40, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Range";
+            this.label1.Text = "Radius";
             // 
             // colorDialog1
             // 
@@ -305,7 +305,6 @@
             this.Name = "f21";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.f21_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);

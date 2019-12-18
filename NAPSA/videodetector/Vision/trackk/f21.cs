@@ -18,7 +18,7 @@ namespace trackk
         Color color = Color.Black;
         //GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
         BlobCounter blobCounter = new BlobCounter();
-        int range = 120;
+        int radius = 120;
         public f21()
         {
             InitializeComponent();
@@ -87,7 +87,7 @@ namespace trackk
             Bitmap mImage = null;
             mImage=(Bitmap)args.Frame.Clone();
             filter.CenterColor = new RGB(color);
-            filter.Radius =(short)range;
+            filter.Radius =(short)radius;
            
             objectsImage = args.Frame;
             filter.ApplyInPlace(objectsImage);
@@ -126,7 +126,7 @@ namespace trackk
                 
             // set center colol and radius
             filter.CenterColor = new RGB(color);
-            filter.Radius = (short)range;
+            filter.Radius = (short)radius;
             // apply the filter
             objectsImage = args.Frame;
             filter.ApplyInPlace(args.Frame);
@@ -274,7 +274,7 @@ namespace trackk
             color = colorDialog1.Color;
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e) => range = Convert.ToInt32(numericUpDown1.Value);
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e) => radius = Convert.ToInt32(numericUpDown1.Value);
 
         private void numericUpDown2_ValueChanged(object sender, EventArgs e)
         {
