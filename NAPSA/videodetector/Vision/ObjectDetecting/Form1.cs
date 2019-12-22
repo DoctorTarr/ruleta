@@ -39,10 +39,10 @@ namespace ObjectDetecting
             {
                 _device = new FilterInfoCollection(FilterCategory.VideoInputDevice);
                 for (var i = 0; i < _device.Count; i++)
-                    comboBox1.Items.Add(_device[i].Name);              
-                                   
+                    comboBox1.Items.Add(_device[i].Name);
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -60,7 +60,7 @@ namespace ObjectDetecting
             }
         }
         #endregion
-             
+
         #region MyMethods
         private void StartCameras(int deviceindex)
         {
@@ -182,7 +182,7 @@ namespace ObjectDetecting
             if (rbRed.Checked == true)
             {
                 iColorMode = 1;
-                sbRadius.Value = 100;
+                sbRadius.Value = 204; // 100;
                 iRadius = sbRadius.Value;
 
                 sbRedColor.Value = 220;
@@ -232,7 +232,7 @@ namespace ObjectDetecting
 
                 DisplayRGB();
             }
-        }       
+        }
 
         private void sbRadius_Scroll(object sender, ScrollEventArgs e)
         {
@@ -283,7 +283,7 @@ namespace ObjectDetecting
             ///     -> D = (W*F)/P
             ///
             double _distance;
-            double _ObjectWidth = 10, _focalLength = 604.8;
+            double _ObjectWidth = 68, _focalLength = 400;
 
             //_distance = Convert.ToInt16((_ObjectWidth * _focalLength) / _pixel);
             _distance = (_ObjectWidth * _focalLength) / _pixel;
@@ -356,7 +356,7 @@ namespace ObjectDetecting
                 _bitmapBlurImage = _blurfilter.Apply(_bitmapGreyImage);
                 _bitmapEdgeImage = _edgeFilter.Apply(_bitmapBlurImage);
             }
-            else if(_blurFlag==false)
+            else if (_blurFlag == false)
             {
                 _bitmapEdgeImage = _edgeFilter.Apply(_bitmapGreyImage);
             }
@@ -390,7 +390,7 @@ namespace ObjectDetecting
                 ///
                 /// _corners: the corner of Quadrilateral
                 /// 
-                if (_shapeChecker.IsQuadrilateral(_edgePoint, out _corners))
+                if (false) //_shapeChecker.IsQuadrilateral(_edgePoint, out _corners))
                 {
                     //Drawing the reference point of the picturebox
                     _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
@@ -419,10 +419,10 @@ namespace ObjectDetecting
                     /// Drawing outline of detected object
                     /// 
                     if (_coordinates.Length == 4)
-                    {                        
+                    {
                         string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);
                         _g.DrawString(_shapeString, _font, _brush, _x, _y);
-                        _g.DrawPolygon(_pen, ToPointsArray(_corners));                        
+                        _g.DrawPolygon(_pen, ToPointsArray(_corners));
                     }
 
                     //size of rectange
@@ -448,14 +448,18 @@ namespace ObjectDetecting
                 if (_shapeChecker.IsCircle(_edgePoint, out _center, out _radius))
                 {
                     //Drawing the reference point
-                    _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width), 
-                                                   (float)(pictureBox1.Size.Height), 
+                    _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
+                                                   (float)(pictureBox1.Size.Height),
                                                    (float)10, (float)10);
 
                     // Drawing setting for outline of detected object
+                    _blobCounter.ObjectsOrder = ObjectsOrder.Size;
                     Rectangle[] _rects = _blobCounter.GetObjectsRectangles();
                     Pen _pen = new Pen(Color.Red, ipenWidth);
-                    string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);                    
+                    Pen _pengreen = new Pen(Color.GreenYellow, ipenWidth);
+                    Pen _penyellow = new Pen(Color.GreenYellow, ipenWidth);
+
+                    string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);
                     int _x = (int)_center.X;
                     int _y = (int)_center.Y;
                     ///
@@ -470,11 +474,25 @@ namespace ObjectDetecting
                     //Drawing the centroid point of object
                     int _centroid_X = (int)_blobPoints[0].CenterOfGravity.X;
                     int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;
-                    _g.DrawEllipse(_pen, (float)(_centroid_X),(float)(_centroid_Y),(float)10, (float)10);
+                    _g.DrawEllipse(_pen, (float)(_centroid_X), (float)(_centroid_Y), (float)10, (float)10);
                     //Degree calculation
                     int _deg_x = _centroid_X - pictureBox1.Size.Width;
                     int _deg_y = pictureBox1.Size.Height - _centroid_Y;
-                    textBox1.Text = ("Degree: (" + _deg_x + ", " + _deg_y + ")");
+
+                    //textBox1.Text = ("Dis: (" + _deg_x + ", " + _deg_y + ")");
+                    //                    Rectangle rc = new Rectangle(_centroid_X - (int)(_radius), _centroid_Y - (int)(_radius), (int)(_radius * 2), (int)(_radius * 2));
+
+                    // Base ruleta sin aro negro - radius 164 color red
+                    //Rectangle rcMain = new Rectangle(120, 5, 410, 460);
+                    //_g.DrawRectangle(_pengreen, rcMain);
+
+                    //// Cilindro -incluye numeros - radius 204 color red
+                    //Rectangle rcCilinder = new Rectangle(176, 59, 256, 256);
+                    //_g.DrawRectangle(_penyellow, rcMain);
+
+                    // Casillas - radius 204 color blue
+                    Rectangle rcSlots = new Rectangle(196, 80, 198, 198);
+                    _g.DrawRectangle(_penyellow, rcSlots);
 
                     //size of rectange
                     foreach (Rectangle rc in _rects)
@@ -482,9 +500,14 @@ namespace ObjectDetecting
                         ///for debug
                         //System.Diagnostics.Debug.WriteLine(
                         //    string.Format("Circle size: ({0}, {1})", rc.Width, rc.Height));
-                        iFeatureWidth = rc.Width;
-                        double dis = FindDistance(iFeatureWidth);                        
-                        _g.DrawString(dis.ToString("N2") + "cm", _font, _brush, _x, _y + 60);
+                        //iFeatureWidth = rc.Width;
+                        //double dis = FindDistance(iFeatureWidth);
+                        //_g.DrawString(dis.ToString("N2") + "cm", _font, _brush, _x, _y + 60);
+                        //textBox1.Text = "Center: (" + _centroid_X.ToString() + ", " + _centroid_X.ToString() +") - W: " + iFeatureWidth.ToString() + ")";
+                        _g.DrawRectangle(_pen, rc);
+
+                        textBox1.Text = string.Format("(X: {0}, Y: {1} W:{2} - H: {3})", rc.X, rc.Y, rc.Width, rc.Height);
+                        break;
                     }
                 }
                 #endregion
@@ -493,7 +516,7 @@ namespace ObjectDetecting
                 ///
                 /// _corners: the corner of Triangle
                 ///
-                if (_shapeChecker.IsTriangle(_edgePoint, out _corners))
+                if (false) //_shapeChecker.IsTriangle(_edgePoint, out _corners))
                 {
                     //Drawing the reference point
                     _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
