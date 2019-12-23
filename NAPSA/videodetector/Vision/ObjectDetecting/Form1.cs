@@ -483,15 +483,15 @@ namespace ObjectDetecting
                     //                    Rectangle rc = new Rectangle(_centroid_X - (int)(_radius), _centroid_Y - (int)(_radius), (int)(_radius * 2), (int)(_radius * 2));
 
                     // Base ruleta sin aro negro - radius 164 color red
-                    //Rectangle rcMain = new Rectangle(120, 5, 410, 460);
-                    //_g.DrawRectangle(_pengreen, rcMain);
+                    Rectangle rcMain = new Rectangle(120, 5, 410, 460);
+                    _g.DrawRectangle(_pengreen, rcMain);
 
                     //// Cilindro -incluye numeros - radius 204 color red
-                    //Rectangle rcCilinder = new Rectangle(176, 59, 256, 256);
-                    //_g.DrawRectangle(_penyellow, rcMain);
+                    Rectangle rcCilinder = new Rectangle(174, 58, 258, 258);
+                    _g.DrawRectangle(_penyellow, rcMain);
 
                     // Casillas - radius 204 color blue
-                    Rectangle rcSlots = new Rectangle(196, 80, 198, 198);
+                    Rectangle rcSlots = new Rectangle(225, 111, 198,240);
                     _g.DrawRectangle(_penyellow, rcSlots);
 
                     //size of rectange
