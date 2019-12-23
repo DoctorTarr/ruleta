@@ -24,7 +24,7 @@ namespace RouletteNumberDetection
         Color color = Color.LimeGreen;
         
 
-        bool _blurFlag = false;
+        bool _calibrateFlag = false;
 
         // Bitmaps
         Bitmap _bitmapEdgeImage, _bitmapBinaryImage, _bitmapGreyImage, _bitmapBlurImage, _colorFilterImage;
@@ -39,6 +39,15 @@ namespace RouletteNumberDetection
         System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
         System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
         int ipenWidth = 5, iFeatureWidth;
+
+        // Base ruleta sin aro negro - radius 164 color red
+        Rectangle rcMain = new Rectangle(120, 5, 410, 460);
+
+        // Cilindro -incluye numeros - radius 204 color red
+        Rectangle rcCylinder = new Rectangle(182, 64, 276, 330);
+
+        // Casillas - radius 204 color blue
+        Rectangle rcSlots = new Rectangle(225, 111, 198, 240);
 
         public MainForm()
         {
@@ -65,25 +74,40 @@ namespace RouletteNumberDetection
         }
         #endregion
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            CalibrateCamera();
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             StartCameras();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbCalibrate.Checked)
+                _calibrateFlag = true;
+            else
+                _calibrateFlag = false;
+
+        }
+
+       private void button2_Click(object sender, EventArgs e)
         {
             StopCameras();
         }
 
         #region MyMethods
 
-        private void CalibrateCamera()
+        private void CalibrateCamera(Bitmap _bitmapSourceImage)
         {
+            Graphics _g = Graphics.FromImage(_bitmapSourceImage);
+
+            Pen _pengreen = new Pen(Color.GreenYellow, ipenWidth);
+            Pen _penyellow = new Pen(Color.GreenYellow, ipenWidth);
+            Pen _penred = new Pen(Color.Red, ipenWidth);
+
+            _g.DrawRectangle(_pengreen, rcMain);
+
+            _g.DrawRectangle(_penyellow, rcCylinder);
+
+            _g.DrawRectangle(_penred, rcSlots);
 
         }
 
@@ -159,24 +183,24 @@ namespace RouletteNumberDetection
         {
             Bitmap objectsImage = args.Frame;
             Bitmap mImage = (Bitmap)args.Frame.Clone();
+
             int iRadius = 120;
-
-           // Color centerColor = Color.LimeGreen; // 50, 205, 50
-
             iRedValue = 50; // sbRedColor.Value;
             iGreenValue = 205; // sbGreenColor.Value;
             iBlueValue = 50; // sbBlueColor.Value;
-
+            // Color centerColor = Color.LimeGreen; // 50, 205, 50
             _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
             _colorFilter.Radius = (short)iRadius;
             _colorFilter.ApplyInPlace(objectsImage);
 
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
-            ImageLockMode.ReadOnly, args.Frame.PixelFormat);
+            //textBox1.Text = string.Format("w: {0} - h: {1}", mImage.Width, mImage.Height);
+
+            Rectangle area = new Rectangle(0, 0, args.Frame.Width, args.Frame.Height);
+
+            BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, args.Frame.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
             pictureBox1.Image = grayImage.ToManagedImage();
             objectsImage.UnlockBits(objectsData);
-
 
             blobCounter.MinWidth = 10;
             blobCounter.MinHeight = 10;
@@ -204,6 +228,9 @@ namespace RouletteNumberDetection
                 }
 
             //pictureBox1.Image = mImage;
+            if (_calibrateFlag)
+                CalibrateCamera(mImage);
+
             args.Frame = mImage;
         }
 
@@ -264,14 +291,14 @@ namespace RouletteNumberDetection
 
             //#region blur option with Edge filter
             ////create a edge detector instance
-            //if (_blurFlag == true)
+            //if (_calibrateFlag == true)
             //{
             //    //Blur _blurfilter = new Blur();
             //    GaussianBlur _blurfilter = new GaussianBlur(1.5);
             //    _bitmapBlurImage = _blurfilter.Apply(_bitmapGreyImage);
             //    _bitmapEdgeImage = _edgeFilter.Apply(_bitmapBlurImage);
             //}
-            //else if (_blurFlag == false)
+            //else if (_calibrateFlag == false)
             //{
             //    _bitmapEdgeImage = _edgeFilter.Apply(_bitmapGreyImage);
             //}
