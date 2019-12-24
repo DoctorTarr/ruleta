@@ -15,6 +15,7 @@ using Accord.Video;
 using Accord.Video.DirectShow;
 using System.Drawing.Imaging;
 using Accord.Imaging;
+using Accord;
 
 namespace SampleApp
 {
@@ -217,17 +218,22 @@ namespace SampleApp
             BitmapData bitmapData = image.LockBits(new Rectangle(0, 0, image.Width, image.Height),
                 ImageLockMode.ReadWrite, image.PixelFormat);
 
-            int rectWidth = image.Width / 4;
+            int rectWidth = image.Width / 2;
             int rectHeight = image.Height / 4;
             int rectX = image.Width / 2 - rectWidth / 2;
             int rectY = image.Height / 2 - rectHeight / 2;
 
-            for (int i = 0; i < 5; i++)
-            {
-                Drawing.Rectangle(bitmapData,
-                    new Rectangle(rectX - i, rectY - i, rectWidth - 1, rectHeight - 1),
-                    Color.Red);
-            }
+            Drawing.Line(bitmapData, new IntPoint(image.Width / 2, 0), new IntPoint(image.Width / 2, image.Width),
+                Color.Red);
+
+            Drawing.Line(bitmapData, new IntPoint(image.Width, image.Height / 2), new IntPoint(0, image.Height / 2),
+                Color.Red);
+
+            //Graphics g1 = Graphics.FromImage(image);
+            //Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
+            //g1.DrawLine(pen1, image.Width / 2, 0, image.Width / 2, image.Width);
+            //g1.DrawLine(pen1, image.Width, image.Height / 2, 0, image.Height / 2);
+            //g1.Dispose();
 
             image.UnlockBits(bitmapData);
         }
