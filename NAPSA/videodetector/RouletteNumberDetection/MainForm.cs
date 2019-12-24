@@ -179,6 +179,21 @@ namespace RouletteNumberDetection
         }
         #endregion
 
+        #region Blob Detection
+        /// <summary> Blob Detection    
+        /// This method for color object detection by Blob counter algorithm.
+        /// If you using this method, then you can detecting as follows:
+        ///             red circle, rectangle, triangle
+        ///             blue circle, rectangle, triangle
+        ///             green circle, rectangle, triangle
+        /// the process of this method as follow:
+        ///     1. color filtering by Euclidean filtering(R, G, B).
+        ///     2. the grayscale filtering based on color filtered image.
+        ///     3. In this step, you can choose the blur option. Applied blur option(or not),
+        ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
+        ///     4. the binary filtering based on edge filter image.
+        ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
+        /// </summary>
         private void drawBlobs(object sender, NewFrameEventArgs args)
         {
             Bitmap objectsImage = args.Frame;
@@ -234,255 +249,7 @@ namespace RouletteNumberDetection
             args.Frame = mImage;
         }
 
-        #region Blob Detection
-        /// <summary> Blob Detection    
-        /// This method for color object detection by Blob counter algorithm.
-        /// If you using this method, then you can detecting as follows:
-        ///             red circle, rectangle, triangle
-        ///             blue circle, rectangle, triangle
-        ///             green circle, rectangle, triangle
-        /// the process of this method as follow:
-        ///     1. color filtering by Euclidean filtering(R, G, B).
-        ///     2. the grayscale filtering based on color filtered image.
-        ///     3. In this step, you can choose the blur option. Applied blur option(or not),
-        ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
-        ///     4. the binary filtering based on edge filter image.
-        ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
-        /// </summary>
 
-        private Bitmap BlobDetection(Bitmap _bitmapSourceImage)
-        {
-            //#region Color filtering by Euclidean filtering       
-            //switch (iColorMode)
-            //{
-            //    case 1:
-            //        //_colorFilter.CenterColor = new RGB(230, 30, 30);
-            //        iRedValue = 220; // sbRedColor.Value;
-            //        iBlueValue = 30; // sbBlueColor.Value;
-            //        iGreenValue = 30; // sbGreenColor.Value;
-
-            //        _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
-            //        _colorFilter.Radius = (short)iRadius;
-            //        _colorFilterImage = _colorFilter.Apply(_bitmapSourceImage);
-            //        break;
-            //    case 2:
-            //        iRedValue = 30; // sbRedColor.Value;
-            //        iBlueValue = 30; // sbBlueColor.Value;
-            //        iGreenValue = 240; // sbGreenColor.Value;
-
-            //        _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
-            //        _colorFilter.Radius = (short)iRadius;
-            //        _colorFilterImage = _colorFilter.Apply(_bitmapSourceImage);
-            //        break;
-            //    case 3:
-            //        iRedValue = 5; // sbRedColor.Value;
-            //        iBlueValue = 240; // sbBlueColor.Value;
-            //        iGreenValue = 5; // sbGreenColor.Value;
-
-            //        _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
-            //        _colorFilter.Radius = (short)iRadius;
-            //        _colorFilterImage = _colorFilter.Apply(_bitmapSourceImage);
-            //        break;
-            //}
-            //#endregion
-
-            //Grayscale _grayscale = new Grayscale(0.2125, 0.7154, 0.0721);
-            //_bitmapGreyImage = _grayscale.Apply(_colorFilterImage);
-
-            //#region blur option with Edge filter
-            ////create a edge detector instance
-            //if (_calibrateFlag == true)
-            //{
-            //    //Blur _blurfilter = new Blur();
-            //    GaussianBlur _blurfilter = new GaussianBlur(1.5);
-            //    _bitmapBlurImage = _blurfilter.Apply(_bitmapGreyImage);
-            //    _bitmapEdgeImage = _edgeFilter.Apply(_bitmapBlurImage);
-            //}
-            //else if (_calibrateFlag == false)
-            //{
-            //    _bitmapEdgeImage = _edgeFilter.Apply(_bitmapGreyImage);
-            //}
-            //#endregion
-
-            //Threshold _threshold = new Threshold(iThreshold);
-            //_bitmapBinaryImage = _threshold.Apply(_bitmapEdgeImage);
-
-            /////
-            ///// blob counter algorithm initialize. 
-            ///// BlobCounter.MinWidth and MinHeight -> for the defined minimum region
-            /////
-            //BlobCounter _blobCounter = new BlobCounter();
-            ////Configure Filter
-            //_blobCounter.MinWidth = 70;
-            //_blobCounter.MinHeight = 70;
-            //_blobCounter.FilterBlobs = true;
-            //_blobCounter.ObjectsOrder = ObjectsOrder.Size;
-
-            //_blobCounter.ProcessImage(_bitmapBinaryImage);
-
-            //Blob[] _blobPoints = _blobCounter.GetObjectsInformation();
-            //Graphics _g = Graphics.FromImage(_bitmapSourceImage);
-            //SimpleShapeChecker _shapeChecker = new SimpleShapeChecker();
-
-            //for (int i = 0; i < _blobPoints.Length; i++)
-            //{
-            //    List<IntPoint> _edgePoint = _blobCounter.GetBlobsEdgePoints(_blobPoints[i]);
-            //    List<IntPoint> _corners = null;
-            //    Accord.Point _center;
-            //    float _radius;
-            //    #region detecting Rectangle
-            //    ///
-            //    /// _corners: the corner of Quadrilateral
-            //    /// 
-            //    if (_shapeChecker.IsQuadrilateral(_edgePoint, out _corners))
-            //    {
-            //        //Drawing the reference point of the picturebox
-            //        _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
-            //                                       (float)(pictureBox1.Size.Height),
-            //                                       (float)10, (float)10);
-
-            //        // Drawing setting for outline of detected object
-            //        Rectangle[] _rects = _blobCounter.GetObjectsRectangles();
-            //        System.Drawing.Point[] _coordinates = ToPointsArray(_corners);
-            //        Pen _pen = new Pen(Color.Blue, ipenWidth);
-            //        int _x = _coordinates[0].X;
-            //        int _y = _coordinates[0].Y;
-
-            //        // Drawing setting for centroid of detected object
-            //        int _centroid_X = (int)_blobPoints[0].CenterOfGravity.X;
-            //        int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;
-
-            //        //Drawing the centroid point of object
-            //        _g.DrawEllipse(_pen, (float)(_centroid_X), (float)(_centroid_Y), (float)10, (float)10);
-            //        //Degree calculation
-            //        int _deg_x = (int)_centroid_X - pictureBox1.Size.Width;
-            //        int _deg_y = pictureBox1.Size.Height - (int)_centroid_Y;
-            //        textBox1.Text = ("Degree: (" + _deg_x + ", " + _deg_y + ")");
-
-            //        ///
-            //        /// Drawing outline of detected object
-            //        /// 
-            //        if (_coordinates.Length == 4)
-            //        {
-            //            string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);
-            //            _g.DrawString(_shapeString, _font, _brush, _x, _y);
-            //            _g.DrawPolygon(_pen, ToPointsArray(_corners));
-            //        }
-
-            //        //size of rectange
-            //        foreach (Rectangle rc in _rects)
-            //        {
-            //            ///for debug
-            //            //System.Diagnostics.Debug.WriteLine(
-            //            //    string.Format("Rect size: ({0}, {1})", rc.Width, rc.Height));
-
-            //            iFeatureWidth = rc.Width;
-            //            //check the FindDistance method.
-            //            double dis = FindDistance(iFeatureWidth);
-            //            _g.DrawString(dis.ToString("N2") + "cm", _font, _brush, _x, _y + 60);
-            //        }
-            //    }
-
-            //    #endregion
-
-            //    #region detecting Circle
-            //    ///
-            //    /// _center: the center of circle
-            //    /// _radius: the radius of circle
-            //    ///
-            //    if (_shapeChecker.IsCircle(_edgePoint, out _center, out _radius))
-            //    {
-            //        //Drawing the reference point
-            //        _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
-            //                                       (float)(pictureBox1.Size.Height),
-            //                                       (float)10, (float)10);
-
-            //        // Drawing setting for outline of detected object
-            //        Rectangle[] _rects = _blobCounter.GetObjectsRectangles();
-            //        Pen _pen = new Pen(Color.Red, ipenWidth);
-            //        string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);
-            //        int _x = (int)_center.X;
-            //        int _y = (int)_center.Y;
-            //        ///
-            //        /// Drawing outline of detected object
-            //        ///
-            //        _g.DrawString(_shapeString, _font, _brush, _x, _y);
-            //        _g.DrawEllipse(_pen, (float)(_center.X - _radius),
-            //                             (float)(_center.Y - _radius),
-            //                             (float)(_radius * 2),
-            //                             (float)(_radius * 2));
-
-            //        //Drawing the centroid point of object
-            //        int _centroid_X = (int)_blobPoints[0].CenterOfGravity.X;
-            //        int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;
-            //        _g.DrawEllipse(_pen, (float)(_centroid_X), (float)(_centroid_Y), (float)10, (float)10);
-            //        //Degree calculation
-            //        int _deg_x = _centroid_X - pictureBox1.Size.Width;
-            //        int _deg_y = pictureBox1.Size.Height - _centroid_Y;
-            //        textBox1.Text = ("Degree: (" + _deg_x + ", " + _deg_y + ")");
-
-            //        //size of rectange
-            //        foreach (Rectangle rc in _rects)
-            //        {
-            //            ///for debug
-            //            //System.Diagnostics.Debug.WriteLine(
-            //            //    string.Format("Circle size: ({0}, {1})", rc.Width, rc.Height));
-            //            iFeatureWidth = rc.Width;
-            //            double dis = FindDistance(iFeatureWidth);
-            //            _g.DrawString(dis.ToString("N2") + "cm", _font, _brush, _x, _y + 60);
-            //        }
-            //    }
-            //    #endregion
-
-            //    #region detecting Triangle
-            //    ///
-            //    /// _corners: the corner of Triangle
-            //    ///
-            //    if (_shapeChecker.IsTriangle(_edgePoint, out _corners))
-            //    {
-            //        //Drawing the reference point
-            //        _g.DrawEllipse(_PictureboxPen, (float)(pictureBox1.Size.Width),
-            //                                       (float)(pictureBox1.Size.Height),
-            //                                       (float)10, (float)10);
-
-            //        // Drawing setting for outline of detected object
-            //        Rectangle[] _rects = _blobCounter.GetObjectsRectangles();
-            //        Pen _pen = new Pen(Color.Green, ipenWidth);
-            //        string _shapeString = "" + _shapeChecker.CheckShapeType(_edgePoint);
-            //        int _x = (int)_center.X;
-            //        int _y = (int)_center.Y;
-
-            //        // Drawing setting for centroid of detected object
-            //        int _centroid_X = (int)_blobPoints[0].CenterOfGravity.X;
-            //        int _centroid_Y = (int)_blobPoints[0].CenterOfGravity.Y;
-            //        ///
-            //        /// Drawing outline of detected object
-            //        ///
-            //        _g.DrawString(_shapeString, _font, _brush, _x, _y);
-            //        _g.DrawPolygon(_pen, ToPointsArray(_corners));
-
-            //        //Drawing the centroid point of object
-            //        _g.DrawEllipse(_pen, (float)(_centroid_X), (float)(_centroid_Y), (float)10, (float)10);
-            //        //Degree calculation
-            //        int _deg_x = (int)_centroid_X - pictureBox1.Size.Width;
-            //        int _deg_y = pictureBox1.Size.Height - (int)_centroid_Y;
-            //        textBox1.Text = ("Degree: (" + _deg_x + ", " + _deg_y + ")");
-            //        //size of rectange
-            //        foreach (Rectangle rc in _rects)
-            //        {
-            //            ///for debug
-            //            //System.Diagnostics.Debug.WriteLine(
-            //            //    string.Format("Triangle Size: ({0}, {1})", rc.Width, rc.Height));
-
-            //            iFeatureWidth = rc.Width;
-            //            double dis = FindDistance(iFeatureWidth);
-            //            _g.DrawString(dis.ToString("N2") + "cm", _font, _brush, _x, _y + 60);
-            //        }
-            //    }
-            //    #endregion
-            //}
-            return _bitmapSourceImage;
-        }
         #endregion
         private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
         {
