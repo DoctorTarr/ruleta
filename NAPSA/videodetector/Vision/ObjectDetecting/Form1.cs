@@ -482,17 +482,17 @@ namespace ObjectDetecting
                     //textBox1.Text = ("Dis: (" + _deg_x + ", " + _deg_y + ")");
                     //                    Rectangle rc = new Rectangle(_centroid_X - (int)(_radius), _centroid_Y - (int)(_radius), (int)(_radius * 2), (int)(_radius * 2));
 
-                    // Base ruleta sin aro negro - radius 164 color red
-                    Rectangle rcMain = new Rectangle(120, 5, 410, 460);
-                    _g.DrawRectangle(_pengreen, rcMain);
+                    //// Base ruleta sin aro negro - radius 164 color red
+                    //Rectangle rcMain = new Rectangle(120, 5, 410, 460);
+                    //_g.DrawRectangle(_pengreen, rcMain);
 
-                    //// Cilindro -incluye numeros - radius 204 color red
-                    Rectangle rcCilinder = new Rectangle(174, 58, 258, 258);
-                    _g.DrawRectangle(_penyellow, rcMain);
+                    ////// Cilindro -incluye numeros - radius 204 color red
+                    //Rectangle rcCilinder = new Rectangle(174, 58, 258, 258);
+                    //_g.DrawRectangle(_penyellow, rcMain);
 
-                    // Casillas - radius 204 color blue
-                    Rectangle rcSlots = new Rectangle(225, 111, 198,240);
-                    _g.DrawRectangle(_penyellow, rcSlots);
+                    //// Casillas - radius 204 color blue
+                    //Rectangle rcSlots = new Rectangle(225, 111, 198,240);
+                    //_g.DrawRectangle(_penyellow, rcSlots);
 
                     //size of rectange
                     foreach (Rectangle rc in _rects)
