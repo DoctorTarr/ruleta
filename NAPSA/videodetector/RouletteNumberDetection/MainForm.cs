@@ -24,6 +24,8 @@ namespace RouletteNumberDetection
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
 
+        System.Drawing.Image imgOriginal;
+
         // Bitmaps
         //Bitmap _bitmapEdgeImage, _bitmapBinaryImage, _bitmapGreyImage, _bitmapBlurImage, _colorFilterImage;
 
@@ -141,6 +143,15 @@ namespace RouletteNumberDetection
             }
         }
 
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            if (trackBar1.Value > 0)
+            {
+                imgOriginal = pictureBox2.Image;
+                pictureBox2.Image = Zoom(imgOriginal, new Size(trackBar1.Value, trackBar1.Value));
+            }
+        }
+
         private void StopCameras()
         {
             try
@@ -217,6 +228,8 @@ namespace RouletteNumberDetection
         private void drawBlob(NewFrameEventArgs args, PictureBox pb)
         {
             Bitmap objectsImage = new Bitmap(args.Frame, new Size(640, 360));
+            objectsImage = (Bitmap)Zoom(objectsImage, new Size(100, 100));
+            
             Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
             
 
@@ -280,6 +293,14 @@ namespace RouletteNumberDetection
             }
 
             return array;
+        }
+
+        private System.Drawing.Image Zoom(System.Drawing.Image img, Size size)
+        {
+            Bitmap bmp = new Bitmap(img, img.Width + (img.Width * size.Width / 100), img.Height + (img.Height * size.Height / 100));
+            Graphics g = Graphics.FromImage(bmp);
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            return bmp;
         }
 
     }
