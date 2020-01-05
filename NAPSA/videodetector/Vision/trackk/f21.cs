@@ -48,15 +48,15 @@ namespace trackk
                 camerasCombo.Items.Add("No local capture devices");
                 videoDevices = null;
             }
-
+            // Draw coordinates axis
             Bitmap b = new Bitmap(320, 240);
-           // Rectangle a = (Rectangle)r;
+            // Rectangle a = (Rectangle)r;
             Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
             Graphics g2 = Graphics.FromImage(b);
             pen1 = new Pen(Color.FromArgb(255, 0, 0), 3);
             g2.Clear(Color.White);
             g2.DrawLine(pen1, b.Width / 2, 0, b.Width / 2, b.Width);
-            g2.DrawLine(pen1, b.Width, b.Height / 2, 0, b.Height / 2); 
+            g2.DrawLine(pen1, b.Width, b.Height / 2, 0, b.Height / 2);
             pictureBox1.Image = (System.Drawing.Image)b;
         }
 
