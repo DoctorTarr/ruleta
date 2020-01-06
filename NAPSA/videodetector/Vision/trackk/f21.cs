@@ -14,11 +14,15 @@ namespace trackk
     {
         //string d = "";
         private FilterInfoCollection videoDevices;
+        // create filter
         EuclideanColorFiltering filter = new EuclideanColorFiltering();
+        // set center color and radius
         Color color = Color.Black;
+        int radius = 120;
+
         //GrayscaleBT709 grayscaleFilter = new GrayscaleBT709();
         BlobCounter blobCounter = new BlobCounter();
-        int radius = 120;
+
         public f21()
         {
             InitializeComponent();
@@ -40,7 +44,7 @@ namespace trackk
                 {
                     camerasCombo.Items.Add(device.Name);
                 }
-                camerasCombo.Items.Add("HikVision Camera");
+
                 camerasCombo.SelectedIndex = 0;
             }
             catch (ApplicationException)
@@ -50,13 +54,13 @@ namespace trackk
             }
             // Draw coordinates axis
             Bitmap b = new Bitmap(320, 240);
-            // Rectangle a = (Rectangle)r;
+           // Rectangle a = (Rectangle)r;
             Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
             Graphics g2 = Graphics.FromImage(b);
             pen1 = new Pen(Color.FromArgb(255, 0, 0), 3);
             g2.Clear(Color.White);
             g2.DrawLine(pen1, b.Width / 2, 0, b.Width / 2, b.Width);
-            g2.DrawLine(pen1, b.Width, b.Height / 2, 0, b.Height / 2);
+            g2.DrawLine(pen1, b.Width, b.Height / 2, 0, b.Height / 2); 
             pictureBox1.Image = (System.Drawing.Image)b;
         }
 
@@ -88,16 +92,23 @@ namespace trackk
             mImage=(Bitmap)args.Frame.Clone();
             filter.CenterColor = new RGB(color);
             filter.Radius =(short)radius;
-           
-            objectsImage = args.Frame;
+            // apply the filter
             filter.ApplyInPlace(objectsImage);
-
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
-            ImageLockMode.ReadOnly, args.Frame.PixelFormat);
+            // Now for detecting objects, I use bitmap data and use the lockbits method. 
+            // To clearly understand this method, see here. 
+            // Then, we make it a greyscale algorithom, then unlock it.
+            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, mImage.Width, mImage.Height),
+            ImageLockMode.ReadOnly, mImage.PixelFormat);
+            // grayscaling
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
+            // unlock image
             objectsImage.UnlockBits(objectsData);
 
-            
+            // Now for the object, we use a blobcounter.
+            // blobCounter.MinWidth and blobCounter.MinHeight define the smallest size of the
+            // object in pixels, and blobCounter.GetObjectRectangles() returns all the objects
+            // rectangle position, and using the graphics class, I draw a rectangle over the
+            // images.
             blobCounter.ProcessImage(grayImage);
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
            
@@ -119,21 +130,23 @@ namespace trackk
             args.Frame = mImage;
         }
 
+
         private void videoSourcePlayer3_NewFrame(object sender, NewFrameEventArgs args)
         {
+            Bitmap image = args.Frame;
             Bitmap objectsImage = null;
       
                 
-            // set center colol and radius
+            // set center color and radius
             filter.CenterColor = new RGB(color);
             filter.Radius = (short)radius;
             // apply the filter
-            objectsImage = args.Frame;
-            filter.ApplyInPlace(args.Frame);
+            objectsImage = image;
+            filter.ApplyInPlace(image);
 
             // lock image for further processing
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, args.Frame.Width, args.Frame.Height),
-                ImageLockMode.ReadOnly, args.Frame.PixelFormat);
+            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, image.Width, image.Height),
+                ImageLockMode.ReadOnly, image.PixelFormat);
 
             // grayscaling
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
@@ -142,6 +155,7 @@ namespace trackk
             objectsImage.UnlockBits(objectsData);
 
             // locate blobs 
+            blobCounter.ObjectsOrder = ObjectsOrder.Size;
             blobCounter.ProcessImage(grayImage);
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
           
@@ -149,61 +163,67 @@ namespace trackk
             {
                 Rectangle objectRect = rects[0];
 
-                // draw rectangle around derected object
-                Graphics g = Graphics.FromImage(args.Frame);
+                // draw rectangle around detected object
+                Graphics g = Graphics.FromImage(image);
 
                 using (Pen pen = new Pen(Color.FromArgb(160, 255, 160), 5))
                 {
                     g.DrawRectangle(pen, objectRect);
                 }
                 g.Dispose();
-                int objectX = objectRect.X + objectRect.Width / 2 - args.Frame.Width / 2;
-                int objectY = args.Frame.Height / 2 - (objectRect.Y + objectRect.Height / 2);
+
+                // Draw position of the biggest blob
+                int objectX = objectRect.X + objectRect.Width / 2 - image.Width / 2;
+                int objectY = image.Height / 2 - (objectRect.Y + objectRect.Height / 2);
                 ParameterizedThreadStart t = new ParameterizedThreadStart(p);
                Thread aa = new Thread(t);
                aa.Start(rects[0]);               
             }
-            Graphics g1 = Graphics.FromImage(args.Frame);
+            Graphics g1 = Graphics.FromImage(image);
             Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-            g1.DrawLine(pen1, args.Frame.Width/2,0, args.Frame.Width/2, args.Frame.Width);
-            g1.DrawLine(pen1, args.Frame.Width , args.Frame.Height / 2, 0, args.Frame.Height / 2);
+            g1.DrawLine(pen1,image.Width/2,0,image.Width/2,image.Width);
+            g1.DrawLine(pen1, image.Width , image.Height / 2, 0, image.Height / 2);
             g1.Dispose();
        }
 
-  
 
 
-       void p(object r)
-       {
-           try
-           {
+        // Draw an "o" in the biggest blob position in another thread
+        // For drawing the bitmap, I had to use threading. The thread was called in the
+        // videosourceplayer event.
+        void p(object r)
+        {
+            try
+            {
           
-           Bitmap b = new Bitmap(pictureBox1.Image);
-           Rectangle a = (Rectangle)r;
-           Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-           Graphics g2 = Graphics.FromImage(b);
-           pen1 = new Pen(color, 3);
-           // Brush b5 = null;
-           SolidBrush b5 = new SolidBrush(color);
-           //   g2.Clear(Color.Black);
+            Bitmap b = new Bitmap(pictureBox1.Image);
+            Rectangle a = (Rectangle)r;
+            Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
+            Graphics g2 = Graphics.FromImage(b);
+            pen1 = new Pen(color, 3);
+            // Brush b5 = null;
+            SolidBrush b5 = new SolidBrush(color);
+            //   g2.Clear(Color.Black);
 
 
-           Font f = new Font(Font, FontStyle.Bold);
+            Font f = new Font(Font, FontStyle.Bold);
 
-           g2.DrawString("o", f, b5, a.Location);
-           g2.Dispose();
-           pictureBox1.Image = (System.Drawing.Image)b;
-           this.Invoke((MethodInvoker)delegate
-               {
-                   richTextBox1.Text = a.Location.ToString() + "\n" + richTextBox1.Text + "\n"; ;
-               });
-           }
-           catch (Exception ex)
-           {
-                Console.WriteLine(ex.ToString());
+            g2.DrawString("o", f, b5, a.Location);
+            g2.Dispose();
+            pictureBox1.Image = (System.Drawing.Image)b;
+            this.Invoke((MethodInvoker)delegate
+                {
+                    richTextBox1.Text = a.Location.ToString() + "\n" + richTextBox1.Text + "\n"; ;
+                });
+            }
+            catch (Exception faa)
+            {
                 Thread.CurrentThread.Abort();
-           }
-       }
+            }
+
+
+            Thread.CurrentThread.Abort();
+        }
         
         private void button1_Click(object sender, EventArgs e)
         {
