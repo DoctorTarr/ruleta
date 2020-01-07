@@ -72,33 +72,27 @@ namespace trackk
 
         private void videoSourcePlayer1_NewFrame(object sender, NewFrameEventArgs args)
         {
-            //DateTime now = DateTime.Now;
-            //Graphics g = Graphics.FromImage(args.Frame);
-
-            //// paint current time
-            //SolidBrush brush = new SolidBrush(Color.Red);
-            //g.DrawString(now.ToString(), this.Font, brush, new PointF(5, 5));
-            //brush.Dispose();
-
-            //g.Dispose();
-
+            // Accord needs an empty Event handler to show video
         }
 
-
+        // Draw all blobs
         private void videoSourcePlayer2_NewFrame(object sender, NewFrameEventArgs args)
         {
-            Bitmap objectsImage = null;
-            Bitmap mImage = null;
-            mImage=(Bitmap)args.Frame.Clone();
-            filter.CenterColor = new RGB(color);
+            Bitmap image = args.Frame;
+            Bitmap mImage = (Bitmap)image.Clone();
+
+            Bitmap objectsImage = image;
+
+            // set center color and radius
+            filter.CenterColor = new RGB(Color.FromArgb(color.ToArgb()));
             filter.Radius =(short)radius;
             // apply the filter
             filter.ApplyInPlace(objectsImage);
             // Now for detecting objects, I use bitmap data and use the lockbits method. 
             // To clearly understand this method, see here. 
             // Then, we make it a greyscale algorithom, then unlock it.
-            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, mImage.Width, mImage.Height),
-            ImageLockMode.ReadOnly, mImage.PixelFormat);
+            BitmapData objectsData = objectsImage.LockBits(new Rectangle(0, 0, image.Width, image.Height),
+            ImageLockMode.ReadOnly, image.PixelFormat);
             // grayscaling
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
             // unlock image
@@ -106,7 +100,7 @@ namespace trackk
 
             // Now for the object, we use a blobcounter.
             // blobCounter.MinWidth and blobCounter.MinHeight define the smallest size of the
-            // object in pixels, and blobCounter.GetObjectRectangles() returns all the objects
+            // object in pixels, and blobCounter.GetObjectsRectangles() returns all the objects
             // rectangle position, and using the graphics class, I draw a rectangle over the
             // images.
             blobCounter.ProcessImage(grayImage);
@@ -138,7 +132,7 @@ namespace trackk
       
                 
             // set center color and radius
-            filter.CenterColor = new RGB(color);
+            filter.CenterColor = new RGB(Color.FromArgb(color.ToArgb()));
             filter.Radius = (short)radius;
             // apply the filter
             objectsImage = image;
