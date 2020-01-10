@@ -23,7 +23,7 @@ namespace RouletteNumberDetection
         int iMinWidth = 8, iMaxWidth = 10, iMinHeight = 8, iMaxHeight = 10, iRadius = 110;
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
-        int ZeroX, ZeroY, BallX, BallY;
+        System.Drawing.Point ZeroPos, BallPos;
 
         System.Drawing.Image imgOriginal;
 
@@ -145,15 +145,6 @@ namespace RouletteNumberDetection
             }
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            if (trackBar1.Value > 0)
-            {
-                imgOriginal = pictureBox2.Image;
-                pictureBox2.Image = Zoom(imgOriginal, new Size(trackBar1.Value, trackBar1.Value));
-            }
-        }
-
         private void StopCameras()
         {
             try
@@ -169,24 +160,11 @@ namespace RouletteNumberDetection
             }
         }
 
-        private double FindDistance(int _pixel)
+        private double FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
-            ///
-            /// distance(D): distance of object from the camera
-            /// _focalLength(F): focal length of camera
-            /// _pixel(P): apparent width in pixel
-            /// _ObjectWidth(W): width of object
-            /// 
-            /// F = (P*D)/W
-            ///     -> D = (W*F)/P
-            ///
-            double _distance;
-            double _ObjectWidth = 10, _focalLength = 604.8;
+            double distance = Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
 
-            //_distance = Convert.ToInt16((_ObjectWidth * _focalLength) / _pixel);
-            _distance = (_ObjectWidth * _focalLength) / _pixel;
-
-            return _distance;
+            return distance;
         }
         #endregion
 
@@ -214,9 +192,9 @@ namespace RouletteNumberDetection
             iMinHeight = 10; iMaxHeight = 16;
             iRadius = 180;
 
-            drawBlob(args, pictureBox1, ref ZeroX, ref ZeroY);
-            tbZeroPosX.Text = ZeroX.ToString();
-            tbZeroPosY.Text = ZeroY.ToString();
+            drawBlob(args, pictureBox1, ref ZeroPos);
+            tbZeroPosX.Text = ZeroPos.X.ToString();
+            tbZeroPosY.Text = ZeroPos.Y.ToString();
 
 
             iRedValue = 240; // sbRedColor.Value;
@@ -226,13 +204,13 @@ namespace RouletteNumberDetection
             iMinHeight = 8; iMaxHeight = 10;
             iRadius = 60;
 
-            drawBlob(args, pictureBox2, ref BallX, ref BallY);
-            tbBolaPosX.Text = BallX.ToString();
-            tbBolaPosY.Text = BallY.ToString();
-
+            drawBlob(args, pictureBox2, ref BallPos);
+            tbBolaPosX.Text = BallPos.X.ToString();
+            tbBolaPosY.Text = BallPos.Y.ToString();
+            textBox1.Text = string.Format("{0}", FindDistance(BallPos, ZeroPos));
         }
 
-        private void drawBlob(NewFrameEventArgs args, PictureBox pb, ref int X, ref int Y)
+        private void drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
             Bitmap objectsImage = new Bitmap(args.Frame, new Size(640, 360));
             //objectsImage = (Bitmap)Zoom(objectsImage, new Size(100, 100));
@@ -245,8 +223,6 @@ namespace RouletteNumberDetection
             _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
             _colorFilter.Radius = (short)iRadius;
             _colorFilter.ApplyInPlace(objectsImage);
-
-            textBox1.Text = string.Format("w: {0} - h: {1}", mImage.Width, mImage.Height);
 
             Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
 
@@ -271,8 +247,7 @@ namespace RouletteNumberDetection
                 if (rects.Length > 0)
                 {
                     Rectangle objectRect = rects[0];
-                    X = objectRect.Location.X;
-                    Y = objectRect.Location.Y;
+                    position = objectRect.Location;
 
                     Graphics g = Graphics.FromImage(mImage);
                     g.DrawRectangle(pen, objectRect);
