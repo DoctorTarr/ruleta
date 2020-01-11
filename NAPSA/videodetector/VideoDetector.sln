@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDetecting", "Vision\O
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouletteNumberDetection", "RouletteNumberDetection\RouletteNumberDetection.csproj", "{C0616E3B-32C2-45F9-B572-DE07BE5FA80C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEye.StreamControl.WinForms.Demo", "Vision\WebEye.StreamControl.WinForms.Demo\WebEye.StreamControl.WinForms.Demo.csproj", "{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,24 +105,6 @@ Global
 		{C0616E3B-32C2-45F9-B572-DE07BE5FA80C}.Release|x64.Build.0 = Release|Any CPU
 		{C0616E3B-32C2-45F9-B572-DE07BE5FA80C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0616E3B-32C2-45F9-B572-DE07BE5FA80C}.Release|x86.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|x64.Build.0 = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Debug|x86.Build.0 = Debug|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|Any CPU.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|Any CPU.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|x64.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|x64.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|x86.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Mono|x86.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|x64.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|x64.Build.0 = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|x86.ActiveCfg = Release|Any CPU
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,7 +115,6 @@ Global
 		{589FD176-8FFF-4E0B-8F94-1377F23AB5C0} = {F697B4C2-4712-4596-814B-245E2500AE51}
 		{293611BC-8032-448D-A76A-DB063EC496C0} = {F697B4C2-4712-4596-814B-245E2500AE51}
 		{C0616E3B-32C2-45F9-B572-DE07BE5FA80C} = {F697B4C2-4712-4596-814B-245E2500AE51}
-		{67DBC2BA-CD1B-44E2-94CD-B086B556BB45} = {F697B4C2-4712-4596-814B-245E2500AE51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A8F350E8-CEB2-4B86-AC55-6367B244864F}
