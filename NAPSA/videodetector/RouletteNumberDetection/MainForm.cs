@@ -58,13 +58,16 @@ namespace RouletteNumberDetection
             {  3, 0 },
             { 26, 0 }
         };
-
+        // Blob detection references
+        // http://www.aforgenet.com/framework/features/blobs_processing.html
+        // https://www.codeproject.com/Articles/139628/Detect-and-Track-Objects-in-Live-Webcam-Video-Base
 
         // Color parameters
         int iRedValue = 30, iGreenValue = 220, iBlueValue = 30;
         int iMinWidth = 8, iMaxWidth = 10, iMinHeight = 8, iMaxHeight = 10, iRadius = 110;
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
+        Size _pbSize = new Size(640, 360);
 
         System.Drawing.Point ZeroPos, BallPos;
 
@@ -255,9 +258,10 @@ namespace RouletteNumberDetection
 
         private void drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
-            Bitmap objectsImage = new Bitmap(args.Frame, new Size(640, 360));
+            Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
+            //CopyRegionIntoImage(objectsImage, new Rectangle(197, 125, 315, 285), ref objectsImage, new Rectangle(new System.Drawing.Point(0, 0), new Size(398, 360)));
             //objectsImage = (Bitmap)Zoom(objectsImage, new Size(100, 100));
-            
+
             Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
             //Pen pen = new Pen(Color.FromArgb(160, 255, 160), 5);
             Pen pen = new Pen(Color.FromArgb(iRedValue, iGreenValue, iBlueValue), 5);
@@ -326,6 +330,13 @@ namespace RouletteNumberDetection
             return bmp;
         }
 
+        private static void CopyRegionIntoImage(Bitmap srcBitmap, Rectangle srcRegion, ref Bitmap destBitmap, Rectangle destRegion)
+        {
+            using (Graphics grD = Graphics.FromImage(destBitmap))
+            {
+                grD.DrawImage(srcBitmap, destRegion, srcRegion, GraphicsUnit.Pixel);
+            }
+        }
     }
 
 }

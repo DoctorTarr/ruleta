@@ -57,7 +57,7 @@
             this.fileToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(434, 24);
+            this.mainMenuStrip.Size = new System.Drawing.Size(624, 24);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -128,17 +128,17 @@
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fpsLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 342);
+            this.statusStrip.Location = new System.Drawing.Point(0, 366);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.statusStrip.Size = new System.Drawing.Size(434, 22);
+            this.statusStrip.Size = new System.Drawing.Size(624, 22);
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             // 
             // fpsLabel
             // 
             this.fpsLabel.Name = "fpsLabel";
-            this.fpsLabel.Size = new System.Drawing.Size(387, 17);
+            this.fpsLabel.Size = new System.Drawing.Size(1065, 17);
             this.fpsLabel.Spring = true;
             this.fpsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.fpsLabel.Visible = false;
@@ -150,7 +150,7 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 24);
             this.mainPanel.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(434, 318);
+            this.mainPanel.Size = new System.Drawing.Size(624, 342);
             this.mainPanel.TabIndex = 2;
             // 
             // videoSourcePlayer
@@ -162,7 +162,7 @@
             this.videoSourcePlayer.Location = new System.Drawing.Point(0, 0);
             this.videoSourcePlayer.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.videoSourcePlayer.Name = "videoSourcePlayer";
-            this.videoSourcePlayer.Size = new System.Drawing.Size(434, 318);
+            this.videoSourcePlayer.Size = new System.Drawing.Size(624, 342);
             this.videoSourcePlayer.TabIndex = 0;
             this.videoSourcePlayer.VideoSource = null;
             this.videoSourcePlayer.NewFrameReceived += new Accord.Video.NewFrameEventHandler(this.videoSourcePlayer_NewFrame);
@@ -183,7 +183,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(434, 364);
+            this.ClientSize = new System.Drawing.Size(624, 388);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mainMenuStrip);
