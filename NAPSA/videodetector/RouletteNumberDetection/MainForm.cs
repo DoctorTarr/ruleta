@@ -18,11 +18,54 @@ namespace RouletteNumberDetection
 {
     public partial class MainForm : Form
     {
+        int[,] Numbers = new int[,]
+        {
+            {  0, 0 },
+            { 32, 0 },
+            { 15, 0 },
+            { 19, 0 },
+            {  4, 0 },
+            { 21, 0 },
+            {  2, 0 },
+            { 25, 0 },
+            { 17, 0 },
+            { 34, 0 },
+            {  6, 0 },
+            { 27, 0 },
+            { 13, 0 },
+            { 36, 0 },
+            { 11, 0 },
+            { 30, 0 },
+            {  8, 0 },
+            { 23, 0 },
+            { 10, 147 },
+            {  5, 147 },
+            { 24, 146 },
+            { 16, 0 },
+            { 33, 0 },
+            {  1, 0 },
+            { 20, 0 },
+            { 14, 0 },
+            { 31, 0 },
+            {  9, 0 },
+            { 22, 0 },
+            { 18, 0 },
+            { 29, 0 },
+            {  7, 0 },
+            { 28, 0 },
+            { 12, 0 },
+            { 35, 0 },
+            {  3, 0 },
+            { 26, 0 }
+        };
+
+
         // Color parameters
         int iRedValue = 30, iGreenValue = 220, iBlueValue = 30;
         int iMinWidth = 8, iMaxWidth = 10, iMinHeight = 8, iMaxHeight = 10, iRadius = 110;
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
+
         System.Drawing.Point ZeroPos, BallPos;
 
         System.Drawing.Image imgOriginal;
