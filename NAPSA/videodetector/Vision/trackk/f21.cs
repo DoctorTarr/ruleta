@@ -173,11 +173,11 @@ namespace trackk
                Thread aa = new Thread(t);
                aa.Start(rects[0]);               
             }
-            Graphics g1 = Graphics.FromImage(image);
-            Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
-            g1.DrawLine(pen1,image.Width/2,0,image.Width/2,image.Width);
-            g1.DrawLine(pen1, image.Width , image.Height / 2, 0, image.Height / 2);
-            g1.Dispose();
+            //Graphics g1 = Graphics.FromImage(image);
+            //Pen pen1 = new Pen(Color.FromArgb(160, 255, 160), 3);
+            //g1.DrawLine(pen1,image.Width/2,0,image.Width/2,image.Width);
+            //g1.DrawLine(pen1, image.Width , image.Height / 2, 0, image.Height / 2);
+            //g1.Dispose();
        }
 
 

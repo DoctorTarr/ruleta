@@ -174,7 +174,7 @@ namespace RouletteNumberDetection
             {
                 StopCameras();
                 // IP Camera
-                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/1/httppreview");
+                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/101/httppreview");
                 videoSource.Login = "admin";
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
@@ -231,8 +231,8 @@ namespace RouletteNumberDetection
             iRedValue = 5; // sbRedColor.Value;
             iGreenValue = 240; // sbGreenColor.Value;
             iBlueValue = 5; // sbBlueColor.Value;
-            iMinWidth = 10; iMaxWidth = 16;
-            iMinHeight = 10; iMaxHeight = 16;
+            iMinWidth = 12; iMaxWidth = 16;
+            iMinHeight = 12; iMaxHeight = 16;
             iRadius = 180;
 
             drawBlob(args, pictureBox1, ref ZeroPos);
@@ -240,9 +240,9 @@ namespace RouletteNumberDetection
             tbZeroPosY.Text = ZeroPos.Y.ToString();
 
 
-            iRedValue = 240; // sbRedColor.Value;
-            iGreenValue = 235; // sbGreenColor.Value;
-            iBlueValue = 251; // sbBlueColor.Value;
+            iRedValue = 245; // sbRedColor.Value;
+            iGreenValue = 250; // sbGreenColor.Value;
+            iBlueValue = 250; // sbBlueColor.Value;
             iMinWidth = 8; iMaxWidth = 10;
             iMinHeight = 8; iMaxHeight = 10;
             iRadius = 60;

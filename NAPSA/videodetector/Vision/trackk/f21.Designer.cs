@@ -61,7 +61,7 @@
             // 
             this.videoSourcePlayer1.Location = new System.Drawing.Point(22, 12);
             this.videoSourcePlayer1.Name = "videoSourcePlayer1";
-            this.videoSourcePlayer1.Size = new System.Drawing.Size(381, 305);
+            this.videoSourcePlayer1.Size = new System.Drawing.Size(392, 305);
             this.videoSourcePlayer1.TabIndex = 3;
             this.videoSourcePlayer1.Text = "videoSourcePlayer1";
             this.videoSourcePlayer1.VideoSource = null;
@@ -100,7 +100,7 @@
             // 
             this.videoSourcePlayer3.Location = new System.Drawing.Point(22, 323);
             this.videoSourcePlayer3.Name = "videoSourcePlayer3";
-            this.videoSourcePlayer3.Size = new System.Drawing.Size(381, 385);
+            this.videoSourcePlayer3.Size = new System.Drawing.Size(392, 305);
             this.videoSourcePlayer3.TabIndex = 7;
             this.videoSourcePlayer3.Text = "videoSourcePlayer3";
             this.videoSourcePlayer3.VideoSource = null;
@@ -111,7 +111,7 @@
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Location = new System.Drawing.Point(420, 323);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(391, 385);
+            this.pictureBox1.Size = new System.Drawing.Size(392, 305);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
