@@ -18,45 +18,59 @@ namespace RouletteNumberDetection
 {
     public partial class MainForm : Form
     {
+        //Roulette wheel number sequence
+        //The pockets of the roulette wheel are numbered from 0 to 36.
+        //In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black.
+        //In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red.
+        //There is a green pocket numbered 0 (zero). In American roulette, there is a second green pocket marked 00. 
+        //Pocket number order on the roulette wheel adheres to the following clockwise sequence in most casinos
+
+        //Single-zero wheel 
+        //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
+        //Double-zero wheel 
+        //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
+        //Triple-zero wheel 
+        //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
         int[,] Numbers = new int[,]
         {
-            {  0, 0 },
-            { 32, 0 },
-            { 15, 0 },
-            { 19, 0 },
-            {  4, 0 },
-            { 21, 0 },
-            {  2, 0 },
-            { 25, 0 },
-            { 17, 0 },
-            { 34, 0 },
-            {  6, 0 },
-            { 27, 0 },
-            { 13, 0 },
-            { 36, 0 },
-            { 11, 0 },
-            { 30, 0 },
-            {  8, 0 },
-            { 23, 0 },
-            { 10, 147 },
-            {  5, 147 },
-            { 24, 146 },
-            { 16, 0 },
-            { 33, 0 },
-            {  1, 0 },
-            { 20, 0 },
-            { 14, 0 },
-            { 31, 0 },
-            {  9, 0 },
-            { 22, 0 },
-            { 18, 0 },
-            { 29, 0 },
-            {  7, 0 },
-            { 28, 0 },
-            { 12, 0 },
-            { 35, 0 },
-            {  3, 0 },
-            { 26, 0 }
+            // distance, angle = number
+            {  20,  -90 },   // 0
+            { 127, -114 },   // 1
+            {  72,  -38 },   // 2
+            {  29, -146 },   // 3
+            {  51,  -38 },   // 4
+            { 136,  -94 },   // 5
+            { 108,  -51 },   // 6
+            {  68, -148 },   // 7
+            { 134,  -79 },   // 8
+            { 107, -133 },   // 9
+            { 136,  -89 },      // 10
+            { 129, -69 },      // 11
+            { 48, -149 },      // 12
+            { 122, -59 },      // 13
+            { 118, -124 },      // 14
+            { 30, -43 },      // 15
+            {  131, -105 },      // 16
+            { 92, -44 },      // 17
+            { 88, -143 },    // 18
+            { 41, -39 },    // 19
+            { 20, -120 },    // 20
+            { 62, -35 },    // 21
+            { 97, -137 },    // 22
+            {  134, -83 },    // 23
+            { 135, -100 },    // 24
+            { 84, -40 },    // 25
+            { 19, -128 },    // 26
+            {  114, -55 },    // 27
+            { 61, -149 },    // 28
+            { 80, -146 },    // 29
+            { 132, -74 },    // 30
+            { 113, -130 },    // 31
+            { 22, -58 },    // 32
+            { 130, -110 },    // 33
+            { 99, -47 },    // 34
+            {  37, -150 },    // 35
+            { 125, -64 }     // 36
         };
         // Blob detection references
         // http://www.aforgenet.com/framework/features/blobs_processing.html
@@ -159,16 +173,10 @@ namespace RouletteNumberDetection
 
         }
 
-        private void get_Frame(object sender, NewFrameEventArgs eventArgs)
-        {
-            blobDetection(sender, eventArgs);
-            //Bitmap _BsourceFrame = (Bitmap)eventArgs.Frame.Clone();
-            //pictureBox1.Image = BlobDetection(_BsourceFrame);
-            //pictureBox2.Image = _bitmapEdgeImage;
-            //pictureBox3.Image = _bitmapBinaryImage;
-            //pictureBox4.Image = _colorFilterImage;
-
-        }
+        //private void get_Frame(object sender, NewFrameEventArgs eventArgs)
+        //{
+        //    blobDetection(sender, eventArgs);
+        //}
 
 
         private void StartCameras()
@@ -181,7 +189,7 @@ namespace RouletteNumberDetection
                 videoSource.Login = "admin";
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
-                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(get_Frame);
+                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(blobDetection);
 
                 videoSourcePlayer1.Start();
             }
@@ -206,9 +214,9 @@ namespace RouletteNumberDetection
             }
         }
 
-        private double FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
+        private float FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
-            double distance = Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+            float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
 
             return distance;
         }
@@ -243,27 +251,28 @@ namespace RouletteNumberDetection
             tbZeroPosY.Text = ZeroPos.Y.ToString();
 
 
-            iRedValue = 245; // sbRedColor.Value;
-            iGreenValue = 250; // sbGreenColor.Value;
-            iBlueValue = 250; // sbBlueColor.Value;
+            iRedValue = 255; // sbRedColor.Value;
+            iGreenValue = 255; // sbGreenColor.Value;
+            iBlueValue = 255; // sbBlueColor.Value;
             iMinWidth = 8; iMaxWidth = 10;
             iMinHeight = 8; iMaxHeight = 10;
-            iRadius = 60;
+            iRadius = 5;
 
             drawBlob(args, pictureBox2, ref BallPos);
             tbBolaPosX.Text = BallPos.X.ToString();
             tbBolaPosY.Text = BallPos.Y.ToString();
-            textBox1.Text = string.Format("{0}", FindDistance(BallPos, ZeroPos));
+            textBox1.Text = string.Format("{0}", FindDistance(ZeroPos, BallPos));
+            textBox2.Text = string.Format("{0}", GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos));
         }
 
         private void drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
             Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
+
             //CopyRegionIntoImage(objectsImage, new Rectangle(197, 125, 315, 285), ref objectsImage, new Rectangle(new System.Drawing.Point(0, 0), new Size(398, 360)));
             //objectsImage = (Bitmap)Zoom(objectsImage, new Size(100, 100));
 
             Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
-            //Pen pen = new Pen(Color.FromArgb(160, 255, 160), 5);
             Pen pen = new Pen(Color.FromArgb(iRedValue, iGreenValue, iBlueValue), 5);
 
             // Color centerColor = Color.LimeGreen; // 50, 205, 50
@@ -336,6 +345,19 @@ namespace RouletteNumberDetection
             {
                 grD.DrawImage(srcBitmap, destRegion, srcRegion, GraphicsUnit.Pixel);
             }
+        }
+
+        /**
+        * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
+        * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
+        */
+        static float radian = 180.0F / (float)Math.PI;
+
+        private static float GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
+        {
+            float xDiff = p2.X - p1.X;
+            float yDiff = p2.Y - p1.Y;
+            return (float)Math.Atan2(yDiff, xDiff) * radian;
         }
     }
 
