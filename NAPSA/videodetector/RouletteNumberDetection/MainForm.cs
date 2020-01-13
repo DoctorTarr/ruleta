@@ -18,60 +18,6 @@ namespace RouletteNumberDetection
 {
     public partial class MainForm : Form
     {
-        //Roulette wheel number sequence
-        //The pockets of the roulette wheel are numbered from 0 to 36.
-        //In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black.
-        //In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red.
-        //There is a green pocket numbered 0 (zero). In American roulette, there is a second green pocket marked 00. 
-        //Pocket number order on the roulette wheel adheres to the following clockwise sequence in most casinos
-
-        //Single-zero wheel 
-        //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        //Double-zero wheel 
-        //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
-        //Triple-zero wheel 
-        //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        int[,] Numbers = new int[,]
-        {
-            // distance, angle = number
-            {  20,  -90 },   // 0
-            { 127, -114 },   // 1
-            {  72,  -38 },   // 2
-            {  29, -146 },   // 3
-            {  51,  -38 },   // 4
-            { 136,  -94 },   // 5
-            { 108,  -51 },   // 6
-            {  68, -148 },   // 7
-            { 134,  -79 },   // 8
-            { 107, -133 },   // 9
-            { 136,  -89 },      // 10
-            { 129, -69 },      // 11
-            { 48, -149 },      // 12
-            { 122, -59 },      // 13
-            { 118, -124 },      // 14
-            { 30, -43 },      // 15
-            {  131, -105 },      // 16
-            { 92, -44 },      // 17
-            { 88, -143 },    // 18
-            { 41, -39 },    // 19
-            { 20, -120 },    // 20
-            { 62, -35 },    // 21
-            { 97, -137 },    // 22
-            {  134, -83 },    // 23
-            { 135, -100 },    // 24
-            { 84, -40 },    // 25
-            { 19, -128 },    // 26
-            {  114, -55 },    // 27
-            { 61, -149 },    // 28
-            { 80, -146 },    // 29
-            { 132, -74 },    // 30
-            { 113, -130 },    // 31
-            { 22, -58 },    // 32
-            { 130, -110 },    // 33
-            { 99, -47 },    // 34
-            {  37, -150 },    // 35
-            { 125, -64 }     // 36
-        };
         // Blob detection references
         // http://www.aforgenet.com/framework/features/blobs_processing.html
         // https://www.codeproject.com/Articles/139628/Detect-and-Track-Objects-in-Live-Webcam-Video-Base
@@ -82,6 +28,8 @@ namespace RouletteNumberDetection
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
         Size _pbSize = new Size(640, 400);
+        int _Distance = 0, _Angle = 0;
+        int _WinnerNumber = 0;
 
         System.Drawing.Point ZeroPos, BallPos;
 
@@ -212,12 +160,6 @@ namespace RouletteNumberDetection
             }
         }
 
-        private float FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
-        {
-            float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
-
-            return distance;
-        }
         #endregion
 
         #region Blob Detection
@@ -243,6 +185,8 @@ namespace RouletteNumberDetection
         /// 
         private void blobDetection(object sender, NewFrameEventArgs args)
         {
+            int winner = -1;
+
             iRedValue = 5; // sbRedColor.Value;
             iGreenValue = 240; // sbGreenColor.Value;
             iBlueValue = 5; // sbBlueColor.Value;
@@ -268,8 +212,17 @@ namespace RouletteNumberDetection
             {
                 tbBolaPosX.Text = BallPos.X.ToString();
                 tbBolaPosY.Text = BallPos.Y.ToString();
-                textBox1.Text = string.Format("{0}", FindDistance(ZeroPos, BallPos));
-                textBox2.Text = string.Format("{0}", GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos));
+                _Distance = FindDistance(ZeroPos, BallPos);
+                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                textBox1.Text = string.Format("{0}", _Distance);
+                textBox2.Text = string.Format("{0}", _Angle);
+                winner = FindWinnerNumber(_Distance, _Angle);
+
+                if (winner > -1)
+                {
+                    _WinnerNumber = winner;
+                    textBox3.Text = string.Format("{0}", _WinnerNumber);
+                }
             }
         }
 
@@ -365,13 +318,91 @@ namespace RouletteNumberDetection
         * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
         * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
         */
-        static float radian = 180.0F / (float)Math.PI;
+        static double radian = 180.0F / (float)Math.PI;
 
-        private static float GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
+        private static int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
         {
-            float xDiff = p2.X - p1.X;
-            float yDiff = p2.Y - p1.Y;
-            return (float)Math.Atan2(yDiff, xDiff) * radian;
+            double xDiff = p2.X - p1.X;
+            double yDiff = p2.Y - p1.Y;
+            return (int)Math.Round(Math.Atan2(yDiff, xDiff) * radian);
+        }
+
+        private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
+        {
+            float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+
+            return (int)Math.Round(distance);
+        }
+
+        //Roulette wheel number sequence
+        //The pockets of the roulette wheel are numbered from 0 to 36.
+        //In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black.
+        //In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red.
+        //There is a green pocket numbered 0 (zero). In American roulette, there is a second green pocket marked 00. 
+        //Pocket number order on the roulette wheel adheres to the following clockwise sequence in most casinos
+
+        //Single-zero wheel 
+        //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
+        //Double-zero wheel 
+        //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
+        //Triple-zero wheel 
+        //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
+        int[,] Numbers = new int[,]
+        {
+            // distance, angle = number
+            {  24,  90 },// 0
+            { 150, 113 },// 1
+            {  81,  46 },// 2
+            {  31, 130 },// 3
+            {  60,  44 },// 4
+            { 164,  95 },// 5
+            { 125,  58 },// 6
+            {  76, 143 },// 7
+            { 160,  81 },// 8
+            { 117, 129 },// 9
+            { 165,  90 },// 10
+            { 151,  73 },// 11
+            {  53, 141 },// 12
+            { 140,  65 },// 13
+            { 135, 121 },// 14
+            {  38,  50 },// 15
+            { 160, 103 },// 16
+            { 102,  51 },// 17
+            {  98, 136 },// 18
+            {  48,  45 },// 19
+            { 142, 116 },// 20
+            {  71,  44 },// 21
+            { 107, 132 },// 22
+            { 163,  86 },// 23
+            { 161,  99 },// 24
+            {  94,  48 },// 25
+            {  26, 111 },// 26
+            { 132,  61 },// 27
+            {  63, 141 },// 28
+            {  87, 138 },// 29
+            { 155,  77 },// 30
+            { 126, 124 },// 31
+            {  28,  62 },// 32
+            { 155, 108 },// 33
+            { 115,  55 },// 34 
+            {  45, 138 },// 35
+            { 148,  68 } // 36
+        };
+        private int FindWinnerNumber(int distance, int angle)
+        {
+            int winner = -1;
+
+            for (int i = 0; i < 37; i++)
+            {
+                if ((Math.Abs(Numbers[i, 0] - distance) < 3) &&
+                    (Math.Abs(Numbers[i, 1] - angle) < 3))
+                {
+                    winner = i;
+                    break;
+                }
+            }
+
+            return winner;
         }
     }
 

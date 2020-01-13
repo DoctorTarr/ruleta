@@ -22,7 +22,7 @@ namespace SampleApp
     public partial class MainForm : Form
     {
         private Stopwatch stopWatch = null;
-
+        private Size _pbSize = new Size(640, 400);
         // Class constructor
         public MainForm()
         {
@@ -152,17 +152,20 @@ namespace SampleApp
         // New frame received by the player
         private void videoSourcePlayer_NewFrame(object sender, NewFrameEventArgs args)
         {
-            DateTime now = DateTime.Now;
+            //DateTime now = DateTime.Now;
+            Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
+            args.Frame = objectsImage;
             Graphics g = Graphics.FromImage(args.Frame);
 
             // paint current time
             SolidBrush brush = new SolidBrush(Color.Red);
-            g.DrawString(now.ToString(), this.Font, brush, new PointF(5, 5));
+            //g.DrawString(now.ToString(), this.Font, brush, new PointF(5, 5));
             brush.Dispose();
 
             g.Dispose();
 
             DrawGrid(args.Frame);
+
 
         }
 
