@@ -81,11 +81,9 @@ namespace RouletteNumberDetection
         int iMinWidth = 8, iMaxWidth = 10, iMinHeight = 8, iMaxHeight = 10, iRadius = 110;
         Color color = Color.LimeGreen;
         bool _calibrateFlag = false;
-        Size _pbSize = new Size(640, 360);
+        Size _pbSize = new Size(640, 400);
 
         System.Drawing.Point ZeroPos, BallPos;
-
-        System.Drawing.Image imgOriginal;
 
         // Bitmaps
         //Bitmap _bitmapEdgeImage, _bitmapBinaryImage, _bitmapGreyImage, _bitmapBlurImage, _colorFilterImage;
@@ -223,6 +221,11 @@ namespace RouletteNumberDetection
         #endregion
 
         #region Blob Detection
+        //For blob recognition, there is a demo application which you will find after you download all the source code.
+        //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
+        // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
+        // to perform color transformations, if the features you need should be recognized by subtly different color.And so on…
+
         /// <summary> Blob Detection    
         /// This method for color object detection by Blob counter algorithm.
         /// If you using this method, then you can detecting as follows:
@@ -237,6 +240,7 @@ namespace RouletteNumberDetection
         ///     4. the binary filtering based on edge filter image.
         ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
         /// </summary>
+        /// 
         private void blobDetection(object sender, NewFrameEventArgs args)
         {
             iRedValue = 5; // sbRedColor.Value;
@@ -246,27 +250,32 @@ namespace RouletteNumberDetection
             iMinHeight = 12; iMaxHeight = 16;
             iRadius = 180;
 
-            drawBlob(args, pictureBox1, ref ZeroPos);
-            tbZeroPosX.Text = ZeroPos.X.ToString();
-            tbZeroPosY.Text = ZeroPos.Y.ToString();
+            if (drawBlob(args, pictureBox1, ref ZeroPos))
+            {
+                tbZeroPosX.Text = ZeroPos.X.ToString();
+                tbZeroPosY.Text = ZeroPos.Y.ToString();
+            }
 
 
-            iRedValue = 255; // sbRedColor.Value;
-            iGreenValue = 255; // sbGreenColor.Value;
-            iBlueValue = 255; // sbBlueColor.Value;
-            iMinWidth = 8; iMaxWidth = 10;
-            iMinHeight = 8; iMaxHeight = 10;
-            iRadius = 5;
+            iRedValue = 251; // sbRedColor.Value;
+            iGreenValue = 254; // sbGreenColor.Value;
+            iBlueValue = 150; // sbBlueColor.Value;
+            iMinWidth = 8; iMaxWidth = 12;
+            iMinHeight = 8; iMaxHeight = 12;
+            iRadius = 50;
 
-            drawBlob(args, pictureBox2, ref BallPos);
-            tbBolaPosX.Text = BallPos.X.ToString();
-            tbBolaPosY.Text = BallPos.Y.ToString();
-            textBox1.Text = string.Format("{0}", FindDistance(ZeroPos, BallPos));
-            textBox2.Text = string.Format("{0}", GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos));
+            if (drawBlob(args, pictureBox2, ref BallPos))
+            {
+                tbBolaPosX.Text = BallPos.X.ToString();
+                tbBolaPosY.Text = BallPos.Y.ToString();
+                textBox1.Text = string.Format("{0}", FindDistance(ZeroPos, BallPos));
+                textBox2.Text = string.Format("{0}", GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos));
+            }
         }
 
-        private void drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
+        private bool drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
+            bool found = false;
             Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
 
             //CopyRegionIntoImage(objectsImage, new Rectangle(197, 125, 315, 285), ref objectsImage, new Rectangle(new System.Drawing.Point(0, 0), new Size(398, 360)));
@@ -278,13 +287,14 @@ namespace RouletteNumberDetection
             // Color centerColor = Color.LimeGreen; // 50, 205, 50
             _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
             _colorFilter.Radius = (short)iRadius;
+            pb.Image = _colorFilter.Apply(objectsImage);
             _colorFilter.ApplyInPlace(objectsImage);
 
             Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
 
             BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-            pb.Image = grayImage.ToManagedImage();
+//            pb.Image = grayImage.ToManagedImage();
             objectsImage.UnlockBits(objectsData);
 
             blobCounter.MinWidth = iMinWidth;
@@ -300,7 +310,9 @@ namespace RouletteNumberDetection
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
 
             foreach (Rectangle recs in rects)
-                if (rects.Length > 0)
+            {
+                found = rects.Length > 0;
+                if (found)
                 {
                     Rectangle objectRect = rects[0];
                     position = objectRect.Location;
@@ -310,12 +322,14 @@ namespace RouletteNumberDetection
                     g.Dispose();
                     break;
                 }
+            }
 
             //pictureBox1.Image = mImage;
             if (_calibrateFlag)
                 CalibrateCamera(mImage);
 
             args.Frame = mImage;
+            return found;
         }
 
         #endregion

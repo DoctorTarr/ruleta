@@ -204,9 +204,9 @@ namespace ObjectDetecting
                 sbRadius.Value = 180;
                 iRadius = sbRadius.Value;
 
-                sbRedColor.Value = 30;
-                sbGreenColor.Value = 30;
-                sbBlueColor.Value = 240;
+                sbRedColor.Value = 255; // 30;
+                sbGreenColor.Value = 255; //30;
+                sbBlueColor.Value = 255; //240;
 
                 listBox1.Items.Add("Blue: " + iBlueValue.ToString());
                 ScrollDown();
@@ -371,8 +371,8 @@ namespace ObjectDetecting
             ///
             BlobCounter _blobCounter = new BlobCounter();
             //Configure Filter
-            _blobCounter.MinWidth = 70;
-            _blobCounter.MinHeight = 70;
+            _blobCounter.MinWidth = 10;
+            _blobCounter.MinHeight = 10;
             _blobCounter.FilterBlobs = true;
             _blobCounter.ProcessImage(_bitmapBinaryImage);
 
