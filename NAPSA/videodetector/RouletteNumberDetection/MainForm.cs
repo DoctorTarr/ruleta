@@ -33,6 +33,9 @@ namespace RouletteNumberDetection
 
         System.Drawing.Point ZeroPos, BallPos;
 
+        System.Drawing.Point _MiddlePos = new System.Drawing.Point(0,0);
+
+
         // Bitmaps
         //Bitmap _bitmapEdgeImage, _bitmapBinaryImage, _bitmapGreyImage, _bitmapBlurImage, _colorFilterImage;
 
@@ -153,6 +156,15 @@ namespace RouletteNumberDetection
                 videoSourcePlayer1.WaitForStop();
                 pictureBox1.Image = null;
                 pictureBox2.Image = null;
+                textBox1.Text = "";
+                textBox2.Text = "";
+                textBox3.Text = "";
+                textBox4.Text = "";
+                tbBolaPosX.Text = "";
+                tbBolaPosY.Text = "";
+                tbZeroPosX.Text = "";
+                tbZeroPosY.Text = "";
+
             }
             catch (Exception)
             {
@@ -198,37 +210,55 @@ namespace RouletteNumberDetection
             {
                 tbZeroPosX.Text = ZeroPos.X.ToString();
                 tbZeroPosY.Text = ZeroPos.Y.ToString();
+                //textBox4.Text = string.Format("{0}", GetAngleOfLineBetweenTwoPoints(_MiddlePos, ZeroPos));
             }
 
-
-            iRedValue = 251; // sbRedColor.Value;
-            iGreenValue = 254; // sbGreenColor.Value;
-            iBlueValue = 150; // sbBlueColor.Value;
-            iMinWidth = 8; iMaxWidth = 12;
-            iMinHeight = 8; iMaxHeight = 12;
-            iRadius = 50;
-
-            if (drawBlob(args, pictureBox2, ref BallPos))
+            if (Math.Abs(ZeroPos.X - 314) < 3)
             {
-                tbBolaPosX.Text = BallPos.X.ToString();
-                tbBolaPosY.Text = BallPos.Y.ToString();
-                _Distance = FindDistance(ZeroPos, BallPos);
-                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-                textBox1.Text = string.Format("{0}", _Distance);
-                textBox2.Text = string.Format("{0}", _Angle);
-                winner = FindWinnerNumber(_Distance, _Angle);
+                iRedValue = 251; // sbRedColor.Value;
+                iGreenValue = 254; // sbGreenColor.Value;
+                iBlueValue = 150; // sbBlueColor.Value;
+                iMinWidth = 8; iMaxWidth = 12;
+                iMinHeight = 8; iMaxHeight = 12;
+                iRadius = 50;
 
-                if (winner > -1)
+                if (drawBlob(args, pictureBox2, ref BallPos))
                 {
-                    _WinnerNumber = winner;
-                    textBox3.Text = string.Format("{0}", _WinnerNumber);
+                    tbBolaPosX.Text = BallPos.X.ToString();
+                    tbBolaPosY.Text = BallPos.Y.ToString();
+                    _Distance = FindDistance(ZeroPos, BallPos);
+                    _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                    textBox1.Text = string.Format("{0}", _Distance);
+                    textBox2.Text = string.Format("{0}", _Angle);
+                    {
+                        winner = FindWinnerNumber(_Distance, _Angle);
+
+                        if (winner > -1)
+                        {
+                            _WinnerNumber = winner;
+                            textBox3.Text = string.Format("{0}", _WinnerNumber);
+                        }
+                    }
+                }
+                else
+                {
+                    _WinnerNumber = -1;
+                    textBox3.Text = "";
                 }
             }
+
         }
 
         private bool drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
             bool found = false;
+            blobCounter.MinWidth = iMinWidth;
+            blobCounter.MaxWidth = iMaxWidth;
+            blobCounter.MinHeight = iMinHeight;
+            blobCounter.MaxHeight = iMaxHeight;
+            blobCounter.FilterBlobs = false;
+            blobCounter.ObjectsOrder = ObjectsOrder.Size;
+
             Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
 
             //CopyRegionIntoImage(objectsImage, new Rectangle(197, 125, 315, 285), ref objectsImage, new Rectangle(new System.Drawing.Point(0, 0), new Size(398, 360)));
@@ -247,17 +277,8 @@ namespace RouletteNumberDetection
 
             BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-//            pb.Image = grayImage.ToManagedImage();
-            objectsImage.UnlockBits(objectsData);
-
-            blobCounter.MinWidth = iMinWidth;
-            blobCounter.MaxWidth = iMaxWidth;
-            blobCounter.MinHeight = iMinHeight;
-            blobCounter.MaxHeight = iMaxHeight;
-
-            blobCounter.FilterBlobs = true;
-            blobCounter.ObjectsOrder = ObjectsOrder.Size;
             blobCounter.ProcessImage(grayImage);
+            objectsImage.UnlockBits(objectsData);
 
 
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
