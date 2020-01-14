@@ -687,7 +687,7 @@ namespace DASYS.GUI
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FrmPanel";
-            this.Text = "Panel del Recolector II";
+            this.Text = "Panel del Recolector III";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmPanel_FormClosing);
             this.Load += new System.EventHandler(this.FrmPanel_Load);

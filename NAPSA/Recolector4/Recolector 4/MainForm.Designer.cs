@@ -361,7 +361,7 @@
             this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.Color.Red;
             this.Name = "MainForm";
-            this.Text = "Ruleta - Número Ganador";
+            this.Text = "Panel del Video Recolector IV";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);

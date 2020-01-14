@@ -206,7 +206,7 @@ namespace ObjectDetecting
 
                 sbRedColor.Value = 255; // 30;
                 sbGreenColor.Value = 255; //30;
-                sbBlueColor.Value = 255; //240;
+                sbBlueColor.Value = 200; //240;
 
                 listBox1.Items.Add("Blue: " + iBlueValue.ToString());
                 ScrollDown();

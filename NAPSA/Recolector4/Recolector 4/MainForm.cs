@@ -48,7 +48,13 @@ namespace RouletteNumberDetection
 
         private System.Drawing.Point ZeroPos, BallPos;
 
-        private Size _pbSize = new Size(640, 400);
+        //private Size _pbSize = new Size(640, 400);
+        //private ResizeBilinear _resizeFilter = new ResizeBilinear(640, 400);
+        private ResizeNearestNeighbor _resizeFilter = new ResizeNearestNeighbor(640, 400);
+
+        private double radian = 180.0F / (float)Math.PI;
+
+
         private int _Distance = 0, _Angle = 0;
         private bool _calibrateFlag = false;
 
@@ -138,12 +144,6 @@ namespace RouletteNumberDetection
             _g.DrawRectangle(_penred, rcSlots);
 
         }
-
-        //private void get_Frame(object sender, NewFrameEventArgs eventArgs)
-        //{
-        //    blobDetection(sender, eventArgs);
-        //}
-
 
         private void StartCameras()
         {
@@ -272,18 +272,8 @@ namespace RouletteNumberDetection
         private bool drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
         {
             bool found = false;
-            // Filter for blob detecting. Parameters setup in caller
-            
-            _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
-                                             //  post processing after image was processed.If the property is set to true, 
-                                             //  then blobs filtering is done right after image processing routine. 
-                                             // If BlobsFilter is set, then custom blobs' filtering is done, which is
-                                             // implemented by user. Otherwise blobs are filtered according to dimensions
-                                             // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
 
-            _blobCounter.ObjectsOrder = ObjectsOrder.Size;
-
-            Bitmap objectsImage = new Bitmap(args.Frame, _pbSize);
+            Bitmap objectsImage =_resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
 
             Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
 
@@ -293,31 +283,35 @@ namespace RouletteNumberDetection
 
             BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-            _blobCounter.ProcessImage(grayImage);
+
+            // Filter for blob detecting. Parameters setup in caller
+            _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
+                                             //  post processing after image was processed.If the property is set to true, 
+                                             //  then blobs filtering is done right after image processing routine. 
+                                             // If BlobsFilter is set, then custom blobs' filtering is done, which is
+                                             // implemented by user. Otherwise blobs are filtered according to dimensions
+                                             // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
+
             objectsImage.UnlockBits(objectsData);
 
+            _blobCounter.ObjectsOrder = ObjectsOrder.Size;
+            _blobCounter.ProcessImage(grayImage);
 
             Rectangle[] rects = _blobCounter.GetObjectsRectangles();
-            //found = rects.Length > 0;
-            if (rects.Length > 0)
+            found = rects.Length > 0;
+            if (found)
             {
                 Rectangle objectRect = rects[0];
-                found = objectRect.Width <= _blobCounter.MaxWidth;
-                if (found)
-                {
-                    position = objectRect.Location;
+                position = objectRect.Location;
 #if DEBUG
-                    pb.Image = _colorFilter.Apply(objectsImage);
+                pb.Image = _colorFilter.Apply(objectsImage);
 
-                    Graphics g = Graphics.FromImage(mImage);
-                    g.DrawRectangle(_drawPen, objectRect);
-                    g.Dispose();
+                Graphics g = Graphics.FromImage(mImage);
+                g.DrawRectangle(_drawPen, objectRect);
+                g.Dispose();
 #endif
-
-                }
             }
 
-            //pictureBox1.Image = mImage;
             if (_calibrateFlag)
                 CalibrateCamera(mImage);
 
@@ -358,13 +352,12 @@ namespace RouletteNumberDetection
         * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
         * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
         */
-        static double radian = 180.0F / (float)Math.PI;
 
-        private static int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
+        private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             double xDiff = p2.X - p1.X;
             double yDiff = p2.Y - p1.Y;
-            return (int)Math.Round(Math.Atan2(yDiff, xDiff) * radian);
+            return (int)Math.Round(Math.Atan2(yDiff, xDiff) * this.radian);
         }
 
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
