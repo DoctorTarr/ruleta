@@ -329,6 +329,8 @@ namespace DASYS.GUI
                         break;
                 }
                 Persistencia.Guardar(cadena);
+                txtProtocolo.AppendText(cadena);
+                txtProtocolo.AppendText(Environment.NewLine);
             }
             catch (Exception ex)
             {
