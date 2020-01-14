@@ -270,7 +270,6 @@ namespace RouletteNumberDetection
             // Color centerColor = Color.LimeGreen; // 50, 205, 50
             _colorFilter.CenterColor = new RGB((byte)iRedValue, (byte)iGreenValue, (byte)iBlueValue);
             _colorFilter.Radius = (short)iRadius;
-            pb.Image = _colorFilter.Apply(objectsImage);
             _colorFilter.ApplyInPlace(objectsImage);
 
             Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
@@ -282,20 +281,18 @@ namespace RouletteNumberDetection
 
 
             Rectangle[] rects = blobCounter.GetObjectsRectangles();
-
-            foreach (Rectangle recs in rects)
+            found = rects.Length > 0;
+            if (found)
             {
-                found = rects.Length > 0;
-                if (found)
-                {
-                    Rectangle objectRect = rects[0];
-                    position = objectRect.Location;
+                Rectangle objectRect = rects[0];
+                position = objectRect.Location;
+#if DEBUG
+                pb.Image = _colorFilter.Apply(objectsImage);
 
-                    Graphics g = Graphics.FromImage(mImage);
-                    g.DrawRectangle(pen, objectRect);
-                    g.Dispose();
-                    break;
-                }
+                Graphics g = Graphics.FromImage(mImage);
+                g.DrawRectangle(pen, objectRect);
+                g.Dispose();
+#endif
             }
 
             //pictureBox1.Image = mImage;
@@ -306,7 +303,7 @@ namespace RouletteNumberDetection
             return found;
         }
 
-        #endregion
+#endregion
         private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
         {
             System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
