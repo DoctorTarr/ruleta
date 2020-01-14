@@ -298,18 +298,23 @@ namespace RouletteNumberDetection
 
 
             Rectangle[] rects = _blobCounter.GetObjectsRectangles();
-            found = rects.Length > 0;
-            if (found)
+            //found = rects.Length > 0;
+            if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                position = objectRect.Location;
+                found = objectRect.Width <= _blobCounter.MaxWidth;
+                if (found)
+                {
+                    position = objectRect.Location;
 #if DEBUG
-                pb.Image = _colorFilter.Apply(objectsImage);
+                    pb.Image = _colorFilter.Apply(objectsImage);
 
-                Graphics g = Graphics.FromImage(mImage);
-                g.DrawRectangle(_drawPen, objectRect);
-                g.Dispose();
+                    Graphics g = Graphics.FromImage(mImage);
+                    g.DrawRectangle(_drawPen, objectRect);
+                    g.Dispose();
 #endif
+
+                }
             }
 
             //pictureBox1.Image = mImage;
@@ -405,7 +410,7 @@ namespace RouletteNumberDetection
             { 102,  51 },// 17
             {  98, 136 },// 18
             {  48,  45 },// 19
-            { 142, 116 },// 20
+            { 142, 115 },// 20
             {  71,  44 },// 21
             { 107, 132 },// 22
             { 163,  86 },// 23
