@@ -65,7 +65,7 @@ namespace DASYS.GUI
                 {
                     this.port = new SerialPort("COM1", 9600, Parity.None, 8, StopBits.One);
                     this.port.Open();
-                    this.port.NewLine = "\r"; // Protocolo contra la cajita de sensores, usa CRLF
+                    this.port.NewLine = "\r\n"; // Protocolo contra la cajita de sensores, usa CRLF
                     this.port.DataReceived += new SerialDataReceivedEventHandler(this.port_DataReceived);
                     flag = true;
                 }

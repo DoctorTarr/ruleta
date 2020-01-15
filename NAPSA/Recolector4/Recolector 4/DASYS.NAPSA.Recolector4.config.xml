@@ -17,7 +17,7 @@
 	<log>
 		<logActivado>false</logActivado>
 		<logRuta>c:\NAPSA LOGS</logRuta>
-		<logArchivo>\log2.log</logArchivo>
+		<logArchivo>\log4.log</logArchivo>
 		<logMaxKb>50</logMaxKb>
 	</log>
 	<generales>

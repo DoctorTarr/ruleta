@@ -22,6 +22,22 @@ namespace RouletteNumberDetection
             }
             base.Dispose(disposing);
         }
+
+        #region Form_Load, Closing
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            this.azarNumero = new Random((int)DateTime.Now.Ticks);
+            this.leerUltimoNumero();
+            if (Pase.UltimoPase == null)
+                Pase.UltimoPase = new Pase();
+            this.estadoMesa = ProtocoloNAPSA.EstadoJuego.StartingApp;
+            this.estadoMesa++;
+
+        }
+
+        #endregion
+
+
         #region Demo Timer
         private void tmrDemo_Tick(object sender, EventArgs e)
         {
@@ -31,28 +47,47 @@ namespace RouletteNumberDetection
                 if (this.estadoDemo > 5)
                     this.estadoDemo = 1;
                 string cadena = string.Empty;
+                
                 switch (this.estadoDemo)
                 {
                     case 1:
-                        cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        cadena = ProtocoloNAPSA.FormatearCadenaEstado(numeroDemo,
+                                                                ProtocoloNAPSA.EstadoJuego.BeforeGame, 
+                                                                this.azarNumero.Next(0, 100), this.azarNumero.Next(0, 2), 0);
                         this.tmrDemo.Interval = 100;
                         break;
                     case 2:
-                        cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        cadena = ProtocoloNAPSA.FormatearCadenaEstado(numeroDemo,
+                                                                ProtocoloNAPSA.EstadoJuego.PlaceYourBet,
+                                                                this.azarNumero.Next(0, 100), this.azarNumero.Next(0, 2), 0);
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 3:
-                        cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        cadena = ProtocoloNAPSA.FormatearCadenaEstado(numeroDemo,
+                                                                ProtocoloNAPSA.EstadoJuego.FinishBetting,
+                                                                this.azarNumero.Next(0, 100), this.azarNumero.Next(0, 2), 0);
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 4:
-                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+//                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        cadena = ProtocoloNAPSA.FormatearCadenaEstado(numeroDemo,
+                                                                ProtocoloNAPSA.EstadoJuego.NoMoreBets,
+                                                                this.azarNumero.Next(0, 100), this.azarNumero.Next(0, 2), 0);
                         this.tmrDemo.Interval = 10000;
                         break;
                     case 5:
-                        Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                        //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                        cadena = ProtocoloNAPSA.FormatearCadenaEstado(numeroDemo,
+                                                                ProtocoloNAPSA.EstadoJuego.WinningNumber,
+                                                                this.azarNumero.Next(0, 100), this.azarNumero.Next(0, 2), 0);
+                        Persistencia.Guardar(cadena);
+
                         this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
-                        cadena = "NN" + this.numeroDemo.ToString("00") + "    N";
+                        //cadena = "NN" + this.numeroDemo.ToString("00") + "    N";
+                        cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numeroDemo);
                         this.tmrDemo.Interval = 1000;
                         break;
                 }
@@ -65,17 +100,6 @@ namespace RouletteNumberDetection
                 int num = 0 + 1;
             }
         }
-        #endregion
-        #region Form_Load, Closing
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            this.azarNumero = new Random((int)DateTime.Now.Ticks);
-            this.leerUltimoNumero();
-            if (Pase.UltimoPase == null)
-                Pase.UltimoPase = new Pase();
-
-        }
-
         #endregion
 
         #region Windows Form Designer generated code
@@ -103,8 +127,8 @@ namespace RouletteNumberDetection
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.cbCalibrate = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnStartVideo = new System.Windows.Forms.Button();
+            this.btnStopVideo = new System.Windows.Forms.Button();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -117,6 +141,7 @@ namespace RouletteNumberDetection
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.txtProtocolo = new System.Windows.Forms.TextBox();
+            this.tmrMain = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -222,9 +247,9 @@ namespace RouletteNumberDetection
             this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.cbCalibrate);
-            this.groupBox3.Controls.Add(this.button1);
+            this.groupBox3.Controls.Add(this.btnStartVideo);
             this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.button2);
+            this.groupBox3.Controls.Add(this.btnStopVideo);
             this.groupBox3.Controls.Add(this.videoSourcePlayer1);
             this.groupBox3.ForeColor = System.Drawing.SystemColors.WindowText;
             this.groupBox3.Location = new System.Drawing.Point(12, 3);
@@ -295,28 +320,28 @@ namespace RouletteNumberDetection
             this.cbCalibrate.Visible = false;
             this.cbCalibrate.CheckedChanged += new System.EventHandler(this.cbCalibrate_CheckedChanged);
             // 
-            // button1
+            // btnStartVideo
             // 
-            this.button1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button1.Location = new System.Drawing.Point(20, 453);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 27);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "start";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnStartVideo.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.btnStartVideo.Location = new System.Drawing.Point(20, 453);
+            this.btnStartVideo.Name = "btnStartVideo";
+            this.btnStartVideo.Size = new System.Drawing.Size(75, 27);
+            this.btnStartVideo.TabIndex = 11;
+            this.btnStartVideo.Text = "start";
+            this.btnStartVideo.UseVisualStyleBackColor = true;
+            this.btnStartVideo.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // btnStopVideo
             // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.button2.Location = new System.Drawing.Point(112, 453);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 27);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "disconnect";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnStopVideo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnStopVideo.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.btnStopVideo.Location = new System.Drawing.Point(112, 453);
+            this.btnStopVideo.Name = "btnStopVideo";
+            this.btnStopVideo.Size = new System.Drawing.Size(75, 27);
+            this.btnStopVideo.TabIndex = 12;
+            this.btnStopVideo.Text = "disconnect";
+            this.btnStopVideo.UseVisualStyleBackColor = true;
+            this.btnStopVideo.Click += new System.EventHandler(this.button2_Click);
             // 
             // textBox3
             // 
@@ -418,9 +443,10 @@ namespace RouletteNumberDetection
             // btnIniciarDemo
             // 
             this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(329, 578);
+            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
+            this.btnIniciarDemo.Location = new System.Drawing.Point(967, 530);
             this.btnIniciarDemo.Name = "btnIniciarDemo";
-            this.btnIniciarDemo.Size = new System.Drawing.Size(97, 23);
+            this.btnIniciarDemo.Size = new System.Drawing.Size(76, 23);
             this.btnIniciarDemo.TabIndex = 51;
             this.btnIniciarDemo.Text = "Iniciar Demo";
             this.btnIniciarDemo.UseVisualStyleBackColor = true;
@@ -437,11 +463,15 @@ namespace RouletteNumberDetection
             this.txtProtocolo.Size = new System.Drawing.Size(255, 82);
             this.txtProtocolo.TabIndex = 52;
             // 
+            // tmrMain
+            // 
+            this.tmrMain.Interval = 500;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.button2;
+            this.CancelButton = this.btnStopVideo;
             this.ClientSize = new System.Drawing.Size(1055, 624);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.btnIniciarDemo);
@@ -479,8 +509,8 @@ namespace RouletteNumberDetection
         private System.Windows.Forms.TextBox tbZeroPosY;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox tbZeroPosX;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnStartVideo;
+        private System.Windows.Forms.Button btnStopVideo;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox cbCalibrate;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -500,6 +530,7 @@ namespace RouletteNumberDetection
         private System.Windows.Forms.Timer tmrDemo;
         private System.Windows.Forms.Button btnIniciarDemo;
         private System.Windows.Forms.TextBox txtProtocolo;
+        private System.Windows.Forms.Timer tmrMain;
     }
 }
 

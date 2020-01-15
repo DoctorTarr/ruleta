@@ -79,6 +79,9 @@ namespace RouletteNumberDetection
         private byte numeroDemo;
         private Random azarNumero;
 
+        // Roulette Status variables
+        private ProtocoloNAPSA.EstadoJuego estadoMesa;
+
         public MainForm()
         {
             InitializeComponent();
@@ -133,6 +136,23 @@ namespace RouletteNumberDetection
        private void button2_Click(object sender, EventArgs e)
         {
             StopCameras();
+        }
+
+        private void btnIniciarDemo_Click(object sender, EventArgs e)
+        {
+            if (this.tmrDemo.Enabled)
+            {
+                this.tmrDemo.Stop();
+                this.txtProtocolo.Text = "";
+                this.btnIniciarDemo.Text = "Iniciar Demo";
+            }
+            else
+            {
+                btnStopVideo.PerformClick();
+                this.btnIniciarDemo.Text = "Detener Demo";
+                this.tmrDemo.Interval = 100;
+                this.tmrDemo.Start();
+            }
         }
 
         #region MyMethods
@@ -377,21 +397,6 @@ namespace RouletteNumberDetection
             return (int)Math.Round(Math.Atan2(yDiff, xDiff) * this.radian);
         }
 
-        private void btnIniciarDemo_Click(object sender, EventArgs e)
-        {
-            if (this.tmrDemo.Enabled)
-            {
-                this.tmrDemo.Stop();
-                this.txtProtocolo.Text = "";
-                this.btnIniciarDemo.Text = "Iniciar Demo";
-            }
-            else
-            {
-                this.btnIniciarDemo.Text = "Detener Demo";
-                this.tmrDemo.Interval = 100;
-                this.tmrDemo.Start();
-            }
-        }
 
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
@@ -430,7 +435,7 @@ namespace RouletteNumberDetection
             { 151,  73 },// 11
             {  53, 141 },// 12
             { 140,  65 },// 13
-            { 135, 121 },// 14
+            { 135, 119 },// 14
             {  38,  50 },// 15
             { 160, 103 },// 16
             { 102,  51 },// 17

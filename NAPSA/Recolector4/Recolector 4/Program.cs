@@ -28,7 +28,7 @@ namespace RouletteNumberDetection
                 try
                 {
                     Common.Logger.EscribirLinea();
-                    Common.Logger.Escribir("*** RECOLECTOR INICIADO ***", true);
+                    Common.Logger.Escribir("*** RECOLECTOR 4 v0.1 INICIADO ***", true);
                     Common.Logger.EscribirLinea();
                 }
                 catch

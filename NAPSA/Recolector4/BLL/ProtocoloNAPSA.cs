@@ -67,11 +67,38 @@ namespace DASYS.Recolector.BLL
       return resultadosPaquete;
     }
 
-    public enum ProtocoloTipoPaquete
+    static public string FormatearCadenaEstado(byte numero, EstadoJuego estado, int rpm, int sentidoGiro, byte error)
+    {
+            int estadoJuego = (int)estado;
+            string cadena = cadena = "NS" + numero.ToString("00") + estadoJuego.ToString() + rpm.ToString("00") + sentidoGiro.ToString() + error.ToString();
+
+            return (cadena);
+    }
+
+        static public string FormatearCadenaNumeroGanador(byte numero)
+        {
+            string cadena = "NN" + numero.ToString("00") + "    N";
+
+            return (cadena);
+        }
+
+        public enum ProtocoloTipoPaquete
     {
       NumeroGanador,
       Status,
       Null,
     }
+
+    public enum EstadoJuego : int
+    {
+        StartingApp,
+        BeforeGame,
+        PlaceYourBet,
+        FinishBetting,
+        NoMoreBets,
+        WinningNumber,
+        CloseTable
+    }
+
   }
 }
