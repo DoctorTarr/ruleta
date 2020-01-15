@@ -22,7 +22,7 @@ namespace DASYS.Recolector.BLL
           exePath += "\\";
         try
         {
-          Connection connection = new Connection(Common.ObtenerConexionDesdeXML("CP", exePath + "DASYS.NAPSA.Recolector.config.xml"));
+          Connection connection = new Connection(Common.ObtenerConexionDesdeXML("CP", exePath + "DASYS.NAPSA.Recolector4.config.xml"));
           Common.oConexiones = (List<Connection>) new Connections();
           Common.oConexiones.Add(connection);
           flag = Common.ProbarConexionBaseDatos(Common.oConexiones[0].Connectivity);
@@ -31,7 +31,7 @@ namespace DASYS.Recolector.BLL
         {
           Common.Logger.Escribir("La conexión a la base de datos ha fallado", true);
         }
-        Hashtable hashtable = Archivos.XML.LeerXML("log", exePath + "DASYS.NAPSA.Recolector.config.xml");
+        Hashtable hashtable = Archivos.XML.LeerXML("log", exePath + "DASYS.NAPSA.Recolector4.config.xml");
         if (hashtable != null && hashtable.Count > 0)
         {
           if (hashtable.Contains((object) "logActivado"))

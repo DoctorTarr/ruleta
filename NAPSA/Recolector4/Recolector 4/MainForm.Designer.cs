@@ -1,4 +1,7 @@
-﻿namespace RouletteNumberDetection
+﻿using DASYS.Recolector.BLL;
+using System;
+
+namespace RouletteNumberDetection
 {
     partial class MainForm
     {
@@ -19,6 +22,61 @@
             }
             base.Dispose(disposing);
         }
+        #region Demo Timer
+        private void tmrDemo_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                ++this.estadoDemo;
+                if (this.estadoDemo > 5)
+                    this.estadoDemo = 1;
+                string cadena = string.Empty;
+                switch (this.estadoDemo)
+                {
+                    case 1:
+                        cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        this.tmrDemo.Interval = 100;
+                        break;
+                    case 2:
+                        cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        this.tmrDemo.Interval = 6000;
+                        break;
+                    case 3:
+                        cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        this.tmrDemo.Interval = 6000;
+                        break;
+                    case 4:
+                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        this.tmrDemo.Interval = 10000;
+                        break;
+                    case 5:
+                        Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                        this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
+                        cadena = "NN" + this.numeroDemo.ToString("00") + "    N";
+                        this.tmrDemo.Interval = 1000;
+                        break;
+                }
+                Persistencia.Guardar(cadena);
+                txtProtocolo.AppendText(cadena);
+                txtProtocolo.AppendText(Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                int num = 0 + 1;
+            }
+        }
+        #endregion
+        #region Form_Load, Closing
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            this.azarNumero = new Random((int)DateTime.Now.Ticks);
+            this.leerUltimoNumero();
+            if (Pase.UltimoPase == null)
+                Pase.UltimoPase = new Pase();
+
+        }
+
+        #endregion
 
         #region Windows Form Designer generated code
 
@@ -28,6 +86,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbZeroPosY = new System.Windows.Forms.TextBox();
@@ -55,6 +114,9 @@
             this.tbBolaPosX = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.tmrDemo = new System.Windows.Forms.Timer(this.components);
+            this.btnIniciarDemo = new System.Windows.Forms.Button();
+            this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -284,7 +346,7 @@
             this.groupBox2.Controls.Add(this.tbBolaPosX);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.pictureBox2);
-            this.groupBox2.Location = new System.Drawing.Point(706, 285);
+            this.groupBox2.Location = new System.Drawing.Point(706, 253);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(337, 268);
             this.groupBox2.TabIndex = 30;
@@ -348,12 +410,41 @@
             this.pictureBox2.TabIndex = 12;
             this.pictureBox2.TabStop = false;
             // 
+            // tmrDemo
+            // 
+            this.tmrDemo.Interval = 500;
+            this.tmrDemo.Tick += new System.EventHandler(this.tmrDemo_Tick);
+            // 
+            // btnIniciarDemo
+            // 
+            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIniciarDemo.Location = new System.Drawing.Point(329, 578);
+            this.btnIniciarDemo.Name = "btnIniciarDemo";
+            this.btnIniciarDemo.Size = new System.Drawing.Size(97, 23);
+            this.btnIniciarDemo.TabIndex = 51;
+            this.btnIniciarDemo.Text = "Iniciar Demo";
+            this.btnIniciarDemo.UseVisualStyleBackColor = true;
+            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
+            // 
+            // txtProtocolo
+            // 
+            this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtProtocolo.Location = new System.Drawing.Point(706, 530);
+            this.txtProtocolo.Multiline = true;
+            this.txtProtocolo.Name = "txtProtocolo";
+            this.txtProtocolo.Size = new System.Drawing.Size(255, 82);
+            this.txtProtocolo.TabIndex = 52;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button2;
             this.ClientSize = new System.Drawing.Size(1055, 624);
+            this.Controls.Add(this.txtProtocolo);
+            this.Controls.Add(this.btnIniciarDemo);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.groupBox3);
@@ -406,6 +497,9 @@
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Timer tmrDemo;
+        private System.Windows.Forms.Button btnIniciarDemo;
+        private System.Windows.Forms.TextBox txtProtocolo;
     }
 }
 

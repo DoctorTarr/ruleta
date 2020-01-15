@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using DASYS.Recolector.BLL;
 
 namespace RouletteNumberDetection
 {
@@ -73,17 +74,15 @@ namespace RouletteNumberDetection
         System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
         int ipenWidth = 5;
 
+        // Demo variables
+        private int estadoDemo;
+        private byte numeroDemo;
+        private Random azarNumero;
 
         public MainForm()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-        }
-
-        #region Form_Load, Closing
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -97,7 +96,25 @@ namespace RouletteNumberDetection
                 return;
             }
         }
-        #endregion
+
+        private void leerUltimoNumero()
+        {
+            DateTime now = DateTime.Now;
+            do
+            {
+                try
+                {
+                    Application.DoEvents();
+                    Pase.UltimoPase = Pase.LeerUltimoNumeroDesdeBase();
+                    return;
+                }
+                catch
+                {
+                    Common.Logger.Escribir("La conexión a la base de datos ha fallado al iniciar.", true);
+                }
+            }
+            while (!(now.AddMinutes(1.0) < DateTime.Now));
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -222,7 +239,7 @@ namespace RouletteNumberDetection
             _blobCounter.MaxWidth = zeroMaxSize;
             _blobCounter.MinHeight = zeroMinSize;
             _blobCounter.MaxHeight = zeroMaxSize;
-            _drawPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
+            _drawPen = zeroPen;
             bZeroFound = drawBlob(args, pictureBox1, ref ZeroPos);
             if (bZeroFound)
             {
@@ -236,7 +253,7 @@ namespace RouletteNumberDetection
             _blobCounter.MaxWidth = ballMaxSize;
             _blobCounter.MinHeight = ballMinSize;
             _blobCounter.MaxHeight = ballMaxSize;
-            _drawPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, zeroColor.Blue), 5);
+            _drawPen = ballPen;
             bBallFound = drawBlob(args, pictureBox2, ref BallPos);
             if (bBallFound)
             {
@@ -360,6 +377,22 @@ namespace RouletteNumberDetection
             return (int)Math.Round(Math.Atan2(yDiff, xDiff) * this.radian);
         }
 
+        private void btnIniciarDemo_Click(object sender, EventArgs e)
+        {
+            if (this.tmrDemo.Enabled)
+            {
+                this.tmrDemo.Stop();
+                this.txtProtocolo.Text = "";
+                this.btnIniciarDemo.Text = "Iniciar Demo";
+            }
+            else
+            {
+                this.btnIniciarDemo.Text = "Detener Demo";
+                this.tmrDemo.Interval = 100;
+                this.tmrDemo.Start();
+            }
+        }
+
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
@@ -438,5 +471,4 @@ namespace RouletteNumberDetection
             return winner;
         }
     }
-
 }
