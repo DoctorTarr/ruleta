@@ -86,6 +86,17 @@ namespace Recolector4
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+            // Filter for blob detecting. Parameters setup in caller
+            _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
+                                              //  post processing after image was processed.If the property is set to true, 
+                                              //  then blobs filtering is done right after image processing routine. 
+                                              // If BlobsFilter is set, then custom blobs' filtering is done, which is
+                                              // implemented by user. Otherwise blobs are filtered according to dimensions
+                                              // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
+
+
+            _blobCounter.ObjectsOrder = ObjectsOrder.Size;
+
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -333,7 +344,7 @@ namespace Recolector4
             _blobCounter.MinHeight = zeroMinSize;
             _blobCounter.MaxHeight = zeroMaxSize;
             _drawPen = zeroPen;
-            bZeroFound = drawBlob(args, pictureBox1, ref ZeroPos);
+            bZeroFound = drawBlob(args, ref pictureBox1, ref ZeroPos);
             if (bZeroFound)
             {
                 tbZeroPosX.Text = ZeroPos.X.ToString();
@@ -346,8 +357,9 @@ namespace Recolector4
             _blobCounter.MaxWidth = ballMaxSize;
             _blobCounter.MinHeight = ballMinSize;
             _blobCounter.MaxHeight = ballMaxSize;
+
             _drawPen = ballPen;
-            bBallFound = drawBlob(args, pictureBox2, ref BallPos);
+            bBallFound = drawBlob(args, ref pictureBox2, ref BallPos);
             if (bBallFound)
             {
                 tbBolaPosX.Text = BallPos.X.ToString();
@@ -379,7 +391,7 @@ namespace Recolector4
 
         }
 
-        private bool drawBlob(NewFrameEventArgs args, PictureBox pb, ref System.Drawing.Point position)
+        private bool drawBlob(NewFrameEventArgs args, ref PictureBox pb, ref System.Drawing.Point position)
         {
             bool found = false;
 
@@ -393,18 +405,8 @@ namespace Recolector4
 
             BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-
-            // Filter for blob detecting. Parameters setup in caller
-            _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
-                                             //  post processing after image was processed.If the property is set to true, 
-                                             //  then blobs filtering is done right after image processing routine. 
-                                             // If BlobsFilter is set, then custom blobs' filtering is done, which is
-                                             // implemented by user. Otherwise blobs are filtered according to dimensions
-                                             // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
-
             objectsImage.UnlockBits(objectsData);
 
-            _blobCounter.ObjectsOrder = ObjectsOrder.Size;
             _blobCounter.ProcessImage(grayImage);
 
             Rectangle[] rects = _blobCounter.GetObjectsRectangles();
