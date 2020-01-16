@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using DASYS.Recolector.BLL;
+using System.Diagnostics;
 
 namespace Recolector4
 {
@@ -55,7 +56,6 @@ namespace Recolector4
 
         private double radian = 180.0F / (float)Math.PI;
 
-        private int lastBallX = 0;
         private bool IsCameraOn = false;
 
         private int _Distance = 0, _Angle = 0;
@@ -81,8 +81,6 @@ namespace Recolector4
         private byte numeroDemo;
         private Random azarNumero;
 
-        // Roulette Status variables
-        private ProtocoloNAPSA.EstadoJuego estadoMesa;
 
         public MainForm()
         {
@@ -121,7 +119,7 @@ namespace Recolector4
             while (!(now.AddMinutes(1.0) < DateTime.Now));
         }
 
-        private void GrabarEstado(int estado, byte numero, int sentidoDeGiro)
+        private void GuardarEstado(int estado, byte numero, int sentidoDeGiro)
         {
             string cadena = string.Empty;
             switch (this.estadoDemo)
@@ -155,9 +153,6 @@ namespace Recolector4
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             ProtocoloNAPSA.EstadoJuego.WinningNumber,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    Persistencia.Guardar(cadena);
-
-                    cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
                     break;
             }
             Persistencia.Guardar(cadena);
@@ -165,6 +160,16 @@ namespace Recolector4
             txtProtocolo.AppendText(Environment.NewLine);
 
         }
+
+
+        private void GuardarNumeroGanador(byte numero)
+        {
+            string cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
+            Persistencia.Guardar(cadena);
+            txtProtocolo.AppendText(cadena);
+            txtProtocolo.AppendText(Environment.NewLine);
+        }
+
         private void btnStartCamara_Click(object sender, EventArgs e)
         {
             
@@ -179,12 +184,11 @@ namespace Recolector4
             else
             {
                 StartCameras();
+                this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
-                this.tmrMain.Interval = 500;
+                this.tmrMain.Interval = 1000;
                 this.tmrMain.Start();
             }
-
-
         }
 
         private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
@@ -203,11 +207,17 @@ namespace Recolector4
                 this.tmrDemo.Stop();
                 this.txtProtocolo.Text = "";
                 this.btnIniciarDemo.Text = "Iniciar Demo";
+                btnStartCamara.Enabled = true;
             }
             else
             {
-                btnStartCamara.PerformClick();
+                if (this.IsCameraOn)
+                {
+                    btnStartCamara.PerformClick();
+                    btnStartCamara.Enabled = false;
+                }
                 this.btnIniciarDemo.Text = "Detener Demo";
+                this.estadoDemo = 0;
                 this.tmrDemo.Interval = 100;
                 this.tmrDemo.Start();
             }
@@ -255,7 +265,6 @@ namespace Recolector4
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
                 tbVideoStatus.Text = "ON";
-                this.IsCameraOn = true;
             }
             catch (Exception ex)
             {

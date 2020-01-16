@@ -132,7 +132,7 @@ namespace DASYS.GUI
         {
             try
             {
-                this.cadena = "NS" + Pase.UltimoPase.Numero.ToString("00");
+                this.cadena = "NS" + Pase.UltimoPase.NumeroGanador.ToString("00");
                 this.cadena += this.azarNumero.Next(0, 4).ToString();
                 this.cadena += this.azarNumero.Next(0, 100).ToString("00");
                 this.cadena += this.azarNumero.Next(0, 2).ToString();
@@ -149,7 +149,7 @@ namespace DASYS.GUI
         {
             try
             {
-                this.cadena = "NS" + Pase.UltimoPase.Numero.ToString("00");
+                this.cadena = "NS" + Pase.UltimoPase.NumeroGanador.ToString("00");
                 this.cadena += ((byte)this.azarNumero.Next(0, 7)).ToString();
                 this.cadena += ((byte)this.azarNumero.Next(0, 100)).ToString("00");
                 this.cadena += ((byte)this.azarNumero.Next(0, 2)).ToString();
@@ -166,7 +166,7 @@ namespace DASYS.GUI
         {
             try
             {
-                this.cadena = "NS" + Pase.UltimoPase.Numero.ToString("00");
+                this.cadena = "NS" + Pase.UltimoPase.NumeroGanador.ToString("00");
                 this.cadena += "5";
                 this.cadena += this.azarNumero.Next(0, 100).ToString("00");
                 this.cadena += this.azarNumero.Next(0, 2).ToString();
@@ -183,7 +183,7 @@ namespace DASYS.GUI
         {
             try
             {
-                this.cadena = "NS" + Pase.UltimoPase.Numero.ToString("00");
+                this.cadena = "NS" + Pase.UltimoPase.NumeroGanador.ToString("00");
                 this.cadena += "4";
                 this.cadena += this.azarNumero.Next(0, 100).ToString("00");
                 this.cadena += this.azarNumero.Next(0, 2).ToString();
@@ -259,7 +259,7 @@ namespace DASYS.GUI
                 }
                 else
                 {
-                    this.cadena = "NS" + Pase.UltimoPase.Numero.ToString("00");
+                    this.cadena = "NS" + Pase.UltimoPase.NumeroGanador.ToString("00");
                     this.cadena += ((byte)this.azarNumero.Next(1, 7)).ToString();
                     this.cadena += ((byte)this.azarNumero.Next(0, 100)).ToString("00");
                     this.cadena += ((byte)this.azarNumero.Next(0, 2)).ToString();

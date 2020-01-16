@@ -35,7 +35,7 @@ namespace DASYS.Recolector.BLL
               }
               else
               {
-                Pase.UltimoPase.Numero = ((ResultadoNumero) resultadoPaquete).NumeroGanador;
+                Pase.UltimoPase.NumeroGanador = ((ResultadoNumero) resultadoPaquete).NumeroGanador;
                 Pase.UltimoPase.FechaHora = DateTime.Now;
                 Pase.UltimoPase.SentidoGiro = Persistencia.sentidoGiroReciente;
                 Pase.UltimoPase.Velocidad = Persistencia.velocidadReciente;

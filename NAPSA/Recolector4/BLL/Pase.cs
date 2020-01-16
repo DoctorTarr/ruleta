@@ -34,7 +34,7 @@ namespace DASYS.Recolector.BLL
       }
     }
 
-    public byte Numero
+    public byte NumeroGanador
     {
       get
       {
@@ -110,7 +110,7 @@ namespace DASYS.Recolector.BLL
             if (dataSet.Tables[0].Rows.Count == 1)
             {
               pase = new Pase();
-              pase.Numero = Common.Datos.NullToByte(dataSet.Tables[0].Rows[0]["paseNumero"]);
+              pase.NumeroGanador = Common.Datos.NullToByte(dataSet.Tables[0].Rows[0]["paseNumero"]);
               pase.Id = Common.Datos.NullToInt32(dataSet.Tables[0].Rows[0]["paseId"]);
               pase.NumeroTiro = Common.Datos.NullToInt32(dataSet.Tables[0].Rows[0]["paseTiroNumero"]);
               pase.fechaHora = Common.Datos.NullToDateTime(dataSet.Tables[0].Rows[0]["paseFechaHora"]);
@@ -146,7 +146,7 @@ namespace DASYS.Recolector.BLL
               foreach (DataRow row in (InternalDataCollectionBase) dataSet.Tables[0].Rows)
                 paseList.Add(new Pase()
                 {
-                  Numero = Common.Datos.NullToByte(row["paseNumero"]),
+                  NumeroGanador = Common.Datos.NullToByte(row["paseNumero"]),
                   Id = Common.Datos.NullToInt32(row["paseId"]),
                   numeroTiro = Common.Datos.NullToInt32(row["paseTiroNumero"]),
                   fechaHora = Common.Datos.NullToDateTime(row["paseFechaHora"]),

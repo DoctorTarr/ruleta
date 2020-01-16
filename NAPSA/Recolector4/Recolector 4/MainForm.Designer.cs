@@ -1,5 +1,7 @@
-﻿using DASYS.Recolector.BLL;
+﻿using Accord.Video;
+using DASYS.Recolector.BLL;
 using System;
+using System.Diagnostics;
 
 namespace Recolector4
 {
@@ -9,6 +11,11 @@ namespace Recolector4
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+
+        // Roulette Status variables
+        private int lastBallX = 0;
+        private ProtocoloNAPSA.EstadoJuego estadoMesa;
+        private Stopwatch stopWatch = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -40,13 +47,38 @@ namespace Recolector4
         #region Demo Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-            int currentDiff = this.ZeroPos.X - this.lastBallX;
+            //int currentDiff = this.ZeroPos.X - this.lastBallX;
 
-            if (currentDiff != 0)
+            //if (currentDiff != 0)
+            //{
+            //    this.textBox4.Text = string.Format("{0}", currentDiff);
+            //    this.lastBallX = this.ZeroPos.X;
+            //}
+            IVideoSource videoSource = videoSourcePlayer1.VideoSource;
+
+            if (videoSource != null)
             {
-                this.textBox4.Text = string.Format("{0}", currentDiff);
-                this.lastBallX = this.ZeroPos.X;
+                // get number of frames since the last timer tick
+                int framesReceived = videoSource.FramesReceived;
+
+                if (stopWatch == null)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
+                else
+                {
+                    stopWatch.Stop();
+
+                    float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
+                    fpsLabel.Text = fps.ToString("F2") + " fps";
+
+                    stopWatch.Reset();
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                }
             }
+
         }
         #endregion
 
@@ -64,28 +96,29 @@ namespace Recolector4
                 {
                     case 1:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GrabarEstado(this.estadoDemo, numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 100;
                         break;
                     case 2:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GrabarEstado(this.estadoDemo, numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 3:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GrabarEstado(this.estadoDemo, numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 4:
-                        //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GrabarEstado(this.estadoDemo, numeroDemo, this.azarNumero.Next(0, 2));
+                        //cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 10000;
                         break;
                     case 5:
                         //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
-                        GrabarEstado(this.estadoDemo, numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarNumeroGanador(this.numeroDemo);
                         this.tmrDemo.Interval = 1000;
                         break;
                 }
@@ -139,6 +172,7 @@ namespace Recolector4
             this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
+            this.fpsLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -461,6 +495,7 @@ namespace Recolector4
             // 
             // btnIniciarDemo
             // 
+            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
             this.btnIniciarDemo.Location = new System.Drawing.Point(967, 530);
@@ -487,12 +522,23 @@ namespace Recolector4
             this.tmrMain.Interval = 500;
             this.tmrMain.Tick += new System.EventHandler(this.tmrMain_Tick);
             // 
+            // fpsLabel
+            // 
+            this.fpsLabel.AutoSize = true;
+            this.fpsLabel.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.fpsLabel.Location = new System.Drawing.Point(361, 583);
+            this.fpsLabel.Name = "fpsLabel";
+            this.fpsLabel.Size = new System.Drawing.Size(21, 13);
+            this.fpsLabel.TabIndex = 53;
+            this.fpsLabel.Text = "fps";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
             this.ClientSize = new System.Drawing.Size(1055, 624);
+            this.Controls.Add(this.fpsLabel);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.btnIniciarDemo);
             this.Controls.Add(this.groupBox2);
@@ -553,6 +599,7 @@ namespace Recolector4
         private System.Windows.Forms.TextBox tbVideoStatus;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label fpsLabel;
     }
 }
 
