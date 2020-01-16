@@ -16,7 +16,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using DASYS.Recolector.BLL;
 
-namespace RouletteNumberDetection
+namespace Recolector4
 {
     public partial class MainForm : Form
     {
@@ -45,7 +45,7 @@ namespace RouletteNumberDetection
         private int ballMaxSize = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
         private short ballRadius  = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
 
-        private Pen ballPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
+        private Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
 
         private System.Drawing.Point ZeroPos, BallPos;
 
@@ -55,6 +55,8 @@ namespace RouletteNumberDetection
 
         private double radian = 180.0F / (float)Math.PI;
 
+        private int lastBallX = 0;
+        private bool IsCameraOn = false;
 
         private int _Distance = 0, _Angle = 0;
         private bool _calibrateFlag = false;
@@ -119,9 +121,70 @@ namespace RouletteNumberDetection
             while (!(now.AddMinutes(1.0) < DateTime.Now));
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void GrabarEstado(int estado, byte numero, int sentidoDeGiro)
         {
-            StartCameras();
+            string cadena = string.Empty;
+            switch (this.estadoDemo)
+            {
+                case 1:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.BeforeGame,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 2:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.PlaceYourBet,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 3:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.FinishBetting,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 4:
+                    //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.NoMoreBets,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 5:
+                    //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.WinningNumber,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    Persistencia.Guardar(cadena);
+
+                    cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
+                    break;
+            }
+            Persistencia.Guardar(cadena);
+            txtProtocolo.AppendText(cadena);
+            txtProtocolo.AppendText(Environment.NewLine);
+
+        }
+        private void btnStartCamara_Click(object sender, EventArgs e)
+        {
+            
+            if (this.IsCameraOn)
+            {
+                this.tmrMain.Stop();
+                StopCameras();
+                this.txtProtocolo.Text = "";
+                this.btnStartCamara.Text = "Iniciar Captura";
+                this.IsCameraOn = false;
+            }
+            else
+            {
+                StartCameras();
+                this.btnStartCamara.Text = "Detener Captura";
+                this.tmrMain.Interval = 500;
+                this.tmrMain.Start();
+            }
+
+
         }
 
         private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
@@ -131,11 +194,6 @@ namespace RouletteNumberDetection
             else
                 _calibrateFlag = false;
 
-        }
-
-       private void button2_Click(object sender, EventArgs e)
-        {
-            StopCameras();
         }
 
         private void btnIniciarDemo_Click(object sender, EventArgs e)
@@ -148,7 +206,7 @@ namespace RouletteNumberDetection
             }
             else
             {
-                btnStopVideo.PerformClick();
+                btnStartCamara.PerformClick();
                 this.btnIniciarDemo.Text = "Detener Demo";
                 this.tmrDemo.Interval = 100;
                 this.tmrDemo.Start();
@@ -195,6 +253,9 @@ namespace RouletteNumberDetection
                 videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(blobDetection);
 
                 videoSourcePlayer1.Start();
+                tbVideoStatus.BackColor = Color.Red;
+                tbVideoStatus.Text = "ON";
+                this.IsCameraOn = true;
             }
             catch (Exception ex)
             {
@@ -208,6 +269,9 @@ namespace RouletteNumberDetection
             {
                 videoSourcePlayer1.SignalToStop();
                 videoSourcePlayer1.WaitForStop();
+                tbVideoStatus.BackColor = Color.DarkRed;
+                tbVideoStatus.Text = "OFF";
+
                 pictureBox1.Image = null;
                 pictureBox2.Image = null;
                 textBox1.Text = "";
@@ -369,21 +433,6 @@ namespace RouletteNumberDetection
             return array;
         }
 
-        //private System.Drawing.Image Zoom(System.Drawing.Image img, Size size)
-        //{
-        //    Bitmap bmp = new Bitmap(img, img.Width + (img.Width * size.Width / 100), img.Height + (img.Height * size.Height / 100));
-        //    Graphics g = Graphics.FromImage(bmp);
-        //    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-        //    return bmp;
-        //}
-
-        //private static void CopyRegionIntoImage(Bitmap srcBitmap, Rectangle srcRegion, ref Bitmap destBitmap, Rectangle destRegion)
-        //{
-        //    using (Graphics grD = Graphics.FromImage(destBitmap))
-        //    {
-        //        grD.DrawImage(srcBitmap, destRegion, srcRegion, GraphicsUnit.Pixel);
-        //    }
-        //}
 
         /**
         * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
@@ -396,7 +445,6 @@ namespace RouletteNumberDetection
             double yDiff = p2.Y - p1.Y;
             return (int)Math.Round(Math.Atan2(yDiff, xDiff) * this.radian);
         }
-
 
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RouletteNumberDetection.Properties {
+namespace Recolector4.Properties {
     using System;
     
     
