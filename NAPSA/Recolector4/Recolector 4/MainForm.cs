@@ -336,6 +336,13 @@ namespace Recolector4
         private void blobDetection(object sender, NewFrameEventArgs args)
         {
             int winner = -1;
+
+            Bitmap objectsImage = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
+            args.Frame = objectsImage;
+            return;
+
+            //Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
+
             // Zero Number blob parameters
             _colorFilter.CenterColor = zeroColor;
             _colorFilter.Radius = zeroRadius;
@@ -344,7 +351,7 @@ namespace Recolector4
             _blobCounter.MinHeight = zeroMinSize;
             _blobCounter.MaxHeight = zeroMaxSize;
             _drawPen = zeroPen;
-            bZeroFound = drawBlob(args, ref pictureBox1, ref ZeroPos);
+            bZeroFound = drawBlob(objectsImage, ref pictureBox1, ref ZeroPos);
             if (bZeroFound)
             {
                 tbZeroPosX.Text = ZeroPos.X.ToString();
@@ -359,14 +366,16 @@ namespace Recolector4
             _blobCounter.MaxHeight = ballMaxSize;
 
             _drawPen = ballPen;
-            bBallFound = drawBlob(args, ref pictureBox2, ref BallPos);
+            bBallFound = drawBlob(objectsImage, ref pictureBox2, ref BallPos);
             if (bBallFound)
             {
                 tbBolaPosX.Text = BallPos.X.ToString();
                 tbBolaPosY.Text = BallPos.Y.ToString();
             }
 
-            if (Math.Abs(ZeroPos.X - 314) < 3)
+            // if (Math.Abs(ZeroPos.X - 314) < 3)
+            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
+            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
             {
                 _Distance = FindDistance(ZeroPos, BallPos);
                 _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
@@ -388,26 +397,34 @@ namespace Recolector4
                     textBox3.Text = "";
                 }
             }
+#if DEBUG
+
+            //Graphics g = Graphics.FromImage(mImage);
+            //g.DrawRectangle(_drawPen, objectRect);
+            //g.Dispose();
+            //if (_calibrateFlag)
+            //    CalibrateCamera(mImage);
+
+            //args.Frame = mImage;
+
+#endif
 
         }
 
-        private bool drawBlob(NewFrameEventArgs args, ref PictureBox pb, ref System.Drawing.Point position)
+        private bool drawBlob(Bitmap objectsImage, ref PictureBox pb, ref System.Drawing.Point position)
         {
             bool found = false;
 
-            Bitmap objectsImage =_resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
-
-            Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
 
             _colorFilter.ApplyInPlace(objectsImage);
+            pb.Image = objectsImage;
 
             Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
 
             BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-            objectsImage.UnlockBits(objectsData);
-
             _blobCounter.ProcessImage(grayImage);
+            objectsImage.UnlockBits(objectsData);
 
             Rectangle[] rects = _blobCounter.GetObjectsRectangles();
             found = rects.Length > 0;
@@ -415,19 +432,8 @@ namespace Recolector4
             {
                 Rectangle objectRect = rects[0];
                 position = objectRect.Location;
-#if DEBUG
-                pb.Image = _colorFilter.Apply(objectsImage);
-
-                Graphics g = Graphics.FromImage(mImage);
-                g.DrawRectangle(_drawPen, objectRect);
-                g.Dispose();
-#endif
             }
 
-            if (_calibrateFlag)
-                CalibrateCamera(mImage);
-
-            args.Frame = mImage;
             return found;
         }
 

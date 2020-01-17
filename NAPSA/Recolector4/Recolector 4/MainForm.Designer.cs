@@ -14,6 +14,7 @@ namespace Recolector4
 
         // Roulette Status variables
         private int lastBallX = 0;
+        private int sentidoGiro = 0; // 0=horario, 1=antihorario
         private ProtocoloNAPSA.EstadoJuego estadoMesa;
         private Stopwatch stopWatch = null;
 
@@ -47,37 +48,39 @@ namespace Recolector4
         #region Demo Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-            //int currentDiff = this.ZeroPos.X - this.lastBallX;
 
-            //if (currentDiff != 0)
-            //{
-            //    this.textBox4.Text = string.Format("{0}", currentDiff);
-            //    this.lastBallX = this.ZeroPos.X;
-            //}
-            IVideoSource videoSource = videoSourcePlayer1.VideoSource;
-
-            if (videoSource != null)
+            if (this.ZeroPos.Y < 150)
             {
-                // get number of frames since the last timer tick
-                int framesReceived = videoSource.FramesReceived;
+                this.sentidoGiro = (this.ZeroPos.X < this.lastBallX) ? 1 : 0;
 
-                if (stopWatch == null)
-                {
-                    stopWatch = new Stopwatch();
-                    stopWatch.Start();
-                }
-                else
-                {
-                    stopWatch.Stop();
-
-                    float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
-                    fpsLabel.Text = fps.ToString("F2") + " fps";
-
-                    stopWatch.Reset();
-                    stopWatch.Reset();
-                    stopWatch.Start();
-                }
+                this.textBox4.Text = string.Format("{0}", sentidoGiro);
+                this.lastBallX = this.ZeroPos.X;
             }
+
+            //IVideoSource videoSource = videoSourcePlayer1.VideoSource;
+
+            //if (videoSource != null)
+            //{
+            //    // get number of frames since the last timer tick
+            //    int framesReceived = videoSource.FramesReceived;
+
+            //    if (stopWatch == null)
+            //    {
+            //        stopWatch = new Stopwatch();
+            //        stopWatch.Start();
+            //    }
+            //    else
+            //    {
+            //        stopWatch.Stop();
+
+            //        float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
+            //        fpsLabel.Text = fps.ToString("F2") + " fps";
+
+            //        stopWatch.Reset();
+            //        stopWatch.Reset();
+            //        stopWatch.Start();
+            //    }
+            //}
 
         }
         #endregion
