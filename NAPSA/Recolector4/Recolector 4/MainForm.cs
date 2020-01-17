@@ -1,21 +1,14 @@
 ﻿using Accord;
 using Accord.Imaging;
 using Accord.Imaging.Filters;
-using Accord.Math.Geometry;
 using Accord.Video;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using DASYS.Recolector.BLL;
-using System.Diagnostics;
 
 namespace Recolector4
 {
@@ -26,27 +19,9 @@ namespace Recolector4
         // https://www.codeproject.com/Articles/139628/Detect-and-Track-Objects-in-Live-Webcam-Video-Base
 
 
-        // Zero number blob detection parameters
-        private static RGB zeroColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["ZeroRed"].ToString()),
-                                        Byte.Parse(ConfigurationManager.AppSettings["ZeroGreen"].ToString()),
-                                        Byte.Parse(ConfigurationManager.AppSettings["ZeroBlue"].ToString()));
 
-        private int zeroMinSize = int.Parse(ConfigurationManager.AppSettings["ZeroMinSize"].ToString());
-        private int zeroMaxSize = int.Parse(ConfigurationManager.AppSettings["ZeroMaxSize"].ToString());
-        private short zeroRadius  = short.Parse(ConfigurationManager.AppSettings["ZeroRadius"].ToString());
 
-        private Pen zeroPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
-
-        // Ball blob detection parameters
-        private static RGB ballColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["BallRed"].ToString()),
-                                        Byte.Parse(ConfigurationManager.AppSettings["BallGreen"].ToString()),
-                                        Byte.Parse(ConfigurationManager.AppSettings["BallBlue"].ToString()));
-
-        private int ballMinSize = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
-        private int ballMaxSize = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
-        private short ballRadius  = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
-
-        private Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
+        private EuclideanColorFiltering _ballColorFilter = new EuclideanColorFiltering();
 
         private System.Drawing.Point ZeroPos, BallPos;
 
@@ -66,8 +41,8 @@ namespace Recolector4
         private int _WinnerNumber = 0;
 
         // Filters
-        private EuclideanColorFiltering _colorFilter = new EuclideanColorFiltering();
-        private SobelEdgeDetector _edgeFilter = new SobelEdgeDetector();
+        private EuclideanColorFiltering _zeroColorFilter = new EuclideanColorFiltering();
+        //private SobelEdgeDetector _edgeFilter = new SobelEdgeDetector();
         private BlobCounter _blobCounter = new BlobCounter();
 
         // Drawing variables
@@ -103,7 +78,7 @@ namespace Recolector4
         {
             try
             {
-                StopCameras();
+                StopCamera();
             }
             catch
             {
@@ -187,14 +162,14 @@ namespace Recolector4
             if (this.IsCameraOn)
             {
                 this.tmrMain.Stop();
-                StopCameras();
+                StopCamera();
                 this.txtProtocolo.Text = "";
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
             }
             else
             {
-                StartCameras();
+                StartCamera();
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
                 this.tmrMain.Interval = 1000;
@@ -261,17 +236,17 @@ namespace Recolector4
 
         }
 
-        private void StartCameras()
+        private void StartCamera()
         {
             try
             {
-                StopCameras();
+                StopCamera();
                 // IP Camera
                 MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/101/httppreview");
                 videoSource.Login = "admin";
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
-                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(blobDetection);
+                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(get_Frame);
 
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
@@ -283,7 +258,7 @@ namespace Recolector4
             }
         }
 
-        private void StopCameras()
+        private void StopCamera()
         {
             try
             {
@@ -313,6 +288,33 @@ namespace Recolector4
         #endregion
 
         #region Blob Detection
+        // All the filters etc are configured here
+        private void setupDetectionVariables()
+        {
+            // Zero number blob detection parameters
+            RGB zeroColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["ZeroRed"].ToString()),
+                                            Byte.Parse(ConfigurationManager.AppSettings["ZeroGreen"].ToString()),
+                                            Byte.Parse(ConfigurationManager.AppSettings["ZeroBlue"].ToString()));
+            short zeroRadius = short.Parse(ConfigurationManager.AppSettings["ZeroRadius"].ToString());
+
+            int zeroMinSize = int.Parse(ConfigurationManager.AppSettings["ZeroMinSize"].ToString());
+            int zeroMaxSize = int.Parse(ConfigurationManager.AppSettings["ZeroMaxSize"].ToString());
+
+            Pen zeroPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
+
+            // Ball blob detection parameters
+            RGB ballColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["BallRed"].ToString()),
+                                            Byte.Parse(ConfigurationManager.AppSettings["BallGreen"].ToString()),
+                                            Byte.Parse(ConfigurationManager.AppSettings["BallBlue"].ToString()));
+
+            int ballMinSize = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
+            int ballMaxSize = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
+            short ballRadius = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
+
+            Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
+        }
+
+
         //For blob recognition, there is a demo application which you will find after you download all the source code.
         //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
         // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
@@ -333,81 +335,81 @@ namespace Recolector4
         ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
         /// </summary>
         /// 
-        private void blobDetection(object sender, NewFrameEventArgs args)
+        private void get_Frame(object sender, NewFrameEventArgs args)
         {
             int winner = -1;
 
-            Bitmap objectsImage = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
-            args.Frame = objectsImage;
-            return;
+            Bitmap _BsourceFrame = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
 
             //Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
 
             // Zero Number blob parameters
-            _colorFilter.CenterColor = zeroColor;
-            _colorFilter.Radius = zeroRadius;
-            _blobCounter.MinWidth = zeroMinSize;
-            _blobCounter.MaxWidth = zeroMaxSize;
-            _blobCounter.MinHeight = zeroMinSize;
-            _blobCounter.MaxHeight = zeroMaxSize;
-            _drawPen = zeroPen;
-            bZeroFound = drawBlob(objectsImage, ref pictureBox1, ref ZeroPos);
-            if (bZeroFound)
-            {
-                tbZeroPosX.Text = ZeroPos.X.ToString();
-                tbZeroPosY.Text = ZeroPos.Y.ToString();
-            }
+            //            _zeroColorFilter.CenterColor = zeroColor;
+            //            _zeroColorFilter.Radius = zeroRadius;
+            //            _blobCounter.MinWidth = zeroMinSize;
+            //            _blobCounter.MaxWidth = zeroMaxSize;
+            //            _blobCounter.MinHeight = zeroMinSize;
+            //            _blobCounter.MaxHeight = zeroMaxSize;
+            //            _drawPen = zeroPen;
+            //            bZeroFound = drawBlob(_BsourceFrame, ref pictureBox1, ref ZeroPos);
+            //            if (bZeroFound)
+            //            {
+            //                tbZeroPosX.Text = ZeroPos.X.ToString();
+            //                tbZeroPosY.Text = ZeroPos.Y.ToString();
+            //            }
 
-            _colorFilter.CenterColor = ballColor;
-            _colorFilter.Radius = ballRadius;
-            _blobCounter.MinWidth = ballMinSize;
-            _blobCounter.MaxWidth = ballMaxSize;
-            _blobCounter.MinHeight = ballMinSize;
-            _blobCounter.MaxHeight = ballMaxSize;
+            //            _zeroColorFilter.CenterColor = ballColor;
+            //            _zeroColorFilter.Radius = ballRadius;
+            //            _blobCounter.MinWidth = ballMinSize;
+            //            _blobCounter.MaxWidth = ballMaxSize;
+            //            _blobCounter.MinHeight = ballMinSize;
+            //            _blobCounter.MaxHeight = ballMaxSize;
 
-            _drawPen = ballPen;
-            bBallFound = drawBlob(objectsImage, ref pictureBox2, ref BallPos);
-            if (bBallFound)
-            {
-                tbBolaPosX.Text = BallPos.X.ToString();
-                tbBolaPosY.Text = BallPos.Y.ToString();
-            }
+            //            _drawPen = ballPen;
+            //            bBallFound = drawBlob(_BsourceFrame, ref pictureBox2, ref BallPos);
+            //            if (bBallFound)
+            //            {
+            //                tbBolaPosX.Text = BallPos.X.ToString();
+            //                tbBolaPosY.Text = BallPos.Y.ToString();
+            //            }
 
-            // if (Math.Abs(ZeroPos.X - 314) < 3)
-            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
-            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
-            {
-                _Distance = FindDistance(ZeroPos, BallPos);
-                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-                textBox1.Text = string.Format("{0}", _Distance);
-                textBox2.Text = string.Format("{0}", _Angle);
-                if (bZeroFound && bBallFound)
-                {
-                    winner = FindWinnerNumber(_Distance, _Angle);
+            //            // if (Math.Abs(ZeroPos.X - 314) < 3)
+            //            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
+            //            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
+            //            {
+            //                _Distance = FindDistance(ZeroPos, BallPos);
+            //                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+            //                textBox1.Text = string.Format("{0}", _Distance);
+            //                textBox2.Text = string.Format("{0}", _Angle);
+            //                if (bZeroFound && bBallFound)
+            //                {
+            //                    winner = FindWinnerNumber(_Distance, _Angle);
 
-                    if (winner > -1)
-                    {
-                        _WinnerNumber = winner;
-                        textBox3.Text = string.Format("{0}", _WinnerNumber);
-                    }
-                }
-                else
-                {
-                    _WinnerNumber = -1;
-                    textBox3.Text = "";
-                }
-            }
-#if DEBUG
+            //                    if (winner > -1)
+            //                    {
+            //                        _WinnerNumber = winner;
+            //                        textBox3.Text = string.Format("{0}", _WinnerNumber);
+            //                    }
+            //                }
+            //                else
+            //                {
+            //                    _WinnerNumber = -1;
+            //                    textBox3.Text = "";
+            //                }
+            //            }
+            //#if DEBUG
 
-            //Graphics g = Graphics.FromImage(mImage);
-            //g.DrawRectangle(_drawPen, objectRect);
-            //g.Dispose();
-            //if (_calibrateFlag)
-            //    CalibrateCamera(mImage);
+            //            //Graphics g = Graphics.FromImage(mImage);
+            //            //g.DrawRectangle(_drawPen, objectRect);
+            //            //g.Dispose();
+            //            //if (_calibrateFlag)
+            //            //    CalibrateCamera(mImage);
 
-            //args.Frame = mImage;
+            //            //args.Frame = mImage;
 
-#endif
+            //#endif
+
+            args.Frame = _BsourceFrame;
 
         }
 
@@ -416,23 +418,23 @@ namespace Recolector4
             bool found = false;
 
 
-            _colorFilter.ApplyInPlace(objectsImage);
-            pb.Image = objectsImage;
+            //_zeroColorFilter.ApplyInPlace(objectsImage);
+            //pb.Image = objectsImage;
 
-            Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
+            //Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
 
-            BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
-            UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-            _blobCounter.ProcessImage(grayImage);
-            objectsImage.UnlockBits(objectsData);
+            //BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
+            //UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
+            //_blobCounter.ProcessImage(grayImage);
+            //objectsImage.UnlockBits(objectsData);
 
-            Rectangle[] rects = _blobCounter.GetObjectsRectangles();
-            found = rects.Length > 0;
-            if (found)
-            {
-                Rectangle objectRect = rects[0];
-                position = objectRect.Location;
-            }
+            //Rectangle[] rects = _blobCounter.GetObjectsRectangles();
+            //found = rects.Length > 0;
+            //if (found)
+            //{
+            //    Rectangle objectRect = rects[0];
+            //    position = objectRect.Location;
+            //}
 
             return found;
         }
