@@ -340,6 +340,18 @@ namespace Recolector4
             int winner = -1;
 
             Bitmap _BsourceFrame = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
+            Bitmap subtractImage = new Bitmap(_BsourceFrame.Width, _BsourceFrame.Height, _BsourceFrame.PixelFormat);
+
+            using (Graphics graph = Graphics.FromImage(subtractImage))
+            {
+                Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
+                graph.FillRectangle(Brushes.White, ImageSize);
+                graph.FillEllipse(Brushes.Black, new Rectangle(160, 93, 307, 307));
+            }
+
+            Subtract _subtractFilter = new Subtract(subtractImage);
+
+            _subtractFilter.ApplyInPlace(_BsourceFrame);
 
             //Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
 
@@ -413,7 +425,7 @@ namespace Recolector4
 
         }
 
-        private bool drawBlob(Bitmap objectsImage, ref PictureBox pb, ref System.Drawing.Point position)
+        private bool BlobDetection(Bitmap objectsImage, ref PictureBox pb, ref System.Drawing.Point position)
         {
             bool found = false;
 
