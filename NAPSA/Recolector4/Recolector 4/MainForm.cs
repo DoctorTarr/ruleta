@@ -18,32 +18,38 @@ namespace Recolector4
         // http://www.aforgenet.com/framework/features/blobs_processing.html
         // https://www.codeproject.com/Articles/139628/Detect-and-Track-Objects-in-Live-Webcam-Video-Base
 
+        // Camera variables
+        private bool IsCameraOn = false;
 
+        // Filter to resize image to get correct aspect ratio and get cylinder as a circle 
+        private ResizeNearestNeighbor _resizeFilter = new ResizeNearestNeighbor(640, 400);
+        // Mask the image around the roulette to avoid false positives
+        Bitmap subtractImage = new Bitmap(640, 400, PixelFormat.Format24bppRgb);
 
+        // Blob detection variables
+        private EuclideanColorFiltering _zeroColorFilter = new EuclideanColorFiltering();
+        private BlobCounter _zeroBlobCounter = new BlobCounter();
 
         private EuclideanColorFiltering _ballColorFilter = new EuclideanColorFiltering();
+        private BlobCounter _ballBlobCounter = new BlobCounter();
+
+
 
         private System.Drawing.Point ZeroPos, BallPos;
 
-        //private Size _pbSize = new Size(640, 400);
-        //private ResizeBilinear _resizeFilter = new ResizeBilinear(640, 400);
-        private ResizeNearestNeighbor _resizeFilter = new ResizeNearestNeighbor(640, 400);
 
         private double radian = 180.0F / (float)Math.PI;
 
-        private bool IsCameraOn = false;
 
-        private int _Distance = 0, _Angle = 0;
         private bool _calibrateFlag = false;
+
+        // Measurement variables
+        private int _Distance = 0, _Angle = 0;
 
         // Winner number variables
         private bool bZeroFound = false, bBallFound = false;
         private int _WinnerNumber = 0;
 
-        // Filters
-        private EuclideanColorFiltering _zeroColorFilter = new EuclideanColorFiltering();
-        //private SobelEdgeDetector _edgeFilter = new SobelEdgeDetector();
-        private BlobCounter _blobCounter = new BlobCounter();
 
         // Drawing variables
         private Pen _drawPen;
@@ -60,6 +66,8 @@ namespace Recolector4
         public MainForm()
         {
             InitializeComponent();
+            setupDetectionVariables();
+
             CheckForIllegalCrossThreadCalls = false;
             // Filter for blob detecting. Parameters setup in caller
             _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
@@ -312,6 +320,16 @@ namespace Recolector4
             short ballRadius = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
 
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
+
+            
+
+            using (Graphics graph = Graphics.FromImage(subtractImage))
+            {
+                Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
+                graph.FillRectangle(Brushes.White, ImageSize);
+                graph.FillEllipse(Brushes.Black, new Rectangle(160, 93, 307, 307));
+            }
+
         }
 
 
@@ -340,14 +358,6 @@ namespace Recolector4
             int winner = -1;
 
             Bitmap _BsourceFrame = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
-            Bitmap subtractImage = new Bitmap(_BsourceFrame.Width, _BsourceFrame.Height, _BsourceFrame.PixelFormat);
-
-            using (Graphics graph = Graphics.FromImage(subtractImage))
-            {
-                Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
-                graph.FillRectangle(Brushes.White, ImageSize);
-                graph.FillEllipse(Brushes.Black, new Rectangle(160, 93, 307, 307));
-            }
 
             Subtract _subtractFilter = new Subtract(subtractImage);
 
