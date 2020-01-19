@@ -51,6 +51,7 @@ namespace Recolector4
 
         private bool _calibrateFlag = false;
 
+        private int cantZerosFound = 0;
 
         // Demo variables
         private int estadoDemo;
@@ -79,79 +80,9 @@ namespace Recolector4
             }
         }
 
-        private void leerUltimoNumero()
-        {
-            DateTime now = DateTime.Now;
-            do
-            {
-                try
-                {
-                    Application.DoEvents();
-                    Pase.UltimoPase = Pase.LeerUltimoNumeroDesdeBase();
-                    return;
-                }
-                catch
-                {
-                    Common.Logger.Escribir("La conexión a la base de datos ha fallado al iniciar.", true);
-                }
-            }
-            while (!(now.AddMinutes(1.0) < DateTime.Now));
-        }
-
-        private void GuardarEstado(int estado, byte numero, int sentidoDeGiro)
-        {
-            string cadena = string.Empty;
-            switch (this.estadoDemo)
-            {
-                case 1:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.BeforeGame,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    break;
-                case 2:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.PlaceYourBet,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    break;
-                case 3:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.FinishBetting,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    break;
-                case 4:
-                    //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.NoMoreBets,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    break;
-                case 5:
-                    //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.WinningNumber,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
-                    break;
-            }
-            Persistencia.Guardar(cadena);
-            txtProtocolo.AppendText(cadena);
-            txtProtocolo.AppendText(Environment.NewLine);
-
-        }
-
-
-        private void GuardarNumeroGanador(byte numero)
-        {
-            string cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
-            Persistencia.Guardar(cadena);
-            txtProtocolo.AppendText(cadena);
-            txtProtocolo.AppendText(Environment.NewLine);
-        }
-
         private void btnStartCamara_Click(object sender, EventArgs e)
         {
-            
+
             if (this.IsCameraOn)
             {
                 this.tmrMain.Stop();
@@ -197,6 +128,7 @@ namespace Recolector4
                 }
                 this.btnIniciarDemo.Text = "Detener Demo";
                 this.estadoDemo = 0;
+                this.cantZerosFound = 0; // Reset spin counter
                 this.tmrDemo.Interval = 100;
                 this.tmrDemo.Start();
             }
@@ -376,10 +308,11 @@ namespace Recolector4
             bBallFound = ZeroPos.X != -1;
 
 
-            if (Math.Abs(ZeroPos.X - 314) < 3)
-            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
-            //if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
+            if ((Math.Abs(ZeroPos.X - 314) < 3))
             {
+                if (this.ZeroPos.Y < 170)
+                    cantZerosFound++;
+
                 _Distance = FindDistance(ZeroPos, BallPos);
                 _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
                 if (bZeroFound && bBallFound)
@@ -435,7 +368,7 @@ namespace Recolector4
                 ZeroPos = objectRect.Location;
             }
 
-            return _colorFilterImage; 
+            return _colorFilterImage;
         }
 
 
@@ -570,5 +503,79 @@ namespace Recolector4
 
             return winner;
         }
+
+        #region Game state handling
+        private void leerUltimoNumero()
+        {
+            DateTime now = DateTime.Now;
+            do
+            {
+                try
+                {
+                    Application.DoEvents();
+                    Pase.UltimoPase = Pase.LeerUltimoNumeroDesdeBase();
+                    return;
+                }
+                catch
+                {
+                    Common.Logger.Escribir("La conexión a la base de datos ha fallado al iniciar.", true);
+                }
+            }
+            while (!(now.AddMinutes(1.0) < DateTime.Now));
+        }
+
+        private void GuardarEstado(int estado, byte numero, int sentidoDeGiro)
+        {
+            string cadena = string.Empty;
+            switch (this.estadoDemo)
+            {
+                case 1:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.BeforeGame,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 2:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.PlaceYourBet,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 3:
+                    //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.FinishBetting,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 4:
+                    //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.NoMoreBets,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+                case 5:
+                    //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
+                                                            ProtocoloNAPSA.EstadoJuego.WinningNumber,
+                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                    break;
+            }
+            Persistencia.Guardar(cadena);
+            txtProtocolo.AppendText(cadena);
+            txtProtocolo.AppendText(Environment.NewLine);
+
+        }
+
+
+        private void GuardarNumeroGanador(byte numero)
+        {
+            string cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
+            Persistencia.Guardar(cadena);
+            txtProtocolo.AppendText(cadena);
+            txtProtocolo.AppendText(Environment.NewLine);
+        }
+        #endregion
+
+
     }
 }

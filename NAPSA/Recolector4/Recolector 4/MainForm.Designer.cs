@@ -49,12 +49,14 @@ namespace Recolector4
         private void tmrMain_Tick(object sender, EventArgs e)
         {
 
-            if (this.ZeroPos.Y < 150)
+            if (this.ZeroPos.Y < 170)
             {
                 this.sentidoGiro = (this.ZeroPos.X < this.lastBallX) ? 1 : 0;
 
-                this.textBox4.Text = string.Format("{0}", sentidoGiro);
+                this.fpsLabel.Text = sentidoGiro.ToString();
                 this.lastBallX = this.ZeroPos.X;
+                //fpsLabel.Text = sentidoGiro.ToString();
+                //this.cantZerosFound = 0;
             }
 
             //IVideoSource videoSource = videoSourcePlayer1.VideoSource;
