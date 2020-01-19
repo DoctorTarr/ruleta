@@ -33,15 +33,14 @@ namespace Recolector4
         private EuclideanColorFiltering _ballColorFilter = new EuclideanColorFiltering();
         private BlobCounter _ballBlobCounter = new BlobCounter();
 
+        // Drawing variables
+        private Pen _drawPen;
+        System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
+        System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+        int ipenWidth = 5;
 
-
+        // Positioning variables
         private System.Drawing.Point ZeroPos, BallPos;
-
-
-        private double radian = 180.0F / (float)Math.PI;
-
-
-        private bool _calibrateFlag = false;
 
         // Measurement variables
         private int _Distance = 0, _Angle = 0;
@@ -50,12 +49,8 @@ namespace Recolector4
         private bool bZeroFound = false, bBallFound = false;
         private int _WinnerNumber = 0;
 
+        private bool _calibrateFlag = false;
 
-        // Drawing variables
-        private Pen _drawPen;
-        System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
-        System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-        int ipenWidth = 5;
 
         // Demo variables
         private int estadoDemo;
@@ -70,16 +65,6 @@ namespace Recolector4
 
             CheckForIllegalCrossThreadCalls = false;
             // Filter for blob detecting. Parameters setup in caller
-            _blobCounter.FilterBlobs = false; // If the property is equal to false, then there is no any additional
-                                              //  post processing after image was processed.If the property is set to true, 
-                                              //  then blobs filtering is done right after image processing routine. 
-                                              // If BlobsFilter is set, then custom blobs' filtering is done, which is
-                                              // implemented by user. Otherwise blobs are filtered according to dimensions
-                                              // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
-
-
-            _blobCounter.ObjectsOrder = ObjectsOrder.Size;
-
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -275,8 +260,8 @@ namespace Recolector4
                 tbVideoStatus.BackColor = Color.DarkRed;
                 tbVideoStatus.Text = "OFF";
 
-                pictureBox1.Image = null;
-                pictureBox2.Image = null;
+                pbZero.Image = null;
+                pbBall.Image = null;
                 textBox1.Text = "";
                 textBox2.Text = "";
                 textBox3.Text = "";
@@ -299,29 +284,44 @@ namespace Recolector4
         // All the filters etc are configured here
         private void setupDetectionVariables()
         {
-            // Zero number blob detection parameters
+            // Configure Zero Color Filter
             RGB zeroColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["ZeroRed"].ToString()),
                                             Byte.Parse(ConfigurationManager.AppSettings["ZeroGreen"].ToString()),
                                             Byte.Parse(ConfigurationManager.AppSettings["ZeroBlue"].ToString()));
-            short zeroRadius = short.Parse(ConfigurationManager.AppSettings["ZeroRadius"].ToString());
+            _zeroColorFilter.CenterColor = zeroColor;
+            _zeroColorFilter.Radius = short.Parse(ConfigurationManager.AppSettings["ZeroRadius"].ToString());
 
-            int zeroMinSize = int.Parse(ConfigurationManager.AppSettings["ZeroMinSize"].ToString());
-            int zeroMaxSize = int.Parse(ConfigurationManager.AppSettings["ZeroMaxSize"].ToString());
+            // Configure Zero number blob detection parameters
 
+            // If the property is equal to false, then there is no any additional
+            //  post processing after image was processed.If the property is set to true, 
+            //  then blobs filtering is done right after image processing routine. 
+            // If BlobsFilter is set, then custom blobs' filtering is done, which is
+            // implemented by user. Otherwise blobs are filtered according to dimensions
+            // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
+            _zeroBlobCounter.FilterBlobs = false;
+            _zeroBlobCounter.ObjectsOrder = ObjectsOrder.Size;
+            _zeroBlobCounter.MinWidth = int.Parse(ConfigurationManager.AppSettings["ZeroMinSize"].ToString());
+            _zeroBlobCounter.MaxWidth = int.Parse(ConfigurationManager.AppSettings["ZeroMaxSize"].ToString());
+
+            // Drawing pen for zero
             Pen zeroPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
 
-            // Ball blob detection parameters
+            // Configure Ball Color Filter
             RGB ballColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["BallRed"].ToString()),
                                             Byte.Parse(ConfigurationManager.AppSettings["BallGreen"].ToString()),
                                             Byte.Parse(ConfigurationManager.AppSettings["BallBlue"].ToString()));
 
-            int ballMinSize = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
-            int ballMaxSize = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
-            short ballRadius = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
+            _ballColorFilter.CenterColor = ballColor;
+            _ballColorFilter.Radius = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
+
+            // Ball blob detection parameters
+            _ballBlobCounter.FilterBlobs = false;
+            _ballBlobCounter.ObjectsOrder = ObjectsOrder.Size;
+            _ballBlobCounter.MinWidth = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
+            _ballBlobCounter.MaxWidth = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
 
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
-
-            
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
@@ -357,68 +357,49 @@ namespace Recolector4
         {
             int winner = -1;
 
-            Bitmap _BsourceFrame = _resizeFilter.Apply(args.Frame); // new Bitmap(args.Frame, _pbSize);
+            Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
+            _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
 
             Subtract _subtractFilter = new Subtract(subtractImage);
-
             _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-            //Bitmap mImage = (Bitmap)objectsImage.Clone(); // args.Frame.Clone();
+            ZeroPos.X = -1;
+            pbZero.Image = ZeroBlobDetection(_BsourceFrame);
+            tbZeroPosX.Text = ZeroPos.X.ToString();
+            tbZeroPosY.Text = ZeroPos.Y.ToString();
+            bZeroFound = ZeroPos.X != -1;
 
-            // Zero Number blob parameters
-            //            _zeroColorFilter.CenterColor = zeroColor;
-            //            _zeroColorFilter.Radius = zeroRadius;
-            //            _blobCounter.MinWidth = zeroMinSize;
-            //            _blobCounter.MaxWidth = zeroMaxSize;
-            //            _blobCounter.MinHeight = zeroMinSize;
-            //            _blobCounter.MaxHeight = zeroMaxSize;
-            //            _drawPen = zeroPen;
-            //            bZeroFound = drawBlob(_BsourceFrame, ref pictureBox1, ref ZeroPos);
-            //            if (bZeroFound)
-            //            {
-            //                tbZeroPosX.Text = ZeroPos.X.ToString();
-            //                tbZeroPosY.Text = ZeroPos.Y.ToString();
-            //            }
+            BallPos.X = -1;
+            pbBall.Image = BallBlobDetection(_BsourceFrame);
+            tbBolaPosX.Text = BallPos.X.ToString();
+            tbBolaPosY.Text = BallPos.Y.ToString();
+            bBallFound = ZeroPos.X != -1;
 
-            //            _zeroColorFilter.CenterColor = ballColor;
-            //            _zeroColorFilter.Radius = ballRadius;
-            //            _blobCounter.MinWidth = ballMinSize;
-            //            _blobCounter.MaxWidth = ballMaxSize;
-            //            _blobCounter.MinHeight = ballMinSize;
-            //            _blobCounter.MaxHeight = ballMaxSize;
 
-            //            _drawPen = ballPen;
-            //            bBallFound = drawBlob(_BsourceFrame, ref pictureBox2, ref BallPos);
-            //            if (bBallFound)
-            //            {
-            //                tbBolaPosX.Text = BallPos.X.ToString();
-            //                tbBolaPosY.Text = BallPos.Y.ToString();
-            //            }
+            // if (Math.Abs(ZeroPos.X - 314) < 3)
+            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
+            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
+            {
+                _Distance = FindDistance(ZeroPos, BallPos);
+                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                if (bZeroFound && bBallFound)
+                {
+                    winner = FindWinnerNumber(_Distance, _Angle);
 
-            //            // if (Math.Abs(ZeroPos.X - 314) < 3)
-            //            // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
-            //            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
-            //            {
-            //                _Distance = FindDistance(ZeroPos, BallPos);
-            //                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-            //                textBox1.Text = string.Format("{0}", _Distance);
-            //                textBox2.Text = string.Format("{0}", _Angle);
-            //                if (bZeroFound && bBallFound)
-            //                {
-            //                    winner = FindWinnerNumber(_Distance, _Angle);
-
-            //                    if (winner > -1)
-            //                    {
-            //                        _WinnerNumber = winner;
-            //                        textBox3.Text = string.Format("{0}", _WinnerNumber);
-            //                    }
-            //                }
-            //                else
-            //                {
-            //                    _WinnerNumber = -1;
-            //                    textBox3.Text = "";
-            //                }
-            //            }
+                    if (winner > -1)
+                    {
+                        _WinnerNumber = winner;
+                        textBox3.Text = string.Format("{0}", _WinnerNumber);
+                    }
+                }
+                else
+                {
+                    _WinnerNumber = -1;
+                    textBox3.Text = "";
+                }
+                textBox1.Text = _Distance.ToString();
+                textBox2.Text = _Angle.ToString();
+            }
             //#if DEBUG
 
             //            //Graphics g = Graphics.FromImage(mImage);
@@ -435,33 +416,52 @@ namespace Recolector4
 
         }
 
-        private bool BlobDetection(Bitmap objectsImage, ref PictureBox pb, ref System.Drawing.Point position)
+        private Bitmap ZeroBlobDetection(Bitmap _bitmapSourceImage)
         {
-            bool found = false;
+            Bitmap _colorFilterImage = _zeroColorFilter.Apply(_bitmapSourceImage);
 
+            Rectangle area = new Rectangle(0, 0, _colorFilterImage.Width, _colorFilterImage.Height);
 
-            //_zeroColorFilter.ApplyInPlace(objectsImage);
-            //pb.Image = objectsImage;
+            BitmapData objectsData = _colorFilterImage.LockBits(area, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
+            UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
+            _zeroBlobCounter.ProcessImage(grayImage);
+            _colorFilterImage.UnlockBits(objectsData);
 
-            //Rectangle area = new Rectangle(0, 0, objectsImage.Width, objectsImage.Height);
+            Rectangle[] rects = _zeroBlobCounter.GetObjectsRectangles();
 
-            //BitmapData objectsData = objectsImage.LockBits(area, ImageLockMode.ReadOnly, objectsImage.PixelFormat);
-            //UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
-            //_blobCounter.ProcessImage(grayImage);
-            //objectsImage.UnlockBits(objectsData);
+            if (rects.Length > 0)
+            {
+                Rectangle objectRect = rects[0];
+                ZeroPos = objectRect.Location;
+            }
 
-            //Rectangle[] rects = _blobCounter.GetObjectsRectangles();
-            //found = rects.Length > 0;
-            //if (found)
-            //{
-            //    Rectangle objectRect = rects[0];
-            //    position = objectRect.Location;
-            //}
-
-            return found;
+            return _colorFilterImage; 
         }
 
-#endregion
+
+        private Bitmap BallBlobDetection(Bitmap _bitmapSourceImage)
+        {
+            Bitmap _colorFilterImage = _ballColorFilter.Apply(_bitmapSourceImage);
+
+            Rectangle area = new Rectangle(0, 0, _colorFilterImage.Width, _colorFilterImage.Height);
+
+            BitmapData objectsData = _colorFilterImage.LockBits(area, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
+            UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
+            _ballBlobCounter.ProcessImage(grayImage);
+            _colorFilterImage.UnlockBits(objectsData);
+
+            Rectangle[] rects = _ballBlobCounter.GetObjectsRectangles();
+
+            if (rects.Length > 0)
+            {
+                Rectangle objectRect = rects[0];
+                BallPos = objectRect.Location;
+            }
+
+            return _colorFilterImage;
+        }
+
+        #endregion
         private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
         {
             System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
@@ -507,7 +507,7 @@ namespace Recolector4
         //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
         //Triple-zero wheel 
         //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        int[,] Numbers = new int[,]
+        private readonly int[,] Numbers = new int[,]
         {
             // distance, angle = number
             {  24,  90 },// 0
@@ -548,6 +548,9 @@ namespace Recolector4
             {  45, 138 },// 35
             { 148,  68 } // 36
         };
+
+        private readonly double radian = 180.0F / (float)Math.PI;
+
         private int FindWinnerNumber(int distance, int angle)
         {
             int winner = -1;

@@ -142,13 +142,14 @@ namespace Recolector4
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbZeroPosY = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbZeroPosX = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pbZero = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -170,17 +171,17 @@ namespace Recolector4
             this.label5 = new System.Windows.Forms.Label();
             this.tbBolaPosX = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pbBall = new System.Windows.Forms.PictureBox();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
             this.fpsLabel = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -190,10 +191,10 @@ namespace Recolector4
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.tbZeroPosX);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.pictureBox1);
+            this.groupBox1.Controls.Add(this.pbZero);
             this.groupBox1.Location = new System.Drawing.Point(706, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(337, 244);
+            this.groupBox1.Size = new System.Drawing.Size(337, 259);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
@@ -201,7 +202,7 @@ namespace Recolector4
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(213, 212);
+            this.label2.Location = new System.Drawing.Point(213, 232);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 13);
             this.label2.TabIndex = 28;
@@ -211,7 +212,7 @@ namespace Recolector4
             // 
             this.tbZeroPosY.Enabled = false;
             this.tbZeroPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosY.Location = new System.Drawing.Point(261, 207);
+            this.tbZeroPosY.Location = new System.Drawing.Point(261, 227);
             this.tbZeroPosY.Name = "tbZeroPosY";
             this.tbZeroPosY.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosY.TabIndex = 27;
@@ -220,7 +221,7 @@ namespace Recolector4
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label1.Location = new System.Drawing.Point(7, 212);
+            this.label1.Location = new System.Drawing.Point(7, 232);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 13);
             this.label1.TabIndex = 26;
@@ -230,7 +231,7 @@ namespace Recolector4
             // 
             this.tbZeroPosX.Enabled = false;
             this.tbZeroPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosX.Location = new System.Drawing.Point(55, 207);
+            this.tbZeroPosX.Location = new System.Drawing.Point(55, 227);
             this.tbZeroPosX.Name = "tbZeroPosX";
             this.tbZeroPosX.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosX.TabIndex = 25;
@@ -245,15 +246,15 @@ namespace Recolector4
             this.label3.TabIndex = 24;
             this.label3.Text = "Detección del Cero";
             // 
-            // pictureBox1
+            // pbZero
             // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(6, 21);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(320, 180);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 12;
-            this.pictureBox1.TabStop = false;
+            this.pbZero.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbZero.Location = new System.Drawing.Point(6, 21);
+            this.pbZero.Name = "pbZero";
+            this.pbZero.Size = new System.Drawing.Size(320, 200);
+            this.pbZero.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbZero.TabIndex = 12;
+            this.pbZero.TabStop = false;
             // 
             // textBox1
             // 
@@ -426,8 +427,8 @@ namespace Recolector4
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.tbBolaPosX);
             this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.pictureBox2);
-            this.groupBox2.Location = new System.Drawing.Point(706, 253);
+            this.groupBox2.Controls.Add(this.pbBall);
+            this.groupBox2.Location = new System.Drawing.Point(706, 269);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(337, 268);
             this.groupBox2.TabIndex = 30;
@@ -481,15 +482,15 @@ namespace Recolector4
             this.label6.TabIndex = 24;
             this.label6.Text = "Detección de Bola";
             // 
-            // pictureBox2
+            // pbBall
             // 
-            this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Location = new System.Drawing.Point(6, 21);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(320, 200);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 12;
-            this.pictureBox2.TabStop = false;
+            this.pbBall.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbBall.Location = new System.Drawing.Point(6, 21);
+            this.pbBall.Name = "pbBall";
+            this.pbBall.Size = new System.Drawing.Size(320, 200);
+            this.pbBall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBall.TabIndex = 12;
+            this.pbBall.TabStop = false;
             // 
             // tmrDemo
             // 
@@ -501,7 +502,7 @@ namespace Recolector4
             this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(967, 530);
+            this.btnIniciarDemo.Location = new System.Drawing.Point(967, 564);
             this.btnIniciarDemo.Name = "btnIniciarDemo";
             this.btnIniciarDemo.Size = new System.Drawing.Size(76, 23);
             this.btnIniciarDemo.TabIndex = 51;
@@ -514,10 +515,10 @@ namespace Recolector4
             this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProtocolo.Location = new System.Drawing.Point(706, 530);
+            this.txtProtocolo.Location = new System.Drawing.Point(706, 543);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(255, 82);
+            this.txtProtocolo.Size = new System.Drawing.Size(255, 69);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -550,18 +551,19 @@ namespace Recolector4
             this.Controls.Add(this.label8);
             this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.Color.DarkRed;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Panel del Video Recolector IV";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbZero)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -571,7 +573,7 @@ namespace Recolector4
 
         private System.Windows.Forms.GroupBox groupBox1;
         private Accord.Controls.VideoSourcePlayer videoSourcePlayer1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pbZero;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label2;
@@ -587,7 +589,7 @@ namespace Recolector4
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbBolaPosX;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pbBall;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox2;
