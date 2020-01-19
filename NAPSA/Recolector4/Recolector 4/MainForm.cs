@@ -376,9 +376,9 @@ namespace Recolector4
             bBallFound = ZeroPos.X != -1;
 
 
-            // if (Math.Abs(ZeroPos.X - 314) < 3)
+            if (Math.Abs(ZeroPos.X - 314) < 3)
             // if (Enumerable.Range(312, 316).Contains(ZeroPos.X))
-            if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
+            //if (ZeroPos.X >= 313 && ZeroPos.X <= 315)
             {
                 _Distance = FindDistance(ZeroPos, BallPos);
                 _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
@@ -454,8 +454,12 @@ namespace Recolector4
 
             if (rects.Length > 0)
             {
-                Rectangle objectRect = rects[0];
-                BallPos = objectRect.Location;
+                //textBox4.Text = objectRect.Width.ToString();
+                if (rects[0].Width > 4)
+                {
+                    Rectangle objectRect = rects[0];
+                    BallPos = objectRect.Location;
+                }
             }
 
             return _colorFilterImage;
@@ -490,8 +494,7 @@ namespace Recolector4
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
-
-            return (int)Math.Round(distance);
+            return (int)Math.Round(distance); // (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
         }
 
         //Roulette wheel number sequence
