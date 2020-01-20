@@ -49,40 +49,42 @@ namespace Recolector4
         private void tmrMain_Tick(object sender, EventArgs e)
         {
 
-            if (this.ZeroPos.Y < 170)
-            {
-                this.sentidoGiro = (this.ZeroPos.X < this.lastBallX) ? 1 : 0;
+            lblBallOn.Text = this.bBallFound ? "B " : "NB";
 
-                this.fpsLabel.Text = sentidoGiro.ToString();
-                this.lastBallX = this.ZeroPos.X;
-                //fpsLabel.Text = sentidoGiro.ToString();
-                //this.cantZerosFound = 0;
-            }
-
-            //IVideoSource videoSource = videoSourcePlayer1.VideoSource;
-
-            //if (videoSource != null)
+            //if (this.ZeroPos.Y < 170)
             //{
-            //    // get number of frames since the last timer tick
-            //    int framesReceived = videoSource.FramesReceived;
+            //    this.sentidoGiro = (this.ZeroPos.X < this.lastBallX) ? 1 : 0;
 
-            //    if (stopWatch == null)
-            //    {
-            //        stopWatch = new Stopwatch();
-            //        stopWatch.Start();
-            //    }
-            //    else
-            //    {
-            //        stopWatch.Stop();
-
-            //        float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
-            //        fpsLabel.Text = fps.ToString("F2") + " fps";
-
-            //        stopWatch.Reset();
-            //        stopWatch.Reset();
-            //        stopWatch.Start();
-            //    }
+            //    this.fpsLabel.Text = sentidoGiro.ToString();
+            //    this.lastBallX = this.ZeroPos.X;
+            //    //fpsLabel.Text = sentidoGiro.ToString();
+            //    //this.cantZerosFound = 0;
             //}
+
+            IVideoSource videoSource = videoSourcePlayer1.VideoSource;
+
+            if (videoSource != null)
+            {
+                // get number of frames since the last timer tick
+                int framesReceived = videoSource.FramesReceived;
+
+                if (stopWatch == null)
+                {
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
+                else
+                {
+                    stopWatch.Stop();
+
+                    float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
+                    lblFPS.Text = fps.ToString("F2") + " fps";
+
+                    stopWatch.Reset();
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                }
+            }
 
         }
         #endregion
@@ -178,7 +180,8 @@ namespace Recolector4
             this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
-            this.fpsLabel = new System.Windows.Forms.Label();
+            this.lblFPS = new System.Windows.Forms.Label();
+            this.lblBallOn = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -278,6 +281,7 @@ namespace Recolector4
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.lblBallOn);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.tbVideoStatus);
             this.groupBox3.Controls.Add(this.label10);
@@ -528,15 +532,25 @@ namespace Recolector4
             this.tmrMain.Interval = 500;
             this.tmrMain.Tick += new System.EventHandler(this.tmrMain_Tick);
             // 
-            // fpsLabel
+            // lblFPS
             // 
-            this.fpsLabel.AutoSize = true;
-            this.fpsLabel.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.fpsLabel.Location = new System.Drawing.Point(361, 583);
-            this.fpsLabel.Name = "fpsLabel";
-            this.fpsLabel.Size = new System.Drawing.Size(21, 13);
-            this.fpsLabel.TabIndex = 53;
-            this.fpsLabel.Text = "fps";
+            this.lblFPS.AutoSize = true;
+            this.lblFPS.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblFPS.Location = new System.Drawing.Point(361, 583);
+            this.lblFPS.Name = "lblFPS";
+            this.lblFPS.Size = new System.Drawing.Size(21, 13);
+            this.lblFPS.TabIndex = 53;
+            this.lblFPS.Text = "fps";
+            // 
+            // lblBallOn
+            // 
+            this.lblBallOn.AutoSize = true;
+            this.lblBallOn.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblBallOn.Location = new System.Drawing.Point(282, 477);
+            this.lblBallOn.Name = "lblBallOn";
+            this.lblBallOn.Size = new System.Drawing.Size(22, 13);
+            this.lblBallOn.TabIndex = 54;
+            this.lblBallOn.Text = "NB";
             // 
             // MainForm
             // 
@@ -544,7 +558,7 @@ namespace Recolector4
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
             this.ClientSize = new System.Drawing.Size(1055, 624);
-            this.Controls.Add(this.fpsLabel);
+            this.Controls.Add(this.lblFPS);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.btnIniciarDemo);
             this.Controls.Add(this.groupBox2);
@@ -606,7 +620,8 @@ namespace Recolector4
         private System.Windows.Forms.TextBox tbVideoStatus;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label fpsLabel;
+        private System.Windows.Forms.Label lblFPS;
+        private System.Windows.Forms.Label lblBallOn;
     }
 }
 

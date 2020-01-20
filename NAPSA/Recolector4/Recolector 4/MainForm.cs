@@ -33,11 +33,18 @@ namespace Recolector4
         private EuclideanColorFiltering _ballColorFilter = new EuclideanColorFiltering();
         private BlobCounter _ballBlobCounter = new BlobCounter();
 
+        SobelEdgeDetector _edgeFilter = new SobelEdgeDetector();
+
+        private Rectangle _frameArea; // Required to apply filters to the full frame
+        private Rectangle _cylinderArea; // Cylinder area to detect ball presence
+
+
         // Drawing variables
         private Pen _drawPen;
         System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
         System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
         int ipenWidth = 5;
+
 
         // Positioning variables
         private System.Drawing.Point ZeroPos, BallPos;
@@ -62,10 +69,8 @@ namespace Recolector4
         public MainForm()
         {
             InitializeComponent();
-            setupDetectionVariables();
-
             CheckForIllegalCrossThreadCalls = false;
-            // Filter for blob detecting. Parameters setup in caller
+            setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -96,7 +101,7 @@ namespace Recolector4
                 StartCamera();
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
-                this.tmrMain.Interval = 1000;
+                this.tmrMain.Interval = 500;  // 500msec
                 this.tmrMain.Start();
             }
         }
@@ -104,9 +109,9 @@ namespace Recolector4
         private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
         {
             if (cbCalibrate.Checked)
-                _calibrateFlag = true;
+                this._calibrateFlag = true;
             else
-                _calibrateFlag = false;
+                this._calibrateFlag = false;
 
         }
 
@@ -129,7 +134,7 @@ namespace Recolector4
                 this.btnIniciarDemo.Text = "Detener Demo";
                 this.estadoDemo = 0;
                 this.cantZerosFound = 0; // Reset spin counter
-                this.tmrDemo.Interval = 100;
+                this.tmrDemo.Interval = 1000;
                 this.tmrDemo.Start();
             }
         }
@@ -167,7 +172,7 @@ namespace Recolector4
             {
                 StopCamera();
                 // IP Camera
-                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/101/httppreview");
+                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/101/preview");
                 videoSource.Login = "admin";
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
@@ -262,30 +267,33 @@ namespace Recolector4
                 graph.FillEllipse(Brushes.Black, new Rectangle(160, 93, 307, 307));
             }
 
+            _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
+
+            _cylinderArea = new Rectangle(241, 175, 140, 140);
         }
 
 
-        //For blob recognition, there is a demo application which you will find after you download all the source code.
-        //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
-        // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
-        // to perform color transformations, if the features you need should be recognized by subtly different color.And so on…
+    //For blob recognition, there is a demo application which you will find after you download all the source code.
+    //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
+    // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
+    // to perform color transformations, if the features you need should be recognized by subtly different color.And so on…
 
-        /// <summary> Blob Detection    
-        /// This method for color object detection by Blob counter algorithm.
-        /// If you using this method, then you can detecting as follows:
-        ///             red circle, rectangle, triangle
-        ///             blue circle, rectangle, triangle
-        ///             green circle, rectangle, triangle
-        /// the process of this method as follow:
-        ///     1. color filtering by Euclidean filtering(R, G, B).
-        ///     2. the grayscale filtering based on color filtered image.
-        ///     3. In this step, you can choose the blur option. Applied blur option(or not),
-        ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
-        ///     4. the binary filtering based on edge filter image.
-        ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
-        /// </summary>
-        /// 
-        private void get_Frame(object sender, NewFrameEventArgs args)
+    /// <summary> Blob Detection    
+    /// This method for color object detection by Blob counter algorithm.
+    /// If you using this method, then you can detecting as follows:
+    ///             red circle, rectangle, triangle
+    ///             blue circle, rectangle, triangle
+    ///             green circle, rectangle, triangle
+    /// the process of this method as follow:
+    ///     1. color filtering by Euclidean filtering(R, G, B).
+    ///     2. the grayscale filtering based on color filtered image.
+    ///     3. In this step, you can choose the blur option. Applied blur option(or not),
+    ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
+    ///     4. the binary filtering based on edge filter image.
+    ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
+    /// </summary>
+    /// 
+    private void get_Frame(object sender, NewFrameEventArgs args)
         {
             int winner = -1;
 
@@ -305,7 +313,13 @@ namespace Recolector4
             pbBall.Image = BallBlobDetection(_BsourceFrame);
             tbBolaPosX.Text = BallPos.X.ToString();
             tbBolaPosY.Text = BallPos.Y.ToString();
-            bBallFound = ZeroPos.X != -1;
+
+            //    Roulette slots
+            // 		314, 175
+            //241, 246        381,246
+            //      314, 314
+
+            bBallFound = _cylinderArea.Contains(BallPos);
 
 
             if ((Math.Abs(ZeroPos.X - 314) < 3))
@@ -349,13 +363,14 @@ namespace Recolector4
 
         }
 
+        // Zero position detection
         private Bitmap ZeroBlobDetection(Bitmap _bitmapSourceImage)
         {
+            // Filter pixels with zero's color
             Bitmap _colorFilterImage = _zeroColorFilter.Apply(_bitmapSourceImage);
 
-            Rectangle area = new Rectangle(0, 0, _colorFilterImage.Width, _colorFilterImage.Height);
-
-            BitmapData objectsData = _colorFilterImage.LockBits(area, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
+            // Apply grayscale filter
+            BitmapData objectsData = _colorFilterImage.LockBits(_frameArea, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
             _zeroBlobCounter.ProcessImage(grayImage);
             _colorFilterImage.UnlockBits(objectsData);
@@ -372,13 +387,14 @@ namespace Recolector4
         }
 
 
+        // Ball position detection
         private Bitmap BallBlobDetection(Bitmap _bitmapSourceImage)
         {
+            // Filter pixels with balls's color
             Bitmap _colorFilterImage = _ballColorFilter.Apply(_bitmapSourceImage);
 
-            Rectangle area = new Rectangle(0, 0, _colorFilterImage.Width, _colorFilterImage.Height);
-
-            BitmapData objectsData = _colorFilterImage.LockBits(area, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
+            // Apply grayscale filter
+            BitmapData objectsData = _colorFilterImage.LockBits(_frameArea, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
             _ballBlobCounter.ProcessImage(grayImage);
             _colorFilterImage.UnlockBits(objectsData);
@@ -387,18 +403,15 @@ namespace Recolector4
 
             if (rects.Length > 0)
             {
-                //textBox4.Text = objectRect.Width.ToString();
-                if (rects[0].Width > 4)
-                {
-                    Rectangle objectRect = rects[0];
-                    BallPos = objectRect.Location;
-                }
+                Rectangle objectRect = rects[0];
+                BallPos = objectRect.Location;
             }
 
             return _colorFilterImage;
         }
 
         #endregion
+
         private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
         {
             System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
@@ -416,7 +429,6 @@ namespace Recolector4
         * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
         * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
         */
-
         private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             double xDiff = p2.X - p1.X;
@@ -486,6 +498,8 @@ namespace Recolector4
         };
 
         private readonly double radian = 180.0F / (float)Math.PI;
+
+        public bool CalibrateFlag { get => _calibrateFlag; set => _calibrateFlag = value; }
 
         private int FindWinnerNumber(int distance, int angle)
         {
