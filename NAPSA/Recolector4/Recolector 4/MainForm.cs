@@ -36,14 +36,15 @@ namespace Recolector4
         SobelEdgeDetector _edgeFilter = new SobelEdgeDetector();
 
         private Rectangle _frameArea; // Required to apply filters to the full frame
-        private Rectangle _cylinderArea; // Cylinder area to detect ball presence
+        private Rectangle _bowlArea; // Area where the ball rolls before getting into a pocket
+        private Rectangle _numbersArea; // Area where all the numbers are
+        private Rectangle _ballPocketsArea; // Cylinder area to detect ball presence
 
 
         // Drawing variables
-        private Pen _drawPen;
-        System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
-        System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
-        int ipenWidth = 5;
+        //private Pen _drawPen;
+        //System.Drawing.Font _font = new System.Drawing.Font("Times New Roman", 48, FontStyle.Bold);
+        //System.Drawing.SolidBrush _brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
 
 
         // Positioning variables
@@ -53,7 +54,11 @@ namespace Recolector4
         private int _Distance = 0, _Angle = 0;
 
         // Winner number variables
-        private bool bZeroFound = false, bBallFound = false;
+        private bool bZeroFound = false;
+        private bool bRawBallFound = false,  bDebouncedBallFound = false;
+        private bool bBallStateChanged = false;
+        private int iBallUnchangeCount = 0;
+
         private int _WinnerNumber = 0;
 
         private bool _calibrateFlag = false;
@@ -95,13 +100,14 @@ namespace Recolector4
                 this.txtProtocolo.Text = "";
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
+                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
             }
             else
             {
                 StartCamera();
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
-                this.tmrMain.Interval = 500;  // 500msec
+                this.tmrMain.Interval = 1000;//500msec
                 this.tmrMain.Start();
             }
         }
@@ -141,30 +147,6 @@ namespace Recolector4
 
         #region MyMethods
 
-        private void CalibrateCamera(Bitmap _bitmapSourceImage)
-        {
-            // Base ruleta sin aro negro - radius 164 color red
-            Rectangle rcMain = new Rectangle(120, 5, 410, 460);
-
-            // Cilindro -incluye numeros - radius 204 color red
-            Rectangle rcCylinder = new Rectangle(182, 64, 276, 330);
-
-            // Casillas - radius 204 color blue
-            Rectangle rcSlots = new Rectangle(225, 111, 198, 240);
-
-            Graphics _g = Graphics.FromImage(_bitmapSourceImage);
-
-            Pen _pengreen = new Pen(Color.GreenYellow, ipenWidth);
-            Pen _penyellow = new Pen(Color.GreenYellow, ipenWidth);
-            Pen _penred = new Pen(Color.Red, ipenWidth);
-
-            _g.DrawRectangle(_pengreen, rcMain);
-
-            _g.DrawRectangle(_penyellow, rcCylinder);
-
-            _g.DrawRectangle(_penred, rcSlots);
-
-        }
 
         private void StartCamera()
         {
@@ -172,7 +154,7 @@ namespace Recolector4
             {
                 StopCamera();
                 // IP Camera
-                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/101/preview");
+                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/1/preview");
                 videoSource.Login = "admin";
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
@@ -213,6 +195,29 @@ namespace Recolector4
             {
                 return;
             }
+        }
+
+        private void CalibrateCamera(Bitmap _bitmapSourceImage)
+        {
+            int ipenWidth = 5;
+            Rectangle rcCylinder = new Rectangle(182, 64, 276, 330);
+
+            Rectangle rcSlots = _ballPocketsArea;
+
+            Graphics _g = Graphics.FromImage(_bitmapSourceImage);
+
+            Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
+            Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
+            Pen _penred = new Pen(Color.Red, ipenWidth);
+
+            // Cilindro -incluye numeros - radius 204 color red
+            _g.DrawRectangle(_pengreen, _bowlArea);
+
+            _g.DrawRectangle(_penyellow, _numbersArea);
+
+            // Casillas - radius 204 color blue
+            _g.DrawRectangle(_penred, _ballPocketsArea);
+
         }
 
         #endregion
@@ -260,44 +265,91 @@ namespace Recolector4
 
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
 
+            // Base ruleta sin aro negro - radius 164 color red
+            _bowlArea = new Rectangle(160, 93, 307, 307);
+            _numbersArea = new Rectangle(217, 150, 196, 196);
+            _ballPocketsArea = new Rectangle(238, 171, 154, 154);
+
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
                 graph.FillRectangle(Brushes.White, ImageSize);
-                graph.FillEllipse(Brushes.Black, new Rectangle(160, 93, 307, 307));
+                graph.FillEllipse(Brushes.Black, _bowlArea);
             }
 
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
 
-            _cylinderArea = new Rectangle(241, 175, 140, 140);
         }
 
+        const int CHECK_MSEC = 40; // Read hardware every 5 msec
+        const int PRESS_MSEC = 400; // Stable time before registering pressed
+        const int RELEASE_MSEC = 800; // Stable time before registering released
 
-    //For blob recognition, there is a demo application which you will find after you download all the source code.
-    //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
-    // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
-    // to perform color transformations, if the features you need should be recognized by subtly different color.And so on…
+        // This function reads the key state from the hardware.
+        bool RawKeyPressed()
+        {
+            return _ballPocketsArea.Contains(BallPos);
+        }
+        
+       
+        // Service routine called every CHECK_MSEC to
+        // debounce both edges
+        void DebounceSwitch1(ref bool Key_changed, ref bool Key_pressed)
+        {
+            bool DebouncedKeyPress = this.bDebouncedBallFound;
+            bool RawState = RawKeyPressed();
+            Key_changed = false;
+            Key_pressed = DebouncedKeyPress;
+            if (RawState == DebouncedKeyPress)
+            {
+                // Set the timer which allows a change from current state.
+                if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
+            }
+            else
+            {
+                // Key has changed - wait for new state to become stable.
+                if (--this.iBallUnchangeCount == 0)
+                {
+                    // Timer expired - accept the change.
+                    DebouncedKeyPress = RawState;
+                    Key_changed = true;
+                    Key_pressed = DebouncedKeyPress;
+                    // And reset the timer.
+                    if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                    else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
+                }
+            }
+        }
 
-    /// <summary> Blob Detection    
-    /// This method for color object detection by Blob counter algorithm.
-    /// If you using this method, then you can detecting as follows:
-    ///             red circle, rectangle, triangle
-    ///             blue circle, rectangle, triangle
-    ///             green circle, rectangle, triangle
-    /// the process of this method as follow:
-    ///     1. color filtering by Euclidean filtering(R, G, B).
-    ///     2. the grayscale filtering based on color filtered image.
-    ///     3. In this step, you can choose the blur option. Applied blur option(or not),
-    ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
-    ///     4. the binary filtering based on edge filter image.
-    ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
-    /// </summary>
-    /// 
-    private void get_Frame(object sender, NewFrameEventArgs args)
+        //For blob recognition, there is a demo application which you will find after you download all the source code.
+        //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
+        // before recognition.First of all, I would recommend to increase contrast to maximum. In some cases, you need
+        // to perform color transformations, if the features you need should be recognized by subtly different color.And so on…
+
+        /// <summary> Blob Detection    
+        /// This method for color object detection by Blob counter algorithm.
+        /// If you using this method, then you can detecting as follows:
+        ///             red circle, rectangle, triangle
+        ///             blue circle, rectangle, triangle
+        ///             green circle, rectangle, triangle
+        /// the process of this method as follow:
+        ///     1. color filtering by Euclidean filtering(R, G, B).
+        ///     2. the grayscale filtering based on color filtered image.
+        ///     3. In this step, you can choose the blur option. Applied blur option(or not),
+        ///        this method donging Sobel edge filtering based on grayscale(or grayscale + blur) image.
+        ///     4. the binary filtering based on edge filter image.
+        ///     5. Finally, detecting object, distance from the camera and degree are expreed on picturebox 1.
+        /// </summary>
+        /// 
+        private void get_Frame(object sender, NewFrameEventArgs args)
         {
             int winner = -1;
 
             Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
+            //textBox4.Text = _BsourceFrame.Width.ToString();
+            //textBox5.Text = _BsourceFrame.Height.ToString();
+
             _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
 
             Subtract _subtractFilter = new Subtract(subtractImage);
@@ -318,8 +370,11 @@ namespace Recolector4
             // 		314, 175
             //241, 246        381,246
             //      314, 314
+            DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
 
-            bBallFound = _cylinderArea.Contains(BallPos);
+            if (this.bBallStateChanged)
+                lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
+
 
 
             if ((Math.Abs(ZeroPos.X - 314) < 3))
@@ -329,7 +384,7 @@ namespace Recolector4
 
                 _Distance = FindDistance(ZeroPos, BallPos);
                 _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-                if (bZeroFound && bBallFound)
+                if (bZeroFound && bDebouncedBallFound)
                 {
                     winner = FindWinnerNumber(_Distance, _Angle);
 
@@ -352,8 +407,8 @@ namespace Recolector4
             //            //Graphics g = Graphics.FromImage(mImage);
             //            //g.DrawRectangle(_drawPen, objectRect);
             //            //g.Dispose();
-            //            //if (_calibrateFlag)
-            //            //    CalibrateCamera(mImage);
+            if (_calibrateFlag)
+                CalibrateCamera(_BsourceFrame);
 
             //            //args.Frame = mImage;
 

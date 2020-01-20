@@ -45,11 +45,9 @@ namespace Recolector4
 
         #endregion
 
-        #region Demo Timer
+        #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-
-            lblBallOn.Text = this.bBallFound ? "B " : "NB";
 
             //if (this.ZeroPos.Y < 170)
             //{
@@ -157,6 +155,7 @@ namespace Recolector4
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblBallOn = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tbVideoStatus = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
@@ -181,7 +180,6 @@ namespace Recolector4
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
             this.lblFPS = new System.Windows.Forms.Label();
-            this.lblBallOn = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -302,6 +300,16 @@ namespace Recolector4
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
             // 
+            // lblBallOn
+            // 
+            this.lblBallOn.AutoSize = true;
+            this.lblBallOn.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblBallOn.Location = new System.Drawing.Point(282, 477);
+            this.lblBallOn.Name = "lblBallOn";
+            this.lblBallOn.Size = new System.Drawing.Size(22, 13);
+            this.lblBallOn.TabIndex = 54;
+            this.lblBallOn.Text = "NB";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -392,7 +400,6 @@ namespace Recolector4
             this.cbCalibrate.TabIndex = 13;
             this.cbCalibrate.Text = "Calibrate";
             this.cbCalibrate.UseVisualStyleBackColor = true;
-            this.cbCalibrate.Visible = false;
             this.cbCalibrate.CheckedChanged += new System.EventHandler(this.cbCalibrate_CheckedChanged);
             // 
             // btnStartCamara
@@ -541,16 +548,6 @@ namespace Recolector4
             this.lblFPS.Size = new System.Drawing.Size(21, 13);
             this.lblFPS.TabIndex = 53;
             this.lblFPS.Text = "fps";
-            // 
-            // lblBallOn
-            // 
-            this.lblBallOn.AutoSize = true;
-            this.lblBallOn.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblBallOn.Location = new System.Drawing.Point(282, 477);
-            this.lblBallOn.Name = "lblBallOn";
-            this.lblBallOn.Size = new System.Drawing.Size(22, 13);
-            this.lblBallOn.TabIndex = 54;
-            this.lblBallOn.Text = "NB";
             // 
             // MainForm
             // 
