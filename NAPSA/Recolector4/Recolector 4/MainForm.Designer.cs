@@ -13,8 +13,8 @@ namespace Recolector4
         private System.ComponentModel.IContainer components = null;
 
         // Roulette Status variables
-        private int lastBallX = 0;
-        private int sentidoGiro = 0; // 0=horario, 1=antihorario
+        //private int lastBallX = 0;
+        //private int sentidoGiro = 0; // 0=horario, 1=antihorario
         private ProtocoloNAPSA.EstadoJuego estadoMesa;
         private Stopwatch stopWatch = null;
 
@@ -35,10 +35,10 @@ namespace Recolector4
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.azarNumero = new Random((int)DateTime.Now.Ticks);
-            this.leerUltimoNumero();
+            this.LeerUltimoNumero();
             if (Pase.UltimoPase == null)
                 Pase.UltimoPase = new Pase();
-            this.estadoMesa = ProtocoloNAPSA.EstadoJuego.StartingApp;
+            this.estadoMesa = ProtocoloNAPSA.EstadoJuego.CameraOff;
             this.IsCameraOn = false;
 
         }
@@ -48,16 +48,7 @@ namespace Recolector4
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-
-            //if (this.ZeroPos.Y < 170)
-            //{
-            //    this.sentidoGiro = (this.ZeroPos.X < this.lastBallX) ? 1 : 0;
-
-            //    this.fpsLabel.Text = sentidoGiro.ToString();
-            //    this.lastBallX = this.ZeroPos.X;
-            //    //fpsLabel.Text = sentidoGiro.ToString();
-            //    //this.cantZerosFound = 0;
-            //}
+            textBox5.Text = estadoMesa.ToString();
 
             IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 

@@ -39,6 +39,7 @@ namespace Recolector4
         private Rectangle _bowlArea; // Area where the ball rolls before getting into a pocket
         private Rectangle _numbersArea; // Area where all the numbers are
         private Rectangle _ballPocketsArea; // Cylinder area to detect ball presence
+        private Rectangle _centerArea; // Center of the roulette area
 
 
         // Drawing variables
@@ -55,7 +56,7 @@ namespace Recolector4
 
         // Winner number variables
         private bool bZeroFound = false;
-        private bool bRawBallFound = false,  bDebouncedBallFound = false;
+        private bool bDebouncedBallFound = false;
         private bool bBallStateChanged = false;
         private int iBallUnchangeCount = 0;
 
@@ -63,7 +64,7 @@ namespace Recolector4
 
         private bool _calibrateFlag = false;
 
-        private int cantZerosFound = 0;
+        //private int cantZerosFound = 0;
 
         // Demo variables
         private int estadoDemo;
@@ -76,6 +77,8 @@ namespace Recolector4
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
+            this.tmrMain.Interval = 1000;//500msec
+            this.tmrMain.Start();
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -95,20 +98,19 @@ namespace Recolector4
 
             if (this.IsCameraOn)
             {
-                this.tmrMain.Stop();
                 StopCamera();
                 this.txtProtocolo.Text = "";
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
                 this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.estadoMesa = ProtocoloNAPSA.EstadoJuego.CameraOff;
             }
             else
             {
                 StartCamera();
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
-                this.tmrMain.Interval = 1000;//500msec
-                this.tmrMain.Start();
+                this.estadoMesa = ProtocoloNAPSA.EstadoJuego.BeforeGame;
             }
         }
 
@@ -139,7 +141,7 @@ namespace Recolector4
                 }
                 this.btnIniciarDemo.Text = "Detener Demo";
                 this.estadoDemo = 0;
-                this.cantZerosFound = 0; // Reset spin counter
+                //this.cantZerosFound = 0; // Reset spin counter
                 this.tmrDemo.Interval = 1000;
                 this.tmrDemo.Start();
             }
@@ -189,6 +191,7 @@ namespace Recolector4
                 tbBolaPosY.Text = "";
                 tbZeroPosX.Text = "";
                 tbZeroPosY.Text = "";
+                lblBallOn.Text = "";
 
             }
             catch (Exception)
@@ -200,9 +203,6 @@ namespace Recolector4
         private void CalibrateCamera(Bitmap _bitmapSourceImage)
         {
             int ipenWidth = 5;
-            Rectangle rcCylinder = new Rectangle(182, 64, 276, 330);
-
-            Rectangle rcSlots = _ballPocketsArea;
 
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
 
@@ -269,12 +269,14 @@ namespace Recolector4
             _bowlArea = new Rectangle(160, 93, 307, 307);
             _numbersArea = new Rectangle(217, 150, 196, 196);
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
+            _centerArea = new Rectangle(266, 198, 100, 100);
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
                 graph.FillRectangle(Brushes.White, ImageSize);
                 graph.FillEllipse(Brushes.Black, _bowlArea);
+                graph.FillEllipse(Brushes.White, _centerArea);
             }
 
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
@@ -460,8 +462,6 @@ namespace Recolector4
             return _colorFilterImage;
         }
 
-        #endregion
-
         private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
         {
             System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
@@ -474,6 +474,9 @@ namespace Recolector4
             return array;
         }
 
+        #endregion
+
+        #region Finding Winner Number
         // Atan2 aproximation1 2x times faster thatn Math.Atan2
         double atan2_approximation1(double y, double x)
         {
@@ -611,9 +614,10 @@ namespace Recolector4
 
             return winner;
         }
+        #endregion
 
         #region Game state handling
-        private void leerUltimoNumero()
+        private void LeerUltimoNumero()
         {
             DateTime now = DateTime.Now;
             do
