@@ -373,15 +373,19 @@ namespace Recolector4
             DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
 
             if (this.bBallStateChanged)
+            {
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
+                if (!this.bDebouncedBallFound)
+                {
+                    winner = -1;
+                    textBox3.Text = "";
+                }
+            }
 
 
 
             if ((Math.Abs(ZeroPos.X - 314) < 3))
             {
-                if (this.ZeroPos.Y < 170)
-                    cantZerosFound++;
-
                 _Distance = FindDistance(ZeroPos, BallPos);
                 _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
                 if (bZeroFound && bDebouncedBallFound)
@@ -402,20 +406,11 @@ namespace Recolector4
                 textBox1.Text = _Distance.ToString();
                 textBox2.Text = _Angle.ToString();
             }
-            //#if DEBUG
 
-            //            //Graphics g = Graphics.FromImage(mImage);
-            //            //g.DrawRectangle(_drawPen, objectRect);
-            //            //g.Dispose();
             if (_calibrateFlag)
                 CalibrateCamera(_BsourceFrame);
 
-            //            //args.Frame = mImage;
-
-            //#endif
-
             args.Frame = _BsourceFrame;
-
         }
 
         // Zero position detection
@@ -488,13 +483,45 @@ namespace Recolector4
         {
             double xDiff = p2.X - p1.X;
             double yDiff = p2.Y - p1.Y;
-            return (int)Math.Round(Math.Atan2(yDiff, xDiff) * this.radian);
+            return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
+        }
+
+        double atan2_approximation1(double y, double x)
+        {
+            //http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
+            //https://gist.github.com/volkansalma/2972237
+            //Volkan SALMA
+
+            const double ONEQTR_PI = (Math.PI / 4.0);
+            const double THRQTR_PI = (3.0 * Math.PI / 4.0);
+            double r, angle;
+            double abs_y = Math.Abs(y) + 1e-10f;      // kludge to prevent 0/0 condition
+            if (x < 0.0f)
+            {
+                r = (x + abs_y) / (abs_y - x);
+                angle = THRQTR_PI;
+            }
+            else
+            {
+                r = (x - abs_y) / (x + abs_y);
+                angle = ONEQTR_PI;
+            }
+            angle += (0.1963f * r * r - 0.9817f) * r;
+            if (y < 0.0f)
+                return (-angle);     // negate if in quad III or IV
+            else
+                return (angle);
         }
 
         private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
             return (int)Math.Round(distance); // (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
+        }
+
+        private int FindDistance2(System.Drawing.Point p1, System.Drawing.Point p2)
+        {
+            return ((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
         }
 
         //Roulette wheel number sequence
