@@ -77,7 +77,7 @@ namespace Recolector4
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
-            this.tmrMain.Interval = 1000;//500msec
+            this.tmrMain.Interval = 1000; // msec
             this.tmrMain.Start();
         }
 
@@ -604,8 +604,8 @@ namespace Recolector4
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(Numbers[i, 0] - distance) < 3) &&
-                    (Math.Abs(Numbers[i, 1] - angle) < 3))
+                if ((Math.Abs(Numbers[i, 0] - distance) < 2) &&
+                    (Math.Abs(Numbers[i, 1] - angle) < 2))
                 {
                     winner = i;
                     break;
