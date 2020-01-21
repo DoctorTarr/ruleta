@@ -474,18 +474,7 @@ namespace Recolector4
             return array;
         }
 
-
-        /**
-        * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
-        * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
-        */
-        private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
-        {
-            double xDiff = p2.X - p1.X;
-            double yDiff = p2.Y - p1.Y;
-            return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
-        }
-
+        // Atan2 aproximation1 2x times faster thatn Math.Atan2
         double atan2_approximation1(double y, double x)
         {
             //http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
@@ -513,16 +502,39 @@ namespace Recolector4
                 return (angle);
         }
 
-        private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
+        /**
+        * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
+        * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
+        */
+        private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
         {
-            float distance = (float)Math.Sqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
-            return (int)Math.Round(distance); // (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
+            double xDiff = p2.X - p1.X;
+            double yDiff = p2.Y - p1.Y;
+            return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
         }
 
-        private int FindDistance2(System.Drawing.Point p1, System.Drawing.Point p2)
+
+        // Finds the integer square root of a positive number  
+        private int Isqrt(int num)
         {
-            return ((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
+            if (0 == num) { return 0; }  // Avoid zero divide  
+            int n = (num / 2) + 1;       // Initial estimate, never low  
+            int n1 = (n + (num / n)) / 2;
+            while (n1 < n)
+            {
+                n = n1;
+                n1 = (n + (num / n)) / 2;
+            } // end while  
+            return n;
+        } // end Isqrt()  
+
+        // Find distance between zero and ball
+        private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
+        {
+            return Isqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
         }
+
+
 
         //Roulette wheel number sequence
         //The pockets of the roulette wheel are numbered from 0 to 36.
