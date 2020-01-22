@@ -67,10 +67,10 @@ namespace DASYS.Recolector.BLL
       return resultadosPaquete;
     }
 
-    static public string FormatearCadenaEstado(byte numero, EstadoJuego estado, int rpm, int sentidoGiro, byte error)
+    static public string FormatearCadenaEstado(byte numero, int estado, int rpm, int sentidoGiro, byte error)
     {
             int estadoJuego = (int)estado;
-            string cadena = cadena = "NS" + numero.ToString("00") + estadoJuego.ToString() + rpm.ToString("00") + sentidoGiro.ToString() + error.ToString();
+            string cadena = cadena = "NS" + numero.ToString("00") + estadoJuego.ToString("0") + rpm.ToString("00") + sentidoGiro.ToString("0") + error.ToString("0");
 
             return (cadena);
     }
@@ -88,17 +88,5 @@ namespace DASYS.Recolector.BLL
         Status,
         Null,
     }
-
-    public enum EstadoJuego : int
-    {
-        CameraOff,
-        BeforeGame,
-        PlaceYourBet,
-        FinishBetting,
-        NoMoreBets,
-        WinningNumber,
-        CloseTable
-    }
-
   }
 }

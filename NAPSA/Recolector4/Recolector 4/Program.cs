@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Recolector4
+namespace VideoRecolector
 {
     static class Program
     {

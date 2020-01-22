@@ -3,7 +3,7 @@ using DASYS.Recolector.BLL;
 using System;
 using System.Diagnostics;
 
-namespace Recolector4
+namespace VideoRecolector
 {
     partial class MainForm
     {
@@ -15,7 +15,7 @@ namespace Recolector4
         // Roulette Status variables
         //private int lastBallX = 0;
         //private int sentidoGiro = 0; // 0=horario, 1=antihorario
-        private ProtocoloNAPSA.EstadoJuego estadoMesa;
+        private JuegoRuleta.ESTADO_JUEGO estadoMesa;
         private Stopwatch stopWatch = null;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Recolector4
             this.LeerUltimoNumero();
             if (Pase.UltimoPase == null)
                 Pase.UltimoPase = new Pase();
-            this.estadoMesa = ProtocoloNAPSA.EstadoJuego.CameraOff;
+            this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STARTING_APP;
             this.IsCameraOn = false;
 
         }
@@ -112,8 +112,8 @@ namespace Recolector4
                         break;
                     case 5:
                         //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
                         GuardarNumeroGanador(this.numeroDemo);
                         this.tmrDemo.Interval = 1000;
                         break;

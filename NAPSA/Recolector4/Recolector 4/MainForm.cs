@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using DASYS.Recolector.BLL;
 
-namespace Recolector4
+namespace VideoRecolector
 {
     public partial class MainForm : Form
     {
@@ -103,14 +103,14 @@ namespace Recolector4
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
                 this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
-                this.estadoMesa = ProtocoloNAPSA.EstadoJuego.CameraOff;
+                this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STARTING_APP;
             }
             else
             {
                 StartCamera();
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
-                this.estadoMesa = ProtocoloNAPSA.EstadoJuego.BeforeGame;
+                this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME;
             }
         }
 
@@ -639,36 +639,36 @@ namespace Recolector4
         private void GuardarEstado(int estado, byte numero, int sentidoDeGiro)
         {
             string cadena = string.Empty;
-            switch (this.estadoDemo)
+            switch (estado)
             {
                 case 1:
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.BeforeGame,
+                                                            (int)JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
                     break;
                 case 2:
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.PlaceYourBet,
+                                                            (int)JuegoRuleta.ESTADO_JUEGO.PLACE_YOUR_BET,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
                     break;
                 case 3:
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.FinishBetting,
+                                                            (int)JuegoRuleta.ESTADO_JUEGO.FINISH_BETTING,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
                     break;
                 case 4:
                     //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.NoMoreBets,
+                                                            (int)JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
                     break;
                 case 5:
                     //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            ProtocoloNAPSA.EstadoJuego.WinningNumber,
+                                                            (int)JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER,
                                                             this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
                     break;
             }

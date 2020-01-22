@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Recolector4.Properties {
+namespace VideoRecolector.Properties {
     using System;
     
     
