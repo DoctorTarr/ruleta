@@ -65,13 +65,11 @@ namespace VideoRecolector
 
         private bool _calibrateFlag = false;
 
-        MotionDetector detector = new MotionDetector(
-            new SimpleBackgroundModelingDetector(),
-            new MotionAreaHighlighting());
         // motion detection and processing algorithm
-        // counter used for flashing
+        MotionDetector detector = new MotionDetector(
+            new TwoFramesDifferenceDetector()); 
         private bool _isMoving = false;
-        private float motionAlarmLevel = 0.005f;
+        private float motionAlarmLevel = 0.003f;
 
         // Demo variables
         private int estadoDemo;
@@ -82,7 +80,6 @@ namespace VideoRecolector
         //private int lastBallX = 0;
         //private int sentidoGiro = 0; // 0=horario, 1=antihorario
         private JuegoRuleta.ESTADO_JUEGO estadoMesa;
-        private int contadorEstadoActual = 0;
         private JuegoRuleta juego;
 
 
@@ -119,7 +116,7 @@ namespace VideoRecolector
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
                 this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
-                this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STARTING_APP;
+                this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             }
             else
             {
@@ -162,6 +159,7 @@ namespace VideoRecolector
                 this.tmrDemo.Start();
             }
         }
+
         private void StartCamera()
         {
             try
