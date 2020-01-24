@@ -21,15 +21,25 @@ namespace VideoRecolector
 
         private ESTADO_JUEGO currentState = ESTADO_JUEGO.STATE_0;
         private int contadorEstadoActual = 0;
-        private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false;
+        private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
+        private int _WinnerNumber = -1;
 
 
-        public ESTADO_JUEGO GetGameState(bool cylinderIsMoving, bool IsCameraOn, bool BallFound)
+        public ESTADO_JUEGO GetGameState(bool cylinderIsMoving, bool IsCameraOn, bool BallFound, int WinnerNumber)
         {
             _isCameraOn = IsCameraOn;
             _isMoving = cylinderIsMoving;
             _isBallPresent = BallFound;
+            if (WinnerNumber != -1)
+            {
+                if (WinnerNumber != _WinnerNumber)
+                {
+                    _haveNewWinner = true;
+                    _WinnerNumber = WinnerNumber;
+                }
+                
+            }
 
             switch (currentState)
             {
@@ -47,10 +57,11 @@ namespace VideoRecolector
                     break;
                 case ESTADO_JUEGO.PLACE_YOUR_BETS:
                     //currentState = ESTADO_JUEGO.NO_MORE_BETS;
-                    CheckPlaceYourBets();
+                    CheckPlaceYourBetsState();
                     break;
                 case ESTADO_JUEGO.NO_MORE_BETS:
-                    currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                    //currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                    CheckNoMoreBetsState();
                     break;
                 case ESTADO_JUEGO.WINNING_NUMBER:
                     currentState = ESTADO_JUEGO.BEFORE_GAME;
@@ -69,6 +80,7 @@ namespace VideoRecolector
             currentState = estado;
         }
 
+        // Process TABLE_CLOSED state
         public void CheckTableClosedState()
         {
             // If cylinder is moving then go to BEFORE_GAME
@@ -79,6 +91,7 @@ namespace VideoRecolector
             }
         }
 
+        // Process BEFORE_GAME state
         public void CheckBeforeGameState()
         {
             this.contadorEstadoActual++;
@@ -101,14 +114,58 @@ namespace VideoRecolector
             }
         }
 
-        public void CheckPlaceYourBets()
+        // Process PLACE_YOUR_BETS state
+        public void CheckPlaceYourBetsState()
         {
-            if (!this._isBallPresent && this._isCameraOn && this._isMoving)
+            this.contadorEstadoActual++;
+            if (this._isMoving)
             {
-                currentState = ESTADO_JUEGO.NO_MORE_BETS;
-                this.contadorEstadoActual = 0; // Just in case
+                // If ball is not in pocket => NO MORE BETS (a.k.a. Good Luck)
+                if (!this._isBallPresent)
+                {
+                    currentState = ESTADO_JUEGO.NO_MORE_BETS;
+                    this.contadorEstadoActual = 0;
+                }
+            }
+            else
+            {
+                if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
+                {
+                    currentState = ESTADO_JUEGO.TABLE_CLOSED;
+                    this.contadorEstadoActual = 0;
+                }
             }
         }
 
+        // Process NO_MORE_BETS state (waiting for winning number)
+        public void CheckNoMoreBetsState()
+        {
+            this.contadorEstadoActual++;
+            if (_haveNewWinner)
+            {
+                currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                this.contadorEstadoActual = 0;
+            }
+            else
+            {
+                if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
+                {
+                    currentState = ESTADO_JUEGO.TABLE_CLOSED;
+                    this.contadorEstadoActual = 0;
+                }
+            }
+        }
+
+        // Process WINNER_NUMBER state (send winner number and then send winner number state)
+        public void CheckWinnerNumberState()
+        {
+            this.contadorEstadoActual++;
+            if ((_haveNewWinner) && (this.contadorEstadoActual > 4))
+            {
+                currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                this.contadorEstadoActual = 0;
+            }
+
+        }
     }
 }
