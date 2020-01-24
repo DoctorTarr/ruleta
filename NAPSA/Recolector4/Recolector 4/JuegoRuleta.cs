@@ -19,11 +19,19 @@ namespace VideoRecolector
             TABLE_CLOSED    // 6
         }
 
+        public enum WINNER_CMD_TYPE : int
+        {
+            NO_WINNER_CMD,  // 0
+            WINNER_NUMBER_CMD,   // 1
+            WINNER_STATUS_CMD   // 2
+        }
+
         private ESTADO_JUEGO currentState = ESTADO_JUEGO.STATE_0;
         private int contadorEstadoActual = 0;
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
         private int _WinnerNumber = -1;
+        private WINNER_CMD_TYPE _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD; // 1=Winner number 2=Winner status 0=no cmd
 
 
         public ESTADO_JUEGO GetGameState(bool cylinderIsMoving, bool IsCameraOn, bool BallFound, int WinnerNumber)
@@ -38,8 +46,9 @@ namespace VideoRecolector
                     _haveNewWinner = true;
                     _WinnerNumber = WinnerNumber;
                 }
-                
             }
+            else
+                _haveNewWinner = false;
 
             switch (currentState)
             {
@@ -64,7 +73,8 @@ namespace VideoRecolector
                     CheckNoMoreBetsState();
                     break;
                 case ESTADO_JUEGO.WINNING_NUMBER:
-                    currentState = ESTADO_JUEGO.BEFORE_GAME;
+                    //currentState = ESTADO_JUEGO.BEFORE_GAME;
+                    CheckWinnerNumberState();
                     break;
             }
             return currentState;
@@ -123,8 +133,11 @@ namespace VideoRecolector
                 // If ball is not in pocket => NO MORE BETS (a.k.a. Good Luck)
                 if (!this._isBallPresent)
                 {
-                    currentState = ESTADO_JUEGO.NO_MORE_BETS;
-                    this.contadorEstadoActual = 0;
+                    if (this.contadorEstadoActual > 10)
+                    {
+                        currentState = ESTADO_JUEGO.NO_MORE_BETS;
+                        this.contadorEstadoActual = 0;
+                    }
                 }
             }
             else
@@ -160,12 +173,38 @@ namespace VideoRecolector
         public void CheckWinnerNumberState()
         {
             this.contadorEstadoActual++;
-            if ((_haveNewWinner) && (this.contadorEstadoActual > 4))
+            // To keep sending the winner number before winner state
+            if (_haveNewWinner)
             {
-                currentState = ESTADO_JUEGO.WINNING_NUMBER;
-                this.contadorEstadoActual = 0;
-            }
+                switch (this._WinnerNumberCmd)
+                {
+                    case WINNER_CMD_TYPE.NO_WINNER_CMD:
+                        currentState = ESTADO_JUEGO.WINNING_NUMBER; // Just in case
+                        _WinnerNumberCmd = WINNER_CMD_TYPE.WINNER_NUMBER_CMD;
+                        this.contadorEstadoActual = 0;
+                        break;
 
+                    case WINNER_CMD_TYPE.WINNER_NUMBER_CMD:
+                        if (this.contadorEstadoActual > 4) // Send the winner number cmd 4 times
+                        {
+                            currentState = ESTADO_JUEGO.WINNING_NUMBER; // Just in case
+                            _WinnerNumberCmd = WINNER_CMD_TYPE.WINNER_STATUS_CMD;
+                            this.contadorEstadoActual = 0;
+                        }
+                        break;
+
+                    case WINNER_CMD_TYPE.WINNER_STATUS_CMD:
+                        if (this.contadorEstadoActual > 20) // Send the winner number cmd 10 times and then back to before game
+                        {
+                            currentState = ESTADO_JUEGO.BEFORE_GAME; // Just in case
+                            _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD;
+                            _haveNewWinner = false;
+                            this.contadorEstadoActual = 0;
+                        }
+                        break;
+
+                }
+            }
         }
     }
 }

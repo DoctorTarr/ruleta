@@ -45,42 +45,7 @@ namespace VideoRecolector
         private void tmrMain_Tick(object sender, EventArgs e)
         {
             textBox4.Text = this._isMoving ? "M" : "S";
-            this.estadoMesa = juego.GetGameState(this._isMoving, this.IsCameraOn, this.bDebouncedBallFound);
-
-            //switch (this.estadoMesa)
-            //{
-            //    case JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME:
-            //        this.contadorEstadoActual++;
-            //        if (this.contadorEstadoActual > 4)
-            //        {
-            //            estadoMesa = this.juego.GetGameState();
-            //            this.contadorEstadoActual = 0;
-            //        }
-            //        break;
-
-            //    case JuegoRuleta.ESTADO_JUEGO.PLACE_YOUR_BETS:
-            //        if (!this.bDebouncedBallFound)
-            //        {
-            //            estadoMesa = this.juego.GetGameState(); // No more bets
-            //        }
-            //        break;
-
-            //    case JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS:
-            //        if (this._WinnerNumber != -1)
-            //        {
-            //            estadoMesa = this.juego.GetGameState(); // Winner number
-            //        }
-            //        break;
-
-            //    case JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER:
-            //        this.contadorEstadoActual++;
-            //        if (this.contadorEstadoActual > 10)
-            //        {
-            //            estadoMesa = this.juego.GetGameState();
-            //            this.contadorEstadoActual = 0;
-            //        }
-            //        break;
-            //}
+            this.estadoMesa = juego.GetGameState(this._isMoving, this.IsCameraOn, this.bDebouncedBallFound, this._WinnerNumber);
 
             textBox5.Text = estadoMesa.ToString();
 
