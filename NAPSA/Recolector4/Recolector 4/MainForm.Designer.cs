@@ -12,10 +12,6 @@ namespace VideoRecolector
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        // Roulette Status variables
-        //private int lastBallX = 0;
-        //private int sentidoGiro = 0; // 0=horario, 1=antihorario
-        private JuegoRuleta.ESTADO_JUEGO estadoMesa;
         private Stopwatch stopWatch = null;
 
         /// <summary>
@@ -48,6 +44,43 @@ namespace VideoRecolector
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
+            textBox4.Text = this._isMoving ? "M" : "S";
+
+            switch (this.estadoMesa)
+            {
+                case JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME:
+                    this.contadorEstadoActual++;
+                    if (this.contadorEstadoActual > 4)
+                    {
+                        estadoMesa = this.juego.GetNextStatus();
+                        this.contadorEstadoActual = 0;
+                    }
+                    break;
+
+                case JuegoRuleta.ESTADO_JUEGO.PLACE_YOUR_BETS:
+                    if (!this.bDebouncedBallFound)
+                    {
+                        estadoMesa = this.juego.GetNextStatus(); // No more bets
+                    }
+                    break;
+
+                case JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS:
+                    if (this._WinnerNumber != -1)
+                    {
+                        estadoMesa = this.juego.GetNextStatus(); // Winner number
+                    }
+                    break;
+
+                case JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER:
+                    this.contadorEstadoActual++;
+                    if (this.contadorEstadoActual > 10)
+                    {
+                        estadoMesa = this.juego.GetNextStatus();
+                        this.contadorEstadoActual = 0;
+                    }
+                    break;
+            }
+
             textBox5.Text = estadoMesa.ToString();
 
             IVideoSource videoSource = videoSourcePlayer1.VideoSource;
@@ -66,7 +99,7 @@ namespace VideoRecolector
                 {
                     stopWatch.Stop();
 
-                    float fps = 1000.0f * framesReceived / stopWatch.ElapsedMilliseconds;
+                    float fps = (float)tmrMain.Interval * 2.0f * framesReceived / stopWatch.ElapsedMilliseconds;
                     lblFPS.Text = fps.ToString("F2") + " fps";
 
                     stopWatch.Reset();

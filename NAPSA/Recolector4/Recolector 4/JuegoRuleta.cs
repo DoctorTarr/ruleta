@@ -26,6 +26,9 @@ namespace VideoRecolector
             switch (currentState)
             {
                 case ESTADO_JUEGO.STARTING_APP:
+                    currentState = ESTADO_JUEGO.TABLE_CLOSED;
+                    break;
+                case ESTADO_JUEGO.TABLE_CLOSED:
                     currentState = ESTADO_JUEGO.BEFORE_GAME;
                     break;
                 case ESTADO_JUEGO.BEFORE_GAME:
@@ -34,10 +37,24 @@ namespace VideoRecolector
                 case ESTADO_JUEGO.PLACE_YOUR_BETS:
                     currentState = ESTADO_JUEGO.NO_MORE_BETS;
                     break;
+                case ESTADO_JUEGO.NO_MORE_BETS:
+                    currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                    break;
                 case ESTADO_JUEGO.WINNING_NUMBER:
                     currentState = ESTADO_JUEGO.BEFORE_GAME;
                     break;
             }
             return currentState;
         }
+
+        public ESTADO_JUEGO GetCurrentState()
+        {
+            return currentState;
+        }
+
+        public void SetCurrentState(ESTADO_JUEGO estado)
+        {
+            currentState = estado;
+        }
+    }
 }

@@ -11,11 +11,11 @@ namespace DASYS.Recolector.BLL
   public class ResultadoStatus : IResultadosPaquete
   {
     private byte numeroGanador = byte.MaxValue;
-    private ResultadoStatus.StatusSentidoGiro sentidoGiro = ResultadoStatus.StatusSentidoGiro.Indeterminado;
-    private ResultadoStatus.StatusError error = ResultadoStatus.StatusError.Indeterminado;
+    private ResultadoStatus.EstadoSentidoGiro sentidoGiro = ResultadoStatus.EstadoSentidoGiro.Indeterminado;
+    private ResultadoStatus.EstadoError error = ResultadoStatus.EstadoError.Indeterminado;
     private const ProtocoloNAPSA.ProtocoloTipoPaquete tipoPaquete = ProtocoloNAPSA.ProtocoloTipoPaquete.Status;
     private string cadenaOriginal;
-    private ResultadoStatus.StatusEstado estado;
+    private ResultadoStatus.EstadoJuego estado;
     private byte velocidadGiro;
 
     public ResultadoStatus()
@@ -30,10 +30,10 @@ namespace DASYS.Recolector.BLL
 
     public ResultadoStatus(
       byte numeroGanador,
-      ResultadoStatus.StatusEstado estado,
+      ResultadoStatus.EstadoJuego estado,
       byte velocidadGiro,
-      ResultadoStatus.StatusSentidoGiro sentidoGiro,
-      ResultadoStatus.StatusError error)
+      ResultadoStatus.EstadoSentidoGiro sentidoGiro,
+      ResultadoStatus.EstadoError error)
     {
       this.numeroGanador = numeroGanador;
       this.estado = estado;
@@ -58,7 +58,7 @@ namespace DASYS.Recolector.BLL
       }
     }
 
-    public ResultadoStatus.StatusEstado Estado
+    public ResultadoStatus.EstadoJuego Estado
     {
       get
       {
@@ -74,7 +74,7 @@ namespace DASYS.Recolector.BLL
       }
     }
 
-    public ResultadoStatus.StatusSentidoGiro SentidoGiro
+    public ResultadoStatus.EstadoSentidoGiro SentidoGiro
     {
       get
       {
@@ -82,7 +82,7 @@ namespace DASYS.Recolector.BLL
       }
     }
 
-    public ResultadoStatus.StatusError Error
+    public ResultadoStatus.EstadoError Error
     {
       get
       {
@@ -111,10 +111,10 @@ namespace DASYS.Recolector.BLL
           if (this.cadenaOriginal.Length == 9)
           {
             this.numeroGanador = (byte) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(2, 2), byte.MaxValue));
-            this.estado = (ResultadoStatus.StatusEstado) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(4, 1), (byte) 0));
+            this.estado = (ResultadoStatus.EstadoJuego) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(4, 1), (byte) 0));
             this.velocidadGiro = (byte) Math.Abs(Common.Datos.NullToInt32((object) this.cadenaOriginal.Substring(5, 2), 0));
-            this.sentidoGiro = (ResultadoStatus.StatusSentidoGiro) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(7, 1), (byte) 2));
-            this.error = (ResultadoStatus.StatusError) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(8, 1), (byte) 10));
+            this.sentidoGiro = (ResultadoStatus.EstadoSentidoGiro) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(7, 1), (byte) 2));
+            this.error = (ResultadoStatus.EstadoError) Math.Abs((short) Common.Datos.NullToByte((object) this.cadenaOriginal.Substring(8, 1), (byte) 10));
           }
         }
       }
@@ -125,7 +125,7 @@ namespace DASYS.Recolector.BLL
       return (IResultadosPaquete) this;
     }
 
-    public enum StatusEstado
+    public enum EstadoJuego
     {
       Indeterminado,
       BeforeGame,
@@ -136,14 +136,14 @@ namespace DASYS.Recolector.BLL
       CloseTable,
     }
 
-    public enum StatusSentidoGiro
+    public enum EstadoSentidoGiro
     {
       AntiHorario,
       Horario,
       Indeterminado,
     }
 
-    public enum StatusError
+    public enum EstadoError
     {
       OK,
       Estrobos,

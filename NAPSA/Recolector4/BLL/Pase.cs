@@ -209,9 +209,9 @@ namespace DASYS.Recolector.BLL
       return num > 0;
     }
 
-    public static ResultadoStatus.StatusEstado ObtenerUltimoEstado()
+    public static ResultadoStatus.EstadoJuego ObtenerUltimoEstado()
     {
-      ResultadoStatus.StatusEstado statusEstado = ResultadoStatus.StatusEstado.Indeterminado;
+      ResultadoStatus.EstadoJuego statusEstado = ResultadoStatus.EstadoJuego.Indeterminado;
       try
       {
         int int32 = Utils.Datos.NullToInt32((object) Common.oConexiones[0].DbExecuteNonQuery(new QueryEngine()
@@ -219,7 +219,7 @@ namespace DASYS.Recolector.BLL
           QueryName = "estadoSelectUltimo"
         }));
         if (int32 < 7)
-          statusEstado = (ResultadoStatus.StatusEstado) int32;
+          statusEstado = (ResultadoStatus.EstadoJuego) int32;
       }
       catch
       {
@@ -228,7 +228,7 @@ namespace DASYS.Recolector.BLL
       return statusEstado;
     }
 
-    public static bool GuardarUltimoEstado(ResultadoStatus.StatusEstado estado)
+    public static bool GuardarUltimoEstado(ResultadoStatus.EstadoJuego estado)
     {
       int num;
       try

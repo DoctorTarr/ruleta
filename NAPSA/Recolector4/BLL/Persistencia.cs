@@ -45,7 +45,7 @@ namespace DASYS.Recolector.BLL
               if (!flag2)
               {
                 flag1 = Pase.EscribirEnBase(Pase.UltimoPase.NumeroTiro, ((ResultadoNumero) resultadoPaquete).NumeroGanador, Pase.UltimoPase.Velocidad, Pase.UltimoPase.SentidoGiro, true);
-                Pase.GuardarUltimoEstado(ResultadoStatus.StatusEstado.WinningNumber);
+                Pase.GuardarUltimoEstado(ResultadoStatus.EstadoJuego.WinningNumber);
                 break;
               }
               break;
@@ -53,17 +53,17 @@ namespace DASYS.Recolector.BLL
               bool flag3 = false;
               bool flag4 = false;
               byte numeroGanador = ((ResultadoStatus) resultadoPaquete).NumeroGanador;
-              ResultadoStatus.StatusError error = ((ResultadoStatus) resultadoPaquete).Error;
-              ResultadoStatus.StatusEstado estado = ((ResultadoStatus) resultadoPaquete).Estado;
-              ResultadoStatus.StatusSentidoGiro sentidoGiro = ((ResultadoStatus) resultadoPaquete).SentidoGiro;
+              ResultadoStatus.EstadoError error = ((ResultadoStatus) resultadoPaquete).Error;
+              ResultadoStatus.EstadoJuego estado = ((ResultadoStatus) resultadoPaquete).Estado;
+              ResultadoStatus.EstadoSentidoGiro sentidoGiro = ((ResultadoStatus) resultadoPaquete).SentidoGiro;
               byte velocidadGiro = ((ResultadoStatus) resultadoPaquete).VelocidadGiro;
-              if (error != ResultadoStatus.StatusError.OK)
+              if (error != ResultadoStatus.EstadoError.OK)
               {
                 flag3 = true;
                 Persistencia.estadoReciente = 0;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.NoMoreBets && Persistencia.estadoReciente != 4)
+              else if (estado == ResultadoStatus.EstadoJuego.NoMoreBets && Persistencia.estadoReciente != 4)
               {
                 Persistencia.velocidadReciente = velocidadGiro;
                 Persistencia.sentidoGiroReciente = (byte) sentidoGiro;
@@ -71,27 +71,27 @@ namespace DASYS.Recolector.BLL
                 flag3 = true;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.WinningNumber && Persistencia.estadoReciente != 5)
+              else if (estado == ResultadoStatus.EstadoJuego.WinningNumber && Persistencia.estadoReciente != 5)
               {
                 Persistencia.estadoReciente = 5;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.BeforeGame && Persistencia.estadoReciente != 1)
+              else if (estado == ResultadoStatus.EstadoJuego.BeforeGame && Persistencia.estadoReciente != 1)
               {
                 Persistencia.estadoReciente = 1;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.PlaceYourBet && Persistencia.estadoReciente != 2)
+              else if (estado == ResultadoStatus.EstadoJuego.PlaceYourBet && Persistencia.estadoReciente != 2)
               {
                 Persistencia.estadoReciente = 2;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.FinishBetting && Persistencia.estadoReciente != 3)
+              else if (estado == ResultadoStatus.EstadoJuego.FinishBetting && Persistencia.estadoReciente != 3)
               {
                 Persistencia.estadoReciente = 3;
                 flag4 = true;
               }
-              else if (estado == ResultadoStatus.StatusEstado.CloseTable && Persistencia.estadoReciente != 6)
+              else if (estado == ResultadoStatus.EstadoJuego.CloseTable && Persistencia.estadoReciente != 6)
               {
                 Persistencia.estadoReciente = 6;
                 flag4 = true;
@@ -99,7 +99,7 @@ namespace DASYS.Recolector.BLL
               if (flag3)
               {
                 flag1 = Status.EscribirEnBase(numeroGanador, (byte) estado, velocidadGiro, (byte) sentidoGiro, (byte) error);
-                if (Persistencia.estadoReciente == 4 && error == ResultadoStatus.StatusError.OK)
+                if (Persistencia.estadoReciente == 4 && error == ResultadoStatus.EstadoError.OK)
                   Persistencia.actualizarEstadoNMB();
               }
               if (flag4)
