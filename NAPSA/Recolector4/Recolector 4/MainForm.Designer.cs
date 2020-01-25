@@ -36,7 +36,8 @@ namespace VideoRecolector
                 Pase.UltimoPase = new Pase();
             this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             this.IsCameraOn = false;
-
+            this.btnStartCamara.PerformClick();
+//            this.Hide();
         }
 
         #endregion
@@ -570,6 +571,7 @@ namespace VideoRecolector
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Panel del Video Recolector IV";
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
