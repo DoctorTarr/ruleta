@@ -70,6 +70,7 @@ namespace VideoRecolector
             new TwoFramesDifferenceDetector()); 
         private bool _isMoving = false;
         private float motionAlarmLevel = 0.003f;
+        private int _rpm = 0;
 
         // Demo variables
         private int estadoDemo;
@@ -369,8 +370,8 @@ namespace VideoRecolector
                 //textBox4.Text = _BsourceFrame.Width.ToString();
                 //textBox5.Text = _BsourceFrame.Height.ToString();
 
-                //float motionLevel = detector.ProcessFrame(args.Frame);
-                _isMoving = (detector.ProcessFrame(args.Frame) > motionAlarmLevel);
+                this._rpm = (int)(1000.0f * detector.ProcessFrame(args.Frame));
+                _isMoving = (this._rpm > 0);
 
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
 
@@ -657,7 +658,7 @@ namespace VideoRecolector
             while (!(now.AddMinutes(1.0) < DateTime.Now));
         }
 
-        private void GuardarEstado(int estado, byte numero, int sentidoDeGiro)
+        private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
         {
             string cadena = string.Empty;
             switch (estado)
@@ -666,41 +667,46 @@ namespace VideoRecolector
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             (int)JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                                                             rpm, sentidoDeGiro, 0);
                     break;
                 case 2:
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             (int)JuegoRuleta.ESTADO_JUEGO.PLACE_YOUR_BETS,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                                                            rpm, sentidoDeGiro, 0);
                     break;
                 case 3:
                     //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             (int)JuegoRuleta.ESTADO_JUEGO.FINISH_BETTING,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                                                            rpm, sentidoDeGiro, 0);
                     break;
                 case 4:
                     //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             (int)JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                                                            this._rpm, sentidoDeGiro, 0);
                     break;
                 case 5:
                     //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
                     cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
                                                             (int)JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER,
-                                                            this.azarNumero.Next(0, 100), sentidoDeGiro, 0);
+                                                            this._rpm, sentidoDeGiro, 0);
+                    break;
+                case 6:
+                    cadena = ProtocoloNAPSA.FormatearCadenaMesaCerrada();
                     break;
             }
-            Persistencia.Guardar(cadena);
-            txtProtocolo.AppendText(cadena);
-            txtProtocolo.AppendText(Environment.NewLine);
-
+            if (cadena != string.Empty)
+            {
+                Persistencia.Guardar(cadena);
+                txtProtocolo.AppendText(cadena);
+                txtProtocolo.AppendText(Environment.NewLine);
+            }
         }
 
 
-        private void GuardarNumeroGanador(byte numero)
+        private void GuardarNumeroGanador(int numero)
         {
             string cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
             Persistencia.Guardar(cadena);

@@ -29,15 +29,17 @@ namespace VideoRecolector
         private ESTADO_JUEGO currentState = ESTADO_JUEGO.STATE_0;
         private int contadorEstadoActual = 0;
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
+        private int _rpm = 0;
         private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
         private int _WinnerNumber = -1;
         private WINNER_CMD_TYPE _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD; // 1=Winner number 2=Winner status 0=no cmd
 
 
-        public ESTADO_JUEGO GetGameState(bool cylinderIsMoving, bool IsCameraOn, bool BallFound, int WinnerNumber)
+        public ESTADO_JUEGO GetGameState(int rpm, bool IsCameraOn, bool BallFound, int WinnerNumber)
         {
             _isCameraOn = IsCameraOn;
-            _isMoving = cylinderIsMoving;
+            _rpm = rpm;
+            _isMoving = _rpm > 0;
             _isBallPresent = BallFound;
             if (WinnerNumber != -1)
             {
@@ -90,6 +92,16 @@ namespace VideoRecolector
             currentState = estado;
         }
 
+        public int GetCurrentWinnerNumber()
+        {
+            return _WinnerNumber;
+        }
+
+        public  WINNER_CMD_TYPE GetCurrentWinnerNumberCmd()
+        {
+            return this._WinnerNumberCmd;
+        }
+
         // Process TABLE_CLOSED state
         public void CheckTableClosedState()
         {
@@ -133,6 +145,7 @@ namespace VideoRecolector
                 // If ball is not in pocket => NO MORE BETS (a.k.a. Good Luck)
                 if (!this._isBallPresent)
                 {
+                    _haveNewWinner = false;
                     if (this.contadorEstadoActual > 10)
                     {
                         currentState = ESTADO_JUEGO.NO_MORE_BETS;
@@ -154,7 +167,7 @@ namespace VideoRecolector
         public void CheckNoMoreBetsState()
         {
             this.contadorEstadoActual++;
-            if (_haveNewWinner)
+            if (_isBallPresent && _haveNewWinner)
             {
                 currentState = ESTADO_JUEGO.WINNING_NUMBER;
                 this.contadorEstadoActual = 0;

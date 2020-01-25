@@ -44,10 +44,23 @@ namespace VideoRecolector
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-            textBox4.Text = this._isMoving ? "M" : "S";
-            this.estadoMesa = juego.GetGameState(this._isMoving, this.IsCameraOn, this.bDebouncedBallFound, this._WinnerNumber);
+            textBox4.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
+
+            this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound, this._WinnerNumber);
 
             textBox5.Text = estadoMesa.ToString();
+
+            if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
+            {
+                if (juego.GetCurrentWinnerNumberCmd() == JuegoRuleta.WINNER_CMD_TYPE.WINNER_NUMBER_CMD)
+                    this.GuardarNumeroGanador(juego.GetCurrentWinnerNumber());
+                else
+                    this.GuardarEstado((int)estadoMesa, juego.GetCurrentWinnerNumber(), this._rpm, 0);
+            }
+            else
+            {
+                this.GuardarEstado((int)estadoMesa, juego.GetCurrentWinnerNumber(), this._rpm, 0);
+            }
 
             IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 
@@ -91,28 +104,28 @@ namespace VideoRecolector
                 {
                     case 1:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 100;
                         break;
                     case 2:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 3:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 6000;
                         break;
                     case 4:
                         //cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
                         this.tmrDemo.Interval = 10000;
                         break;
                     case 5:
                         //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
                         this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this.azarNumero.Next(0, 2));
+                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
                         GuardarNumeroGanador(this.numeroDemo);
                         this.tmrDemo.Interval = 1000;
                         break;
