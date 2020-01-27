@@ -66,10 +66,9 @@ namespace VideoRecolector
         private bool _calibrateFlag = false;
 
         // motion detection and processing algorithm
-        MotionDetector detector = new MotionDetector(
-            new TwoFramesDifferenceDetector()); 
+        MotionDetector detector = new MotionDetector(new TwoFramesDifferenceDetector()); 
         private bool _isMoving = false;
-        private float motionAlarmLevel = 0.003f;
+        //private float motionAlarmLevel = 0.003f;
         private int _rpm = 0;
 
         // Demo variables
