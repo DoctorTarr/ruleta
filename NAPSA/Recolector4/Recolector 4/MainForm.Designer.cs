@@ -36,6 +36,7 @@ namespace VideoRecolector
                 Pase.UltimoPase = new Pase();
             this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             this.IsCameraOn = false;
+            this._rpm = 0;
             this.btnStartCamara.PerformClick();
 //            this.Hide();
         }
@@ -47,7 +48,7 @@ namespace VideoRecolector
         {
             textBox4.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
 
-            this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound, this._WinnerNumber);
+            this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
 
             textBox5.Text = estadoMesa.ToString();
 
@@ -60,7 +61,7 @@ namespace VideoRecolector
             }
             else
             {
-                this.GuardarEstado((int)estadoMesa, juego.GetCurrentWinnerNumber(), this._rpm, 0);
+                this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
             }
 
             IVideoSource videoSource = videoSourcePlayer1.VideoSource;

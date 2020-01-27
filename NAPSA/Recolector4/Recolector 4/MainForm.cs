@@ -203,7 +203,9 @@ namespace VideoRecolector
                 tbZeroPosY.Text = "";
                 lblBallOn.Text = "";
                 bDebouncedBallFound = false;
+                this._rpm = 0;
                 _isMoving = false;
+                this._WinnerNumber = -1;
                 // reset motion detector
                 if (detector != null)
                     detector.Reset();
@@ -417,6 +419,7 @@ namespace VideoRecolector
                         if (winner > -1)
                         {
                             _WinnerNumber = winner;
+                            juego.SetNewWinnerNumber(_WinnerNumber);
                             textBox3.Text = string.Format("{0}", _WinnerNumber);
                         }
                     }

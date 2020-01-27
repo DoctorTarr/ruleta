@@ -32,26 +32,16 @@ namespace VideoRecolector
         private int _rpm = 0;
         private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
         private int _WinnerNumber = -1;
+        private int _LastWinnerNumber = -1;
         private WINNER_CMD_TYPE _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD; // 1=Winner number 2=Winner status 0=no cmd
 
 
-        public ESTADO_JUEGO GetGameState(int rpm, bool IsCameraOn, bool BallFound, int WinnerNumber)
+        public ESTADO_JUEGO GetGameState(int rpm, bool IsCameraOn, bool BallFound)
         {
             _isCameraOn = IsCameraOn;
             _rpm = rpm;
             _isMoving = _rpm > 0;
             _isBallPresent = BallFound;
-            if (WinnerNumber != -1)
-            {
-                if (WinnerNumber != _WinnerNumber)
-                {
-                    _haveNewWinner = true;
-                    _WinnerNumber = WinnerNumber;
-                }
-            }
-            else
-                _haveNewWinner = false;
-
             switch (currentState)
             {
                 // State for starting the app only
@@ -95,6 +85,22 @@ namespace VideoRecolector
         public int GetCurrentWinnerNumber()
         {
             return _WinnerNumber;
+        }
+
+        public int GetLastWinnerNumber()
+        {
+            return _LastWinnerNumber;
+        }
+
+        public void SetNewWinnerNumber(int winner)
+        {
+            if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
+            {
+                _WinnerNumber = winner;
+                _haveNewWinner = true;
+                currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                this.contadorEstadoActual = 0;
+            }
         }
 
         public  WINNER_CMD_TYPE GetCurrentWinnerNumberCmd()
@@ -212,6 +218,8 @@ namespace VideoRecolector
                             currentState = ESTADO_JUEGO.BEFORE_GAME; // Just in case
                             _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD;
                             _haveNewWinner = false;
+                            _LastWinnerNumber = _WinnerNumber;
+                            _WinnerNumber = -1;
                             this.contadorEstadoActual = 0;
                         }
                         break;
