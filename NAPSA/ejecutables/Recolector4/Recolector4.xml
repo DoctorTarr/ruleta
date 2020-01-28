@@ -8,10 +8,10 @@
   <input>
     <loadpaths />
     <asmlist>
-      <package refid="aeb6776f-e4a1-43c9-a358-b8d7c238bd4b">
+      <package refid="7887edfe-8607-413f-bae3-f5e687a77953">
         <file dir="C:\Projects-drtarr\ruleta\NAPSA\Recolector4\Recolector 4\bin" name="Release" />
         <asmlist>
-          <inputassembly refid="b5dc67f4-64f3-4103-a410-a68a40de2786">
+          <inputassembly refid="e39c99b3-c915-4f9a-80ed-cd2c722deab0">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -19,7 +19,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Controls.Imaging.dll" />
           </inputassembly>
-          <inputassembly refid="ac22843a-6d5d-48a9-8f93-d44f03eaed08">
+          <inputassembly refid="c22ef79c-0d02-42a2-9e73-42bb01111e2b">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -27,7 +27,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Controls.Vision.dll" />
           </inputassembly>
-          <inputassembly refid="509113c4-bfa7-48e2-a61f-54985d7a0c49">
+          <inputassembly refid="78e3c6be-4fcd-46dc-bb9c-f6ce4faa9533">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -35,7 +35,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.dll" />
           </inputassembly>
-          <inputassembly refid="0b720471-8df9-4ed6-8944-942e851e8925">
+          <inputassembly refid="5a816524-47a2-4fe5-b4d0-672b0d075208">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -43,7 +43,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Imaging.dll" />
           </inputassembly>
-          <inputassembly refid="4b8e92cf-eb85-4f45-ae20-816c2fa1120a">
+          <inputassembly refid="f9fa6798-5449-4157-a06e-95a8e090399f">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -51,7 +51,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Math.Core.dll" />
           </inputassembly>
-          <inputassembly refid="76f27518-7eae-4582-aa69-f073290833de">
+          <inputassembly refid="2f212660-c30b-4d83-a037-21e2d2ed430f">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -59,7 +59,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Math.dll" />
           </inputassembly>
-          <inputassembly refid="80781eee-d75d-4921-9455-eef3422ea4e9">
+          <inputassembly refid="5878d525-5be1-4b4f-a9c5-63b01308e917">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -67,7 +67,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Video.DirectShow.dll" />
           </inputassembly>
-          <inputassembly refid="2f98bd48-8b17-4c08-8bb6-7ff2dfc395b3">
+          <inputassembly refid="f47f6f87-d32f-4c4e-abbf-c1495d967c0e">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -75,7 +75,7 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Video.dll" />
           </inputassembly>
-          <inputassembly refid="757bd5b4-f6e5-4f81-85ac-809297efa305">
+          <inputassembly refid="1c7e73e7-d98a-4d62-b78a-457e077513af">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -83,35 +83,35 @@
             <option>transformxaml</option>
             <file dir="" name="Accord.Vision.dll" />
           </inputassembly>
-          <inputassembly refid="fc97c6cd-eaf8-4f43-84be-ad1a31406298">
+          <inputassembly refid="2c189286-79b2-4a99-80c5-3922546044d5">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
             <option>transformxaml</option>
             <file dir="" name="ACL.dll" />
           </inputassembly>
-          <inputassembly refid="4ac5a1b3-2302-4a44-b06b-9363ab602271">
+          <inputassembly refid="f6608d8f-1577-4895-9dcd-4dce99f29c9a">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
             <option>transformxaml</option>
             <file dir="" name="BLL.dll" />
           </inputassembly>
-          <inputassembly refid="7c7f32d4-d8ed-4297-9188-60217ee3c867">
+          <inputassembly refid="6822273d-b259-410a-9fcf-bd6ca5e04448">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
             <option>transformxaml</option>
             <file dir="" name="DAL.dll" />
           </inputassembly>
-          <inputassembly refid="4d08c4ef-75af-4284-a053-b0168c526209">
+          <inputassembly refid="95c3b830-474d-4aab-a767-953bedad12ac">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
             <option>transformxaml</option>
             <file dir="" name="Framework.dll" />
           </inputassembly>
-          <inputassembly refid="c87d6faa-54ad-40ab-ae2a-ba63bd4d581d">
+          <inputassembly refid="7c9e27c5-dbfa-43b3-84bc-cddc11afdfec">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
@@ -119,7 +119,7 @@
             <option>transformxaml</option>
             <file dir="" name="Microsoft.Office.Interop.Excel.dll" />
           </inputassembly>
-          <inputassembly refid="a8a637c8-6155-4f73-81e8-d0957ad084a3">
+          <inputassembly refid="530f556c-7a17-4247-867f-5430309e39ee">
             <option>honoroas</option>
             <option>stripoa</option>
             <option>library</option>
