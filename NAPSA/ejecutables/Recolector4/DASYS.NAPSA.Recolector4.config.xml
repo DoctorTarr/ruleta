@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<dbConnections>
+		<dbConnection name="CP" testConnection="1">
+			<DSNName></DSNName>
+			<dataBaseEngine>ACCESS</dataBaseEngine>
+			<server></server>
+			<dataBase>C:\NAPSA BD\napsa_display3.mdb</dataBase>
+			<user></user>
+			<password></password>
+			<timeout></timeout>
+			<persistSecurity></persistSecurity>
+			<integratedSecurity></integratedSecurity>
+			<port></port>
+		</dbConnection>
+	</dbConnections>
+	<log>
+		<logActivado>false</logActivado>
+		<logRuta>c:\NAPSA LOGS</logRuta>
+		<logArchivo>\log4.log</logArchivo>
+		<logMaxKb>50</logMaxKb>
+	</log>
+	<generales>
+		<rutaGIF>c:\</rutaGIF>
+		<nombreTerminal>PLATO1</nombreTerminal>
+	</generales>
+</configuration>
