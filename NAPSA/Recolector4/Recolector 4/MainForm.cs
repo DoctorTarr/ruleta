@@ -41,6 +41,7 @@ namespace VideoRecolector
         private Rectangle _numbersArea; // Area where all the numbers are
         private Rectangle _ballPocketsArea; // Cylinder area to detect ball presence
         private Rectangle _centerArea; // Center of the roulette area
+        private Rectangle _zeroCenterArea; // Where the zero is at 12 am
 
 
         // Drawing variables
@@ -227,6 +228,7 @@ namespace VideoRecolector
             Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
             Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
             Pen _penred = new Pen(Color.Red, ipenWidth);
+            Pen _penblue = new Pen(Color.Blue, ipenWidth);
 
             // Cilindro -incluye numeros - radius 204 color red
             _g.DrawRectangle(_pengreen, _bowlArea);
@@ -236,6 +238,7 @@ namespace VideoRecolector
             // Casillas - radius 204 color blue
             _g.DrawRectangle(_penred, _ballPocketsArea);
 
+            _g.DrawRectangle(_penblue, _zeroCenterArea);
         }
 
 
@@ -287,6 +290,7 @@ namespace VideoRecolector
             _numbersArea = new Rectangle(217, 150, 196, 196);
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
             _centerArea = new Rectangle(266, 198, 100, 100);
+            _zeroCenterArea = new Rectangle(308, 148, 20, 25);
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
@@ -584,7 +588,7 @@ namespace VideoRecolector
             {  84,  47 },// 2
             {  31, 130 },// 3
             {  60,  44 },// 4
-            { 164,  95 },// 5
+            { 163,  94 },// 5
             { 125,  58 },// 6
             {  76, 143 },// 7
             { 160,  81 },// 8
