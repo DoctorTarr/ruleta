@@ -168,6 +168,7 @@ namespace VideoRecolector
             this.lblFPS = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.lblBallOn = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tbVideoStatus = new System.Windows.Forms.TextBox();
@@ -187,9 +188,17 @@ namespace VideoRecolector
             this.label6 = new System.Windows.Forms.Label();
             this.pbBall = new System.Windows.Forms.PictureBox();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
-            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
+            this.btnSaveNumTable = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.btnSetNumber = new System.Windows.Forms.Button();
+            this.tbAvgAngle = new System.Windows.Forms.TextBox();
+            this.tbAvgDist = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.btnCalibrateNumber = new System.Windows.Forms.Button();
+            this.lblTestCount = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -292,6 +301,7 @@ namespace VideoRecolector
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.textBox3);
             this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.btnIniciarDemo);
             this.groupBox3.Controls.Add(this.lblBallOn);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.tbVideoStatus);
@@ -342,6 +352,21 @@ namespace VideoRecolector
             this.label8.Size = new System.Drawing.Size(91, 13);
             this.label8.TabIndex = 56;
             this.label8.Text = "Número Ganador:";
+            // 
+            // btnIniciarDemo
+            // 
+            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnIniciarDemo.Enabled = false;
+            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
+            this.btnIniciarDemo.Location = new System.Drawing.Point(343, 433);
+            this.btnIniciarDemo.Name = "btnIniciarDemo";
+            this.btnIniciarDemo.Size = new System.Drawing.Size(76, 23);
+            this.btnIniciarDemo.TabIndex = 51;
+            this.btnIniciarDemo.Text = "Iniciar Demo";
+            this.btnIniciarDemo.UseVisualStyleBackColor = true;
+            this.btnIniciarDemo.Visible = false;
+            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
             // 
             // lblBallOn
             // 
@@ -533,30 +558,15 @@ namespace VideoRecolector
             this.tmrDemo.Interval = 500;
             this.tmrDemo.Tick += new System.EventHandler(this.tmrDemo_Tick);
             // 
-            // btnIniciarDemo
-            // 
-            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnIniciarDemo.Enabled = false;
-            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(706, 295);
-            this.btnIniciarDemo.Name = "btnIniciarDemo";
-            this.btnIniciarDemo.Size = new System.Drawing.Size(76, 23);
-            this.btnIniciarDemo.TabIndex = 51;
-            this.btnIniciarDemo.Text = "Iniciar Demo";
-            this.btnIniciarDemo.UseVisualStyleBackColor = true;
-            this.btnIniciarDemo.Visible = false;
-            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
-            // 
             // txtProtocolo
             // 
             this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProtocolo.Location = new System.Drawing.Point(706, 22);
+            this.txtProtocolo.Location = new System.Drawing.Point(698, 22);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(76, 236);
+            this.txtProtocolo.Size = new System.Drawing.Size(84, 236);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -564,15 +574,119 @@ namespace VideoRecolector
             this.tmrMain.Interval = 500;
             this.tmrMain.Tick += new System.EventHandler(this.tmrMain_Tick);
             // 
+            // btnSaveNumTable
+            // 
+            this.btnSaveNumTable.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveNumTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveNumTable.ForeColor = System.Drawing.Color.Black;
+            this.btnSaveNumTable.Location = new System.Drawing.Point(698, 274);
+            this.btnSaveNumTable.Name = "btnSaveNumTable";
+            this.btnSaveNumTable.Size = new System.Drawing.Size(84, 38);
+            this.btnSaveNumTable.TabIndex = 53;
+            this.btnSaveNumTable.Text = "Guardar Tabla";
+            this.btnSaveNumTable.UseVisualStyleBackColor = true;
+            this.btnSaveNumTable.Visible = false;
+            this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(699, 330);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(83, 21);
+            this.comboBox1.TabIndex = 54;
+            // 
+            // btnSetNumber
+            // 
+            this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
+            this.btnSetNumber.Location = new System.Drawing.Point(699, 488);
+            this.btnSetNumber.Name = "btnSetNumber";
+            this.btnSetNumber.Size = new System.Drawing.Size(84, 38);
+            this.btnSetNumber.TabIndex = 55;
+            this.btnSetNumber.Text = "Guardar Numero";
+            this.btnSetNumber.UseVisualStyleBackColor = true;
+            this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
+            // 
+            // tbAvgAngle
+            // 
+            this.tbAvgAngle.Enabled = false;
+            this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAvgAngle.Location = new System.Drawing.Point(725, 385);
+            this.tbAvgAngle.Name = "tbAvgAngle";
+            this.tbAvgAngle.Size = new System.Drawing.Size(58, 22);
+            this.tbAvgAngle.TabIndex = 57;
+            // 
+            // tbAvgDist
+            // 
+            this.tbAvgDist.Enabled = false;
+            this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAvgDist.Location = new System.Drawing.Point(725, 357);
+            this.tbAvgDist.Name = "tbAvgDist";
+            this.tbAvgDist.Size = new System.Drawing.Size(58, 22);
+            this.tbAvgDist.TabIndex = 56;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label12.Location = new System.Drawing.Point(696, 361);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(18, 13);
+            this.label12.TabIndex = 58;
+            this.label12.Text = "D:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label13.Location = new System.Drawing.Point(696, 389);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(17, 13);
+            this.label13.TabIndex = 59;
+            this.label13.Text = "A:";
+            // 
+            // btnCalibrateNumber
+            // 
+            this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
+            this.btnCalibrateNumber.Location = new System.Drawing.Point(698, 421);
+            this.btnCalibrateNumber.Name = "btnCalibrateNumber";
+            this.btnCalibrateNumber.Size = new System.Drawing.Size(84, 38);
+            this.btnCalibrateNumber.TabIndex = 60;
+            this.btnCalibrateNumber.Text = "Calibrar Numero";
+            this.btnCalibrateNumber.UseVisualStyleBackColor = true;
+            this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
+            // 
+            // lblTestCount
+            // 
+            this.lblTestCount.AutoSize = true;
+            this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblTestCount.Location = new System.Drawing.Point(722, 467);
+            this.lblTestCount.Name = "lblTestCount";
+            this.lblTestCount.Size = new System.Drawing.Size(13, 13);
+            this.lblTestCount.TabIndex = 61;
+            this.lblTestCount.Text = "0";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
             this.ClientSize = new System.Drawing.Size(791, 818);
+            this.Controls.Add(this.lblTestCount);
+            this.Controls.Add(this.btnCalibrateNumber);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.tbAvgAngle);
+            this.Controls.Add(this.tbAvgDist);
+            this.Controls.Add(this.btnSetNumber);
+            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.btnSaveNumTable);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.txtProtocolo);
-            this.Controls.Add(this.btnIniciarDemo);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
             this.ForeColor = System.Drawing.Color.DarkRed;
@@ -632,6 +746,15 @@ namespace VideoRecolector
         private System.Windows.Forms.Label lblFPS;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnSaveNumTable;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button btnSetNumber;
+        private System.Windows.Forms.TextBox tbAvgAngle;
+        private System.Windows.Forms.TextBox tbAvgDist;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button btnCalibrateNumber;
+        private System.Windows.Forms.Label lblTestCount;
     }
 }
 

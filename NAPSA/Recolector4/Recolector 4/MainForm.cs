@@ -11,6 +11,9 @@ using System.Configuration;
 using DASYS.Recolector.BLL;
 using Accord.Vision.Motion;
 using Microsoft.Win32;
+using System.IO;
+using Newtonsoft.Json;
+using System.Threading;
 
 namespace VideoRecolector
 {
@@ -133,10 +136,15 @@ namespace VideoRecolector
         private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
         {
             if (cbCalibrate.Checked)
+            {
                 this._calibrateFlag = true;
+                this.btnSaveNumTable.Visible = true;
+            }
             else
+            {
                 this._calibrateFlag = false;
-
+                this.btnSaveNumTable.Visible = false;
+            }
         }
 
         public static void AddApplicationToStartup()
@@ -312,6 +320,13 @@ namespace VideoRecolector
             }
 
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
+
+            for (int i = 0; i < 37; i++)
+            {
+                this.comboBox1.Items.Add(i.ToString());
+            }
+            this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
 
         }
 
@@ -676,6 +691,46 @@ namespace VideoRecolector
                 }
             }
             while (!(now.AddMinutes(1.0) < DateTime.Now));
+        }
+
+        private void btnSaveNumTable_Click(object sender, EventArgs e)
+        {
+            // write the data (overwrites)
+            using (var stream = new StreamWriter(@"./Numbers.json", append: false))
+            {
+                stream.Write(JsonConvert.SerializeObject(this.Numbers));
+            }
+        }
+
+        private void btnCalibrateNumber_Click(object sender, EventArgs e)
+        {
+            int acumDist = 0;
+            int acumAngle = 0;
+            int averageDist = 0;
+            int averageAngle = 0;
+            int count = 0;
+
+            for (int i = 0; i < 100; i++)
+            {
+                Application.DoEvents();
+                count++;
+                acumDist += this._Distance;
+                averageDist = acumDist / count;
+                this.tbAvgDist.Text = averageDist.ToString();
+
+                acumAngle += this._Angle;
+                averageAngle = acumAngle / count;
+                this.tbAvgAngle.Text = averageAngle.ToString();
+                this.lblTestCount.Text = count.ToString();
+            }
+        }
+
+        private void btnSetNumber_Click(object sender, EventArgs e)
+        {
+            int distance = int.Parse(this.tbAvgDist.Text);
+            int angle = int.Parse(this.tbAvgAngle.Text);
+            Numbers[this.comboBox1.SelectedIndex, 0] = distance;
+            Numbers[this.comboBox1.SelectedIndex, 1] = angle;
         }
 
         private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
