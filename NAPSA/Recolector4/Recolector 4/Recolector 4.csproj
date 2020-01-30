@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{C0616E3B-32C2-45F9-B572-DE07BE5FA80C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>RouletteNumberDetection</RootNamespace>
+    <RootNamespace>VideoRecolector</RootNamespace>
     <AssemblyName>Recolector 4</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

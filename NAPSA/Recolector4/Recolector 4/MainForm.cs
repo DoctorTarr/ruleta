@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using DASYS.Recolector.BLL;
 using Accord.Vision.Motion;
+using Microsoft.Win32;
 
 namespace VideoRecolector
 {
@@ -93,6 +94,7 @@ namespace VideoRecolector
             estadoMesa = juego.GetCurrentState();
             this.tmrMain.Interval = 500; // msec
             this.tmrMain.Start();
+            //MessageBox.Show(Application.ExecutablePath);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -136,6 +138,15 @@ namespace VideoRecolector
                 this._calibrateFlag = false;
 
         }
+
+        public static void AddApplicationToStartup()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+            {
+                key.SetValue(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "\"" + Application.ExecutablePath + "\"");
+            }
+        }
+
 
         private void btnIniciarDemo_Click(object sender, EventArgs e)
         {
@@ -414,10 +425,13 @@ namespace VideoRecolector
 
                 if ((Math.Abs(ZeroPos.X - 314) < 3))
                 {
-                    _Distance = FindDistance(ZeroPos, BallPos);
-                    _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-                    if (bZeroFound && bDebouncedBallFound)
-                    {
+                    //if (bZeroFound && bDebouncedBallFound)
+                    //{
+                        _Distance = FindDistance(ZeroPos, BallPos);
+                        _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                        textBox1.Text = _Distance.ToString();
+                        textBox2.Text = _Angle.ToString();
+
                         winner = FindWinnerNumber(_Distance, _Angle);
 
                         if (winner > -1)
@@ -426,15 +440,15 @@ namespace VideoRecolector
                             juego.SetNewWinnerNumber(_WinnerNumber);
                             textBox3.Text = string.Format("{0}", _WinnerNumber);
                         }
-                    }
-                    else
-                    {
-                        _WinnerNumber = -1;
-                        textBox3.Text = "";
-                    }
-                    textBox1.Text = _Distance.ToString();
-                    textBox2.Text = _Angle.ToString();
+                        else
+                            textBox3.Text = "";
                 }
+                //    else
+                //    {
+                //        _WinnerNumber = -1;
+                //        textBox3.Text = "";
+                //    }
+                //}
 
                 if (_calibrateFlag)
                     CalibrateCamera(_BsourceFrame);
@@ -591,10 +605,10 @@ namespace VideoRecolector
             { 163,  94 },// 5
             { 125,  58 },// 6
             {  76, 143 },// 7
-            { 160,  81 },// 8
+            { 161,  81 },// 8
             { 117, 129 },// 9
             { 165,  90 },// 10
-            { 152,  72 },// 11
+            { 154,  72 },// 11
             {  53, 141 },// 12
             { 142,  65 },// 13
             { 135, 119 },// 14
@@ -613,7 +627,7 @@ namespace VideoRecolector
             { 134,  60 },// 27
             {  66, 141 },// 28
             {  87, 138 },// 29
-            { 155,  77 },// 30
+            { 158,  78 },// 30
             { 126, 124 },// 31
             {  28,  62 },// 32
             { 155, 108 },// 33
