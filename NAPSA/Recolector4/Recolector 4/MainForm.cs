@@ -696,7 +696,7 @@ namespace VideoRecolector
         private void btnSaveNumTable_Click(object sender, EventArgs e)
         {
             // write the data (overwrites)
-            using (var stream = new StreamWriter(@"./Numbers.json", append: false))
+            using (var stream = new StreamWriter(@"./data.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.Numbers));
             }
