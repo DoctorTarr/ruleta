@@ -56,7 +56,7 @@ namespace VideoRecolector
 
 
         // Positioning variables
-        private System.Drawing.Point ZeroPos, BallPos;
+        private System.Drawing.Point ZeroPos, ZeroPosToCenter, BallPos, BallPosToCenter;
 
         // Measurement variables
         private int _Distance = 0, _Angle = 0;
@@ -135,13 +135,11 @@ namespace VideoRecolector
             }
         }
 
-        private void cbCalibrate_CheckedChanged(object sender, EventArgs e)
+        private void cbCalibrateCamera_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbCalibrate.Checked)
+            if (cbCalibrateCamera.Checked)
             {
                 this._calibrateFlag = true;
-                this.btnSaveNumTable.Visible = true;
-                this.groupBox4.Visible = true;
             }
             else
             {
@@ -416,19 +414,19 @@ namespace VideoRecolector
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-                ZeroPos.X = 640;
+                ZeroPos.X = -640;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-                tbZeroPosX.Text = ZeroPos.X.ToString();
-                tbZeroPosY.Text = ZeroPos.Y.ToString();
-                bZeroFound = ZeroPos.X != 640;
+                tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
                     tbZeroPosAngle.Text = GetAngleOfLineBetweenTwoPoints(_centerPoint, ZeroPos).ToString();
 
-                BallPos.X = 640;
+                BallPos.X = -640;
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
-                tbBolaPosX.Text = BallPos.X.ToString();
-                tbBolaPosY.Text = BallPos.Y.ToString();
-
+                tbBolaPosX.Text = BallPosToCenter.X.ToString();
+                tbBolaPosY.Text = BallPosToCenter.Y.ToString();
+                
                 //    Roulette slots
                 // 		314, 175
                 //241, 246        381,246
@@ -445,16 +443,15 @@ namespace VideoRecolector
                     }
                 }
 
-
-                _Distance = FindDistance(ZeroPos, BallPos);
-                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
+                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPosToCenter, BallPosToCenter);
                 textBox1.Text = _Distance.ToString();
                 textBox2.Text = _Angle.ToString();
 
-                if ((Math.Abs(ZeroPos.X - 3) < 3))
+                if (_zeroCenterArea.Contains(ZeroPos))
                 {
                     //if (bZeroFound && bDebouncedBallFound)
-                    //{
+                    {
 
                         winner = FindWinnerNumber(_Distance, _Angle);
 
@@ -466,13 +463,8 @@ namespace VideoRecolector
                         }
                         else
                             textBox3.Text = "";
+                    }
                 }
-                //    else
-                //    {
-                //        _WinnerNumber = -1;
-                //        textBox3.Text = "";
-                //    }
-                //}
 
                 if (_calibrateFlag)
                     CalibrateCamera(_BsourceFrame);
@@ -499,11 +491,9 @@ namespace VideoRecolector
             {
                 Rectangle objectRect = rects[0];
                 ZeroPos = objectRect.Center();
-                ZeroPos.X -= _centerPoint.X;
-                ZeroPos.Y = _centerPoint.Y - ZeroPos.Y;
-
+                ZeroPosToCenter.X = ZeroPos.X - _centerPoint.X;
+                ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
             }
-
             return _colorFilterImage;
         }
 
@@ -526,24 +516,24 @@ namespace VideoRecolector
             {
                 Rectangle objectRect = rects[0];
                 BallPos = objectRect.Center();
-                BallPos.X -= _centerPoint.X;
-                BallPos.Y = _centerPoint.Y - BallPos.Y;
+                BallPosToCenter.X = BallPos.X - _centerPoint.X;
+                BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
             }
 
             return _colorFilterImage;
         }
 
-        private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
-        {
-            System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
+        //private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
+        //{
+        //    System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
 
-            for (int i = 0, n = points.Count; i < n; i++)
-            {
-                array[i] = new System.Drawing.Point(points[i].X, points[i].Y);
-            }
+        //    for (int i = 0, n = points.Count; i < n; i++)
+        //    {
+        //        array[i] = new System.Drawing.Point(points[i].X, points[i].Y);
+        //    }
 
-            return array;
-        }
+        //    return array;
+        //}
 
         #endregion
 
@@ -583,10 +573,36 @@ namespace VideoRecolector
         private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
         {
             double xDiff = p2.X - p1.X;
-            double yDiff = p2.Y - p1.Y;
+            double yDiff = p1.Y - p2.Y;
             return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
         }
 
+        /**
+         * Work out the angle from the x horizontal winding anti-clockwise 
+         * in screen space. 
+         * 
+         * The value returned from the following should be 315. 
+         * <pre>
+         * x,y -------------
+         *     |  1,1
+         *     |    \
+         *     |     \
+         *     |     2,2
+         * </pre>
+         * @param p1
+         * @param p2
+         * @return - a double from 0 to 360
+         */
+        private int angleOf(System.Drawing.Point p1, System.Drawing.Point p2)
+        {
+            // NOTE: Remember that most math has the Y axis as positive above the X.
+            // However, for screens we have Y as positive below. For this reason, 
+            // the Y values are inverted to get the expected results.
+            double deltaY = (p1.Y - p2.Y);
+            double deltaX = (p2.X - p1.X);
+            double result = Math.Atan2(deltaY, deltaX) * this.radian;
+            return (int)((result < 0) ? (360d + result) : result);
+        }
 
         // Finds the integer square root of a positive number  
         private int Isqrt(int num)
@@ -792,6 +808,19 @@ namespace VideoRecolector
             }
         }
 
+        private void cbCalibrateNumbers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbCalibrateNumbers.Checked)
+            {
+                this.btnSaveNumTable.Visible = true;
+                this.groupBox4.Visible = true;
+            }
+            else
+            {
+                this.btnSaveNumTable.Visible = false;
+                this.groupBox4.Visible = false;
+            }
+        }
 
         private void GuardarNumeroGanador(int numero)
         {

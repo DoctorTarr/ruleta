@@ -173,6 +173,8 @@ namespace VideoRecolector
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cbCalibrateNumbers = new System.Windows.Forms.CheckBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.lblFPS = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.btnIniciarDemo = new System.Windows.Forms.Button();
@@ -185,7 +187,7 @@ namespace VideoRecolector
             this.label9 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.cbCalibrate = new System.Windows.Forms.CheckBox();
+            this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
             this.btnStartCamara = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -209,7 +211,6 @@ namespace VideoRecolector
             this.btnSetNumber = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnSaveNumTable = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -332,6 +333,7 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.cbCalibrateNumbers);
             this.groupBox3.Controls.Add(this.textBox3);
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
@@ -345,7 +347,7 @@ namespace VideoRecolector
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Controls.Add(this.cbCalibrate);
+            this.groupBox3.Controls.Add(this.cbCalibrateCamera);
             this.groupBox3.Controls.Add(this.btnStartCamara);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.videoSourcePlayer1);
@@ -356,6 +358,28 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // cbCalibrateNumbers
+            // 
+            this.cbCalibrateNumbers.AutoSize = true;
+            this.cbCalibrateNumbers.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.cbCalibrateNumbers.Location = new System.Drawing.Point(260, 455);
+            this.cbCalibrateNumbers.Name = "cbCalibrateNumbers";
+            this.cbCalibrateNumbers.Size = new System.Drawing.Size(106, 17);
+            this.cbCalibrateNumbers.TabIndex = 60;
+            this.cbCalibrateNumbers.Text = "Calibrar Números";
+            this.cbCalibrateNumbers.UseVisualStyleBackColor = true;
+            this.cbCalibrateNumbers.CheckedChanged += new System.EventHandler(this.cbCalibrateNumbers_CheckedChanged);
+            // 
+            // textBox3
+            // 
+            this.textBox3.Enabled = false;
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox3.Location = new System.Drawing.Point(343, 500);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(117, 31);
+            this.textBox3.TabIndex = 59;
+            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblFPS
             // 
@@ -371,7 +395,7 @@ namespace VideoRecolector
             // 
             this.label8.AutoSize = true;
             this.label8.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label8.Location = new System.Drawing.Point(382, 498);
+            this.label8.Location = new System.Drawing.Point(353, 475);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(91, 13);
             this.label8.TabIndex = 56;
@@ -383,7 +407,7 @@ namespace VideoRecolector
             this.btnIniciarDemo.Enabled = false;
             this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(343, 433);
+            this.btnIniciarDemo.Location = new System.Drawing.Point(397, 433);
             this.btnIniciarDemo.Name = "btnIniciarDemo";
             this.btnIniciarDemo.Size = new System.Drawing.Size(76, 23);
             this.btnIniciarDemo.TabIndex = 51;
@@ -482,17 +506,17 @@ namespace VideoRecolector
             this.label7.TabIndex = 30;
             this.label7.Text = "Distancia Cero-Bola:";
             // 
-            // cbCalibrate
+            // cbCalibrateCamera
             // 
-            this.cbCalibrate.AutoSize = true;
-            this.cbCalibrate.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.cbCalibrate.Location = new System.Drawing.Point(260, 433);
-            this.cbCalibrate.Name = "cbCalibrate";
-            this.cbCalibrate.Size = new System.Drawing.Size(67, 17);
-            this.cbCalibrate.TabIndex = 13;
-            this.cbCalibrate.Text = "Calibrate";
-            this.cbCalibrate.UseVisualStyleBackColor = true;
-            this.cbCalibrate.CheckedChanged += new System.EventHandler(this.cbCalibrate_CheckedChanged);
+            this.cbCalibrateCamera.AutoSize = true;
+            this.cbCalibrateCamera.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.cbCalibrateCamera.Location = new System.Drawing.Point(260, 433);
+            this.cbCalibrateCamera.Name = "cbCalibrateCamera";
+            this.cbCalibrateCamera.Size = new System.Drawing.Size(100, 17);
+            this.cbCalibrateCamera.TabIndex = 13;
+            this.cbCalibrateCamera.Text = "Calibrar Camara";
+            this.cbCalibrateCamera.UseVisualStyleBackColor = true;
+            this.cbCalibrateCamera.CheckedChanged += new System.EventHandler(this.cbCalibrateCamera_CheckedChanged);
             // 
             // btnStartCamara
             // 
@@ -631,7 +655,7 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.btnSaveNumTable);
             this.groupBox4.Location = new System.Drawing.Point(698, 266);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(85, 472);
+            this.groupBox4.Size = new System.Drawing.Size(85, 293);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Visible = false;
@@ -657,6 +681,7 @@ namespace VideoRecolector
             this.btnCalibrateNumber.TabIndex = 69;
             this.btnCalibrateNumber.Text = "Calibrar Numero";
             this.btnCalibrateNumber.UseVisualStyleBackColor = true;
+            this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
             // 
             // label13
             // 
@@ -707,6 +732,7 @@ namespace VideoRecolector
             this.btnSetNumber.TabIndex = 64;
             this.btnSetNumber.Text = "Guardar Numero";
             this.btnSetNumber.UseVisualStyleBackColor = true;
+            this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
             // comboBox1
             // 
@@ -727,15 +753,7 @@ namespace VideoRecolector
             this.btnSaveNumTable.TabIndex = 62;
             this.btnSaveNumTable.Text = "Guardar Tabla";
             this.btnSaveNumTable.UseVisualStyleBackColor = true;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(479, 496);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(177, 22);
-            this.textBox3.TabIndex = 59;
+            this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
             // 
             // MainForm
             // 
@@ -784,7 +802,7 @@ namespace VideoRecolector
         private System.Windows.Forms.TextBox tbZeroPosX;
         private System.Windows.Forms.Button btnStartCamara;
         private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.CheckBox cbCalibrate;
+        private System.Windows.Forms.CheckBox cbCalibrateCamera;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbBolaPosY;
@@ -822,6 +840,7 @@ namespace VideoRecolector
         private ComboBox comboBox1;
         private Button btnSaveNumTable;
         private TextBox textBox3;
+        private CheckBox cbCalibrateNumbers;
     }
 }
 
