@@ -449,7 +449,7 @@ namespace VideoRecolector
                 textBox2.Text = _Angle.ToString();
 
                 //if (_zeroCenterArea.Contains(ZeroPos))
-                if (Math.Abs(ZeroPosToCenter.X) < 3)
+                if ((Math.Abs(ZeroPosToCenter.X) < 3) && (ZeroPosToCenter.Y > 88))
                     {
                         //if (bZeroFound && bDebouncedBallFound)
                         {
