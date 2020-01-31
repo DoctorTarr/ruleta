@@ -2,6 +2,7 @@
 using DASYS.Recolector.BLL;
 using System;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace VideoRecolector
 {
@@ -26,6 +27,11 @@ namespace VideoRecolector
             }
             base.Dispose(disposing);
         }
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
 
         #region Form_Load, Closing
         private void MainForm_Load(object sender, EventArgs e)
@@ -38,7 +44,7 @@ namespace VideoRecolector
             this.IsCameraOn = false;
             this._rpm = 0;
             this.btnStartCamara.PerformClick();
-//            this.Hide();
+            this.Hide();
         }
 
         #endregion
@@ -156,6 +162,8 @@ namespace VideoRecolector
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.tbZeroPosAngle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tbZeroPosY = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -166,7 +174,6 @@ namespace VideoRecolector
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lblFPS = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.lblBallOn = new System.Windows.Forms.Label();
@@ -187,27 +194,35 @@ namespace VideoRecolector
             this.tbBolaPosX = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.pbBall = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
-            this.btnSaveNumTable = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.btnSetNumber = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblTestCount = new System.Windows.Forms.Label();
+            this.btnCalibrateNumber = new System.Windows.Forms.Button();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.tbAvgAngle = new System.Windows.Forms.TextBox();
             this.tbAvgDist = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.btnCalibrateNumber = new System.Windows.Forms.Button();
-            this.lblTestCount = new System.Windows.Forms.Label();
+            this.btnSetNumber = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.btnSaveNumTable = new System.Windows.Forms.Button();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.tbZeroPosAngle);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.tbZeroPosY);
             this.groupBox1.Controls.Add(this.label1);
@@ -220,21 +235,40 @@ namespace VideoRecolector
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label14.Location = new System.Drawing.Point(214, 27);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(43, 13);
+            this.label14.TabIndex = 30;
+            this.label14.Text = "Angulo:";
+            // 
+            // tbZeroPosAngle
+            // 
+            this.tbZeroPosAngle.Enabled = false;
+            this.tbZeroPosAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbZeroPosAngle.Location = new System.Drawing.Point(262, 22);
+            this.tbZeroPosAngle.Name = "tbZeroPosAngle";
+            this.tbZeroPosAngle.Size = new System.Drawing.Size(65, 22);
+            this.tbZeroPosAngle.TabIndex = 29;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(212, 27);
+            this.label2.Location = new System.Drawing.Point(102, 27);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(42, 13);
+            this.label2.Size = new System.Drawing.Size(17, 13);
             this.label2.TabIndex = 28;
-            this.label2.Text = "Cero Y:";
+            this.label2.Text = "Y:";
             // 
             // tbZeroPosY
             // 
             this.tbZeroPosY.Enabled = false;
             this.tbZeroPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosY.Location = new System.Drawing.Point(260, 22);
+            this.tbZeroPosY.Location = new System.Drawing.Point(125, 22);
             this.tbZeroPosY.Name = "tbZeroPosY";
             this.tbZeroPosY.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosY.TabIndex = 27;
@@ -245,15 +279,15 @@ namespace VideoRecolector
             this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
             this.label1.Location = new System.Drawing.Point(6, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 13);
+            this.label1.Size = new System.Drawing.Size(17, 13);
             this.label1.TabIndex = 26;
-            this.label1.Text = "Cero X:";
+            this.label1.Text = "X:";
             // 
             // tbZeroPosX
             // 
             this.tbZeroPosX.Enabled = false;
             this.tbZeroPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosX.Location = new System.Drawing.Point(54, 22);
+            this.tbZeroPosX.Location = new System.Drawing.Point(26, 22);
             this.tbZeroPosX.Name = "tbZeroPosX";
             this.tbZeroPosX.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosX.TabIndex = 25;
@@ -298,8 +332,8 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.textBox3);
+            this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.btnIniciarDemo);
             this.groupBox3.Controls.Add(this.lblBallOn);
@@ -332,16 +366,6 @@ namespace VideoRecolector
             this.lblFPS.Size = new System.Drawing.Size(21, 13);
             this.lblFPS.TabIndex = 58;
             this.lblFPS.Text = "fps";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Enabled = false;
-            this.textBox3.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(479, 493);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(177, 29);
-            this.textBox3.TabIndex = 57;
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label8
             // 
@@ -489,6 +513,7 @@ namespace VideoRecolector
             this.groupBox2.Controls.Add(this.tbBolaPosX);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.pbBall);
+            this.groupBox2.Controls.Add(this.pictureBox1);
             this.groupBox2.Location = new System.Drawing.Point(355, 551);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(337, 262);
@@ -553,6 +578,16 @@ namespace VideoRecolector
             this.pbBall.TabIndex = 12;
             this.pbBall.TabStop = false;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Location = new System.Drawing.Point(344, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(84, 250);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            // 
             // tmrDemo
             // 
             this.tmrDemo.Interval = 500;
@@ -574,101 +609,133 @@ namespace VideoRecolector
             this.tmrMain.Interval = 500;
             this.tmrMain.Tick += new System.EventHandler(this.tmrMain_Tick);
             // 
-            // btnSaveNumTable
+            // notifyIcon1
             // 
-            this.btnSaveNumTable.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSaveNumTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveNumTable.ForeColor = System.Drawing.Color.Black;
-            this.btnSaveNumTable.Location = new System.Drawing.Point(698, 274);
-            this.btnSaveNumTable.Name = "btnSaveNumTable";
-            this.btnSaveNumTable.Size = new System.Drawing.Size(84, 38);
-            this.btnSaveNumTable.TabIndex = 53;
-            this.btnSaveNumTable.Text = "Guardar Tabla";
-            this.btnSaveNumTable.UseVisualStyleBackColor = true;
-            this.btnSaveNumTable.Visible = false;
-            this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
+            this.notifyIcon1.BalloonTipText = "Recolector de datos.";
+            this.notifyIcon1.BalloonTipTitle = "NAPSA";
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "Recolector de datos NAPSA";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // comboBox1
+            // groupBox4
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(699, 330);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(83, 21);
-            this.comboBox1.TabIndex = 54;
+            this.groupBox4.Controls.Add(this.lblTestCount);
+            this.groupBox4.Controls.Add(this.btnCalibrateNumber);
+            this.groupBox4.Controls.Add(this.label13);
+            this.groupBox4.Controls.Add(this.label12);
+            this.groupBox4.Controls.Add(this.tbAvgAngle);
+            this.groupBox4.Controls.Add(this.tbAvgDist);
+            this.groupBox4.Controls.Add(this.btnSetNumber);
+            this.groupBox4.Controls.Add(this.comboBox1);
+            this.groupBox4.Controls.Add(this.btnSaveNumTable);
+            this.groupBox4.Location = new System.Drawing.Point(698, 266);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(85, 472);
+            this.groupBox4.TabIndex = 62;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Visible = false;
             // 
-            // btnSetNumber
+            // lblTestCount
             // 
-            this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnSetNumber.Location = new System.Drawing.Point(699, 488);
-            this.btnSetNumber.Name = "btnSetNumber";
-            this.btnSetNumber.Size = new System.Drawing.Size(84, 38);
-            this.btnSetNumber.TabIndex = 55;
-            this.btnSetNumber.Text = "Guardar Numero";
-            this.btnSetNumber.UseVisualStyleBackColor = true;
-            this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
-            // 
-            // tbAvgAngle
-            // 
-            this.tbAvgAngle.Enabled = false;
-            this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgAngle.Location = new System.Drawing.Point(725, 385);
-            this.tbAvgAngle.Name = "tbAvgAngle";
-            this.tbAvgAngle.Size = new System.Drawing.Size(58, 22);
-            this.tbAvgAngle.TabIndex = 57;
-            // 
-            // tbAvgDist
-            // 
-            this.tbAvgDist.Enabled = false;
-            this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgDist.Location = new System.Drawing.Point(725, 357);
-            this.tbAvgDist.Name = "tbAvgDist";
-            this.tbAvgDist.Size = new System.Drawing.Size(58, 22);
-            this.tbAvgDist.TabIndex = 56;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label12.Location = new System.Drawing.Point(696, 361);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(18, 13);
-            this.label12.TabIndex = 58;
-            this.label12.Text = "D:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label13.Location = new System.Drawing.Point(696, 389);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(17, 13);
-            this.label13.TabIndex = 59;
-            this.label13.Text = "A:";
+            this.lblTestCount.AutoSize = true;
+            this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblTestCount.Location = new System.Drawing.Point(24, 196);
+            this.lblTestCount.Name = "lblTestCount";
+            this.lblTestCount.Size = new System.Drawing.Size(13, 13);
+            this.lblTestCount.TabIndex = 70;
+            this.lblTestCount.Text = "0";
             // 
             // btnCalibrateNumber
             // 
             this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnCalibrateNumber.Location = new System.Drawing.Point(698, 421);
+            this.btnCalibrateNumber.Location = new System.Drawing.Point(3, 149);
             this.btnCalibrateNumber.Name = "btnCalibrateNumber";
-            this.btnCalibrateNumber.Size = new System.Drawing.Size(84, 38);
-            this.btnCalibrateNumber.TabIndex = 60;
+            this.btnCalibrateNumber.Size = new System.Drawing.Size(78, 38);
+            this.btnCalibrateNumber.TabIndex = 69;
             this.btnCalibrateNumber.Text = "Calibrar Numero";
             this.btnCalibrateNumber.UseVisualStyleBackColor = true;
-            this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
             // 
-            // lblTestCount
+            // label13
             // 
-            this.lblTestCount.AutoSize = true;
-            this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(722, 467);
-            this.lblTestCount.Name = "lblTestCount";
-            this.lblTestCount.Size = new System.Drawing.Size(13, 13);
-            this.lblTestCount.TabIndex = 61;
-            this.lblTestCount.Text = "0";
+            this.label13.AutoSize = true;
+            this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label13.Location = new System.Drawing.Point(0, 123);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(17, 13);
+            this.label13.TabIndex = 68;
+            this.label13.Text = "A:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label12.Location = new System.Drawing.Point(-1, 94);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(18, 13);
+            this.label12.TabIndex = 67;
+            this.label12.Text = "D:";
+            // 
+            // tbAvgAngle
+            // 
+            this.tbAvgAngle.Enabled = false;
+            this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAvgAngle.Location = new System.Drawing.Point(27, 118);
+            this.tbAvgAngle.Name = "tbAvgAngle";
+            this.tbAvgAngle.Size = new System.Drawing.Size(58, 22);
+            this.tbAvgAngle.TabIndex = 66;
+            // 
+            // tbAvgDist
+            // 
+            this.tbAvgDist.Enabled = false;
+            this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbAvgDist.Location = new System.Drawing.Point(26, 90);
+            this.tbAvgDist.Name = "tbAvgDist";
+            this.tbAvgDist.Size = new System.Drawing.Size(58, 22);
+            this.tbAvgDist.TabIndex = 65;
+            // 
+            // btnSetNumber
+            // 
+            this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
+            this.btnSetNumber.Location = new System.Drawing.Point(2, 217);
+            this.btnSetNumber.Name = "btnSetNumber";
+            this.btnSetNumber.Size = new System.Drawing.Size(79, 38);
+            this.btnSetNumber.TabIndex = 64;
+            this.btnSetNumber.Text = "Guardar Numero";
+            this.btnSetNumber.UseVisualStyleBackColor = true;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(2, 63);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(83, 21);
+            this.comboBox1.TabIndex = 63;
+            // 
+            // btnSaveNumTable
+            // 
+            this.btnSaveNumTable.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnSaveNumTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSaveNumTable.ForeColor = System.Drawing.Color.Black;
+            this.btnSaveNumTable.Location = new System.Drawing.Point(1, 19);
+            this.btnSaveNumTable.Name = "btnSaveNumTable";
+            this.btnSaveNumTable.Size = new System.Drawing.Size(84, 38);
+            this.btnSaveNumTable.TabIndex = 62;
+            this.btnSaveNumTable.Text = "Guardar Tabla";
+            this.btnSaveNumTable.UseVisualStyleBackColor = true;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Enabled = false;
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox3.Location = new System.Drawing.Point(479, 496);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(177, 22);
+            this.textBox3.TabIndex = 59;
             // 
             // MainForm
             // 
@@ -676,15 +743,7 @@ namespace VideoRecolector
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
             this.ClientSize = new System.Drawing.Size(791, 818);
-            this.Controls.Add(this.lblTestCount);
-            this.Controls.Add(this.btnCalibrateNumber);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.tbAvgAngle);
-            this.Controls.Add(this.tbAvgDist);
-            this.Controls.Add(this.btnSetNumber);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.btnSaveNumTable);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.groupBox3);
@@ -704,6 +763,9 @@ namespace VideoRecolector
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -744,17 +806,22 @@ namespace VideoRecolector
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label lblBallOn;
         private System.Windows.Forms.Label lblFPS;
-        private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button btnSaveNumTable;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button btnSetNumber;
-        private System.Windows.Forms.TextBox tbAvgAngle;
-        private System.Windows.Forms.TextBox tbAvgDist;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Button btnCalibrateNumber;
-        private System.Windows.Forms.Label lblTestCount;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private Label label14;
+        private TextBox tbZeroPosAngle;
+        private PictureBox pictureBox1;
+        private GroupBox groupBox4;
+        private Label lblTestCount;
+        private Button btnCalibrateNumber;
+        private Label label13;
+        private Label label12;
+        private TextBox tbAvgAngle;
+        private TextBox tbAvgDist;
+        private Button btnSetNumber;
+        private ComboBox comboBox1;
+        private Button btnSaveNumTable;
+        private TextBox textBox3;
     }
 }
 

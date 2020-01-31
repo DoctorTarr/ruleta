@@ -125,7 +125,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="data.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

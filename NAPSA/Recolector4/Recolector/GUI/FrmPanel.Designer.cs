@@ -572,6 +572,7 @@ namespace DASYS.GUI
             this.lvwMensajes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.lvwMensajes.BackColor = System.Drawing.Color.LightGray;
+            this.lvwMensajes.HideSelection = false;
             this.lvwMensajes.Location = new System.Drawing.Point(12, 81);
             this.lvwMensajes.Name = "lvwMensajes";
             this.lvwMensajes.Size = new System.Drawing.Size(179, 363);
@@ -662,13 +663,13 @@ namespace DASYS.GUI
             this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cerrarToolStripMenuItem});
             this.mnuSystemTray.Name = "mnuSystemTray";
-            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
+            this.mnuSystemTray.Size = new System.Drawing.Size(181, 48);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.ForeColor = System.Drawing.Color.White;
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 

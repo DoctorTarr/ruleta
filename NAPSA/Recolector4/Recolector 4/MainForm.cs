@@ -45,6 +45,7 @@ namespace VideoRecolector
         private Rectangle _numbersArea; // Area where all the numbers are
         private Rectangle _ballPocketsArea; // Cylinder area to detect ball presence
         private Rectangle _centerArea; // Center of the roulette area
+        private System.Drawing.Point _centerPoint; // Center of the roulette area rectangle
         private Rectangle _zeroCenterArea; // Where the zero is at 12 am
 
 
@@ -93,6 +94,7 @@ namespace VideoRecolector
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
+            ReadNumbersTable();
             juego = new JuegoRuleta();
             estadoMesa = juego.GetCurrentState();
             this.tmrMain.Interval = 500; // msec
@@ -139,11 +141,13 @@ namespace VideoRecolector
             {
                 this._calibrateFlag = true;
                 this.btnSaveNumTable.Visible = true;
+                this.groupBox4.Visible = true;
             }
             else
             {
                 this._calibrateFlag = false;
                 this.btnSaveNumTable.Visible = false;
+                this.groupBox4.Visible = false;
             }
         }
 
@@ -256,6 +260,7 @@ namespace VideoRecolector
 
             // Casillas - radius 204 color blue
             _g.DrawRectangle(_penred, _ballPocketsArea);
+            _g.DrawRectangle(_penred, _centerPoint.X, _centerPoint.Y, 1, 1);
 
             _g.DrawRectangle(_penblue, _zeroCenterArea);
         }
@@ -309,7 +314,9 @@ namespace VideoRecolector
             _numbersArea = new Rectangle(217, 150, 196, 196);
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
             _centerArea = new Rectangle(266, 198, 100, 100);
+            _centerPoint = _centerArea.Center();
             _zeroCenterArea = new Rectangle(308, 148, 20, 25);
+            
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
@@ -409,13 +416,15 @@ namespace VideoRecolector
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-                ZeroPos.X = -1;
+                ZeroPos.X = 640;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 tbZeroPosX.Text = ZeroPos.X.ToString();
                 tbZeroPosY.Text = ZeroPos.Y.ToString();
-                bZeroFound = ZeroPos.X != -1;
+                bZeroFound = ZeroPos.X != 640;
+                if (bZeroFound)
+                    tbZeroPosAngle.Text = GetAngleOfLineBetweenTwoPoints(_centerPoint, ZeroPos).ToString();
 
-                BallPos.X = -1;
+                BallPos.X = 640;
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
                 tbBolaPosX.Text = BallPos.X.ToString();
                 tbBolaPosY.Text = BallPos.Y.ToString();
@@ -437,15 +446,15 @@ namespace VideoRecolector
                 }
 
 
+                _Distance = FindDistance(ZeroPos, BallPos);
+                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
+                textBox1.Text = _Distance.ToString();
+                textBox2.Text = _Angle.ToString();
 
-                if ((Math.Abs(ZeroPos.X - 314) < 3))
+                if ((Math.Abs(ZeroPos.X - 3) < 3))
                 {
                     //if (bZeroFound && bDebouncedBallFound)
                     //{
-                        _Distance = FindDistance(ZeroPos, BallPos);
-                        _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPos, BallPos);
-                        textBox1.Text = _Distance.ToString();
-                        textBox2.Text = _Angle.ToString();
 
                         winner = FindWinnerNumber(_Distance, _Angle);
 
@@ -489,7 +498,10 @@ namespace VideoRecolector
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                ZeroPos = objectRect.Location;
+                ZeroPos = objectRect.Center();
+                ZeroPos.X -= _centerPoint.X;
+                ZeroPos.Y = _centerPoint.Y - ZeroPos.Y;
+
             }
 
             return _colorFilterImage;
@@ -513,7 +525,9 @@ namespace VideoRecolector
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                BallPos = objectRect.Location;
+                BallPos = objectRect.Center();
+                BallPos.X -= _centerPoint.X;
+                BallPos.Y = _centerPoint.Y - BallPos.Y;
             }
 
             return _colorFilterImage;
@@ -609,7 +623,9 @@ namespace VideoRecolector
         //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
         //Triple-zero wheel 
         //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        private readonly int[,] Numbers = new int[,]
+        private int[,] Numbers;
+
+        private int[,] Numbers2 = new int[,]
         {
             // distance, angle = number
             {  24,  90 },// 0
@@ -695,11 +711,7 @@ namespace VideoRecolector
 
         private void btnSaveNumTable_Click(object sender, EventArgs e)
         {
-            // write the data (overwrites)
-            using (var stream = new StreamWriter(@"./data.json", append: false))
-            {
-                stream.Write(JsonConvert.SerializeObject(this.Numbers));
-            }
+            WriteNumbersTable();
         }
 
         private void btnCalibrateNumber_Click(object sender, EventArgs e)
@@ -790,6 +802,37 @@ namespace VideoRecolector
         }
         #endregion
 
+        private void Cerrar()
+        {
+            try
+            {
+                Common.Logger.EscribirLinea();
+                Common.Logger.Escribir("*** RECOLECTOR FINALIZADO ***", true);
+                Common.Logger.EscribirLinea();
+                this.Dispose();
+            }
+            catch (Exception ex)
+            {
+                int num = (int)MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ReadNumbersTable()
+        {
+            using (var stream = new StreamReader(@"./data.json"))
+            {
+                this.Numbers = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
+            }
+        }
+
+        private void WriteNumbersTable()
+        {
+            // write the data (overwrites)
+            using (var stream = new StreamWriter(@"./data.json", append: false))
+            {
+                stream.Write(JsonConvert.SerializeObject(this.Numbers));
+            }
+        }
 
     }
 }
