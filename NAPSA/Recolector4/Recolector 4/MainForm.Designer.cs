@@ -56,7 +56,7 @@ namespace VideoRecolector
 
             textBox5.Text = estadoMesa.ToString();
 
-            if (this._calibrateFlag)
+            if (this._calibrateFlag || this.cbCalibrateNumbers.Checked)
             {
                 IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 
@@ -664,7 +664,7 @@ namespace VideoRecolector
             // 
             this.lblTestCount.AutoSize = true;
             this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(24, 196);
+            this.lblTestCount.Location = new System.Drawing.Point(24, 223);
             this.lblTestCount.Name = "lblTestCount";
             this.lblTestCount.Size = new System.Drawing.Size(13, 13);
             this.lblTestCount.TabIndex = 70;
@@ -675,7 +675,7 @@ namespace VideoRecolector
             this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnCalibrateNumber.Location = new System.Drawing.Point(3, 149);
+            this.btnCalibrateNumber.Location = new System.Drawing.Point(3, 176);
             this.btnCalibrateNumber.Name = "btnCalibrateNumber";
             this.btnCalibrateNumber.Size = new System.Drawing.Size(78, 38);
             this.btnCalibrateNumber.TabIndex = 69;
@@ -687,7 +687,7 @@ namespace VideoRecolector
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label13.Location = new System.Drawing.Point(0, 123);
+            this.label13.Location = new System.Drawing.Point(0, 150);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(17, 13);
             this.label13.TabIndex = 68;
@@ -697,7 +697,7 @@ namespace VideoRecolector
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label12.Location = new System.Drawing.Point(-1, 94);
+            this.label12.Location = new System.Drawing.Point(-1, 121);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(18, 13);
             this.label12.TabIndex = 67;
@@ -707,7 +707,7 @@ namespace VideoRecolector
             // 
             this.tbAvgAngle.Enabled = false;
             this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgAngle.Location = new System.Drawing.Point(27, 118);
+            this.tbAvgAngle.Location = new System.Drawing.Point(27, 145);
             this.tbAvgAngle.Name = "tbAvgAngle";
             this.tbAvgAngle.Size = new System.Drawing.Size(58, 22);
             this.tbAvgAngle.TabIndex = 66;
@@ -716,7 +716,7 @@ namespace VideoRecolector
             // 
             this.tbAvgDist.Enabled = false;
             this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgDist.Location = new System.Drawing.Point(26, 90);
+            this.tbAvgDist.Location = new System.Drawing.Point(26, 117);
             this.tbAvgDist.Name = "tbAvgDist";
             this.tbAvgDist.Size = new System.Drawing.Size(58, 22);
             this.tbAvgDist.TabIndex = 65;
@@ -726,7 +726,7 @@ namespace VideoRecolector
             this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnSetNumber.Location = new System.Drawing.Point(2, 217);
+            this.btnSetNumber.Location = new System.Drawing.Point(2, 244);
             this.btnSetNumber.Name = "btnSetNumber";
             this.btnSetNumber.Size = new System.Drawing.Size(79, 38);
             this.btnSetNumber.TabIndex = 64;
@@ -736,10 +736,12 @@ namespace VideoRecolector
             // 
             // comboBox1
             // 
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(2, 63);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(83, 21);
+            this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.comboBox1.Size = new System.Drawing.Size(83, 32);
             this.comboBox1.TabIndex = 63;
             // 
             // btnSaveNumTable

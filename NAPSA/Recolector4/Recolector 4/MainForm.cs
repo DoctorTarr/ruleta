@@ -448,10 +448,11 @@ namespace VideoRecolector
                 textBox1.Text = _Distance.ToString();
                 textBox2.Text = _Angle.ToString();
 
-                if (_zeroCenterArea.Contains(ZeroPos))
-                {
-                    //if (bZeroFound && bDebouncedBallFound)
+                //if (_zeroCenterArea.Contains(ZeroPos))
+                if (Math.Abs(ZeroPosToCenter.X) < 3)
                     {
+                        //if (bZeroFound && bDebouncedBallFound)
+                        {
 
                         winner = FindWinnerNumber(_Distance, _Angle);
 
