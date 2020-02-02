@@ -643,7 +643,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(698, 22);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(84, 175);
+            this.txtProtocolo.Size = new System.Drawing.Size(84, 106);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -996,7 +996,7 @@ namespace VideoRecolector
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
-            this.ClientSize = new System.Drawing.Size(791, 818);
+            this.ClientSize = new System.Drawing.Size(791, 749);
             this.Controls.Add(this.checkBox17);
             this.Controls.Add(this.checkBox16);
             this.Controls.Add(this.checkBox15);
