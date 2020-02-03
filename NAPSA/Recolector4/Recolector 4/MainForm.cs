@@ -57,6 +57,7 @@ namespace VideoRecolector
 
         // Positioning variables
         private System.Drawing.Point ZeroPos, ZeroPosToCenter, BallPos, BallPosToCenter;
+        private int ZeroAngleToCenter = 0;
 
         // Measurement variables
         private int _Distance = 0, _Angle = 0;
@@ -415,12 +416,16 @@ namespace VideoRecolector
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
                 ZeroPos.X = -640;
+                ZeroAngleToCenter = 0;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
                 tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
                 bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
-                    tbZeroPosAngle.Text = GetAngleOfLineBetweenTwoPoints(_centerPoint, ZeroPos).ToString();
+                {
+                    ZeroAngleToCenter = GetAngleOfLineBetweenTwoPoints(_centerPoint, ZeroPos);
+                    tbZeroPosAngle.Text = ZeroAngleToCenter.ToString();
+                }
 
                 BallPos.X = -640;
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
@@ -448,12 +453,10 @@ namespace VideoRecolector
                 textBox1.Text = _Distance.ToString();
                 textBox2.Text = _Angle.ToString();
 
-                //if (_zeroCenterArea.Contains(ZeroPos))
-                if ((Math.Abs(ZeroPosToCenter.X) < 3) && (ZeroPosToCenter.Y > 88))
+                if (Math.Abs(ZeroAngleToCenter-90) < 2)
+                {
+                    //if (bZeroFound && bDebouncedBallFound)
                     {
-                        //if (bZeroFound && bDebouncedBallFound)
-                        {
-
                         winner = FindWinnerNumber(_Distance, _Angle);
 
                         if (winner > -1)
@@ -464,6 +467,7 @@ namespace VideoRecolector
                         }
                         else
                             textBox3.Text = "";
+
                     }
                 }
 
