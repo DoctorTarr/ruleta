@@ -223,7 +223,7 @@ namespace VideoRecolector
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.chkbNumbers = new System.Windows.Forms.CheckBox();
+            this.checkBox0 = new System.Windows.Forms.CheckBox();
             this.lblTestCount = new System.Windows.Forms.Label();
             this.btnCalibrateNumber = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
@@ -717,7 +717,7 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.checkBox3);
             this.groupBox4.Controls.Add(this.checkBox2);
             this.groupBox4.Controls.Add(this.checkBox1);
-            this.groupBox4.Controls.Add(this.chkbNumbers);
+            this.groupBox4.Controls.Add(this.checkBox0);
             this.groupBox4.Controls.Add(this.lblTestCount);
             this.groupBox4.Controls.Add(this.btnCalibrateNumber);
             this.groupBox4.Controls.Add(this.label13);
@@ -986,17 +986,18 @@ namespace VideoRecolector
             this.checkBox1.Text = "32";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
-            // chkbNumbers
+            // checkBox0
             // 
-            this.chkbNumbers.AutoSize = true;
-            this.chkbNumbers.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkbNumbers.ForeColor = System.Drawing.Color.LimeGreen;
-            this.chkbNumbers.Location = new System.Drawing.Point(3, 243);
-            this.chkbNumbers.Name = "chkbNumbers";
-            this.chkbNumbers.Size = new System.Drawing.Size(33, 17);
-            this.chkbNumbers.TabIndex = 81;
-            this.chkbNumbers.Text = "0";
-            this.chkbNumbers.UseVisualStyleBackColor = true;
+            this.checkBox0.AutoSize = true;
+            this.checkBox0.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.checkBox0.ForeColor = System.Drawing.Color.LimeGreen;
+            this.checkBox0.Location = new System.Drawing.Point(3, 243);
+            this.checkBox0.Name = "checkBox0";
+            this.checkBox0.Size = new System.Drawing.Size(33, 17);
+            this.checkBox0.TabIndex = 81;
+            this.checkBox0.Text = "0";
+            this.checkBox0.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.checkBox0.UseVisualStyleBackColor = true;
             // 
             // lblTestCount
             // 
@@ -1378,7 +1379,7 @@ namespace VideoRecolector
         private CheckBox checkBox3;
         private CheckBox checkBox2;
         private CheckBox checkBox1;
-        private CheckBox chkbNumbers;
+        private CheckBox checkBox0;
         private CheckBox checkBox18;
         private CheckBox checkBox19;
         private CheckBox checkBox20;
