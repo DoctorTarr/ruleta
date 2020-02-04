@@ -103,17 +103,6 @@ namespace VideoRecolector
             //MessageBox.Show(Application.ExecutablePath);
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            try
-            {
-                StopCamera();
-            }
-            catch
-            {
-                return;
-            }
-        }
 
         private void btnStartCamara_Click(object sender, EventArgs e)
         {
@@ -840,6 +829,7 @@ namespace VideoRecolector
         {
             try
             {
+                StopCamera();
                 Common.Logger.EscribirLinea();
                 Common.Logger.Escribir("*** RECOLECTOR FINALIZADO ***", true);
                 Common.Logger.EscribirLinea();
