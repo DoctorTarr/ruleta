@@ -59,7 +59,20 @@ namespace VideoRecolector
             }
         }
 
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+                this.Hide();
+            else
+                this.Show();
+        }
+
         #endregion
+
+        private void cerrarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cerrar();
+        }
 
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
@@ -260,6 +273,8 @@ namespace VideoRecolector
             this.btnSetNumber = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnSaveNumTable = new System.Windows.Forms.Button();
+            this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -267,6 +282,7 @@ namespace VideoRecolector
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox4.SuspendLayout();
+            this.mnuSystemTray.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -674,7 +690,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(698, 22);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(84, 84);
+            this.txtProtocolo.Size = new System.Drawing.Size(84, 28);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -686,6 +702,7 @@ namespace VideoRecolector
             // 
             this.notifyIcon1.BalloonTipText = "Recolector de datos.";
             this.notifyIcon1.BalloonTipTitle = "NAPSA";
+            this.notifyIcon1.ContextMenuStrip = this.mnuSystemTray;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Recolector de datos NAPSA";
             this.notifyIcon1.Visible = true;
@@ -1288,12 +1305,26 @@ namespace VideoRecolector
             this.btnSaveNumTable.UseVisualStyleBackColor = true;
             this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
             // 
+            // mnuSystemTray
+            // 
+            this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cerrarToolStripMenuItem});
+            this.mnuSystemTray.Name = "contextMenuStrip1";
+            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
+            // 
+            // cerrarToolStripMenuItem
+            // 
+            this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.cerrarToolStripMenuItem.Text = "Cerrar";
+            this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
-            this.ClientSize = new System.Drawing.Size(791, 805);
+            this.ClientSize = new System.Drawing.Size(791, 749);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtProtocolo);
@@ -1306,6 +1337,7 @@ namespace VideoRecolector
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).EndInit();
@@ -1317,6 +1349,7 @@ namespace VideoRecolector
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.mnuSystemTray.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1411,6 +1444,8 @@ namespace VideoRecolector
         private CheckBox checkBox29;
         private CheckBox checkBox26;
         private CheckBox checkBox27;
+        private ContextMenuStrip mnuSystemTray;
+        private ToolStripMenuItem cerrarToolStripMenuItem;
     }
 }
 
