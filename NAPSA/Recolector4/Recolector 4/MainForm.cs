@@ -412,7 +412,7 @@ namespace VideoRecolector
                 bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
                 {
-                    ZeroAngleToCenter = GetAngleOfLineBetweenTwoPoints(_centerPoint, ZeroPos);
+                    ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
                     tbZeroPosAngle.Text = ZeroAngleToCenter.ToString();
                 }
 
@@ -438,7 +438,7 @@ namespace VideoRecolector
                 }
 
                 _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                _Angle = GetAngleOfLineBetweenTwoPoints(ZeroPosToCenter, BallPosToCenter);
+                _Angle = GetAngleOfPointToZero(BallPosToCenter);
                 textBox1.Text = _Distance.ToString();
                 textBox2.Text = _Angle.ToString();
 
@@ -569,6 +569,14 @@ namespace VideoRecolector
             double xDiff = p2.X - p1.X;
             double yDiff = p1.Y - p2.Y;
             return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
+        }
+
+        /**
+        * Determines the angle of a point against the coordinates center
+        */
+        private int GetAngleOfPointToZero(System.Drawing.Point p)
+        {
+            return (int)Math.Round(atan2_approximation1(p.Y, p.X) * this.radian);
         }
 
         /**

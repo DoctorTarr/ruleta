@@ -226,6 +226,8 @@ namespace VideoRecolector
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.checkBox34 = new System.Windows.Forms.CheckBox();
@@ -271,18 +273,16 @@ namespace VideoRecolector
             this.tbAvgAngle = new System.Windows.Forms.TextBox();
             this.tbAvgDist = new System.Windows.Forms.TextBox();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.btnSaveNumTable = new System.Windows.Forms.Button();
-            this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox4.SuspendLayout();
             this.mnuSystemTray.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -687,10 +687,10 @@ namespace VideoRecolector
             this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProtocolo.Location = new System.Drawing.Point(698, 22);
+            this.txtProtocolo.Location = new System.Drawing.Point(698, 12);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(84, 28);
+            this.txtProtocolo.Size = new System.Drawing.Size(84, 94);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -708,8 +708,23 @@ namespace VideoRecolector
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
+            // mnuSystemTray
+            // 
+            this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cerrarToolStripMenuItem});
+            this.mnuSystemTray.Name = "contextMenuStrip1";
+            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
+            // 
+            // cerrarToolStripMenuItem
+            // 
+            this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.cerrarToolStripMenuItem.Text = "Cerrar";
+            this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
+            // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.comboBox1);
             this.groupBox4.Controls.Add(this.checkBox36);
             this.groupBox4.Controls.Add(this.checkBox34);
             this.groupBox4.Controls.Add(this.checkBox35);
@@ -754,7 +769,6 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.tbAvgAngle);
             this.groupBox4.Controls.Add(this.tbAvgDist);
             this.groupBox4.Controls.Add(this.btnSetNumber);
-            this.groupBox4.Controls.Add(this.comboBox1);
             this.groupBox4.Controls.Add(this.btnSaveNumTable);
             this.groupBox4.Location = new System.Drawing.Point(697, 112);
             this.groupBox4.Name = "groupBox4";
@@ -1282,16 +1296,6 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
-            // comboBox1
-            // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(3, 54);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.comboBox1.Size = new System.Drawing.Size(76, 32);
-            this.comboBox1.TabIndex = 63;
-            // 
             // btnSaveNumTable
             // 
             this.btnSaveNumTable.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -1305,19 +1309,13 @@ namespace VideoRecolector
             this.btnSaveNumTable.UseVisualStyleBackColor = true;
             this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
             // 
-            // mnuSystemTray
+            // comboBox1
             // 
-            this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cerrarToolStripMenuItem});
-            this.mnuSystemTray.Name = "contextMenuStrip1";
-            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
-            // 
-            // cerrarToolStripMenuItem
-            // 
-            this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
-            this.cerrarToolStripMenuItem.Text = "Cerrar";
-            this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(3, 54);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(76, 21);
+            this.comboBox1.TabIndex = 118;
             // 
             // MainForm
             // 
@@ -1347,9 +1345,9 @@ namespace VideoRecolector
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.mnuSystemTray.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
-            this.mnuSystemTray.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1403,7 +1401,6 @@ namespace VideoRecolector
         private TextBox tbAvgAngle;
         private TextBox tbAvgDist;
         private Button btnSetNumber;
-        private ComboBox comboBox1;
         private Button btnSaveNumTable;
         private TextBox textBox3;
         private CheckBox cbCalibrateNumbers;
@@ -1446,6 +1443,7 @@ namespace VideoRecolector
         private CheckBox checkBox27;
         private ContextMenuStrip mnuSystemTray;
         private ToolStripMenuItem cerrarToolStripMenuItem;
+        private ComboBox comboBox1;
     }
 }
 
