@@ -130,20 +130,25 @@ namespace VideoRecolector
             if (cbCalibrateCamera.Checked)
             {
                 this._calibrateFlag = true;
+                this.btnAddToBoot.Visible = true;
+                this.lblFPS.Visible = true;
             }
             else
             {
                 this._calibrateFlag = false;
+                this.btnAddToBoot.Visible = false;
                 this.btnSaveNumTable.Visible = false;
                 this.groupBox4.Visible = false;
+                this.lblFPS.Visible = false;
             }
         }
 
-        public static void AddApplicationToStartup()
+        public void AddApplicationToStartup()
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
             {
                 key.SetValue(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "\"" + Application.ExecutablePath + "\"");
+                MessageBox.Show("Agregado al arranque");
             }
         }
 
@@ -207,7 +212,7 @@ namespace VideoRecolector
                 pbBall.Image = null;
                 textBox1.Text = "";
                 textBox2.Text = "";
-                textBox3.Text = "";
+                txtWinner.Text = "";
                 textBox4.Text = "";
                 tbBolaPosX.Text = "";
                 tbBolaPosY.Text = "";
@@ -323,11 +328,14 @@ namespace VideoRecolector
             this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
 
+            this.bDebouncedBallFound = RawKeyPressed();
+            this.bBallStateChanged = true;
+
         }
 
         const int CHECK_MSEC = 40; // Read hardware every 5 msec
-        const int PRESS_MSEC = 400; // Stable time before registering pressed
-        const int RELEASE_MSEC = 800; // Stable time before registering released
+        const int PRESS_MSEC = 200; // Stable time before registering pressed
+        const int RELEASE_MSEC = 400; // Stable time before registering released
 
         // This function reads the key state from the hardware.
         bool RawKeyPressed()
@@ -426,36 +434,40 @@ namespace VideoRecolector
                 //241, 246        381,246
                 //      314, 314
                 DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
+                _Angle = GetAngleOfPointToZero(BallPosToCenter);
+                textBox2.Text = _Angle.ToString();
+                if (this.bDebouncedBallFound)
+                {
+                    _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
+                    textBox1.Text = _Distance.ToString();
+
+                }
 
                 if (this.bBallStateChanged)
                 {
                     lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                    if (!this.bDebouncedBallFound)
+                    if(!this.bDebouncedBallFound)
                     {
                         winner = -1;
-                        textBox3.Text = "";
+                        lblWinner.Text = "";
                     }
                 }
 
-                _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                _Angle = GetAngleOfPointToZero(BallPosToCenter);
-                textBox1.Text = _Distance.ToString();
-                textBox2.Text = _Angle.ToString();
 
                 if (Math.Abs(ZeroAngleToCenter-90) < 2)
                 {
                     //if (bZeroFound && bDebouncedBallFound)
                     {
-                        winner = FindWinnerNumber(_Distance, _Angle);
+                        winner = FindNumberByAngle(_Distance, _Angle);
 
                         if (winner > -1)
                         {
                             _WinnerNumber = winner;
                             juego.SetNewWinnerNumber(_WinnerNumber);
-                            textBox3.Text = string.Format("{0}", _WinnerNumber);
+                            lblWinner.Text = string.Format("{0}", _WinnerNumber);
                         }
                         else
-                            textBox3.Text = "";
+                            lblWinner.Text = "";
 
                     }
                 }
@@ -641,62 +653,20 @@ namespace VideoRecolector
         //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
         //Triple-zero wheel 
         //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        private int[,] Numbers;
-
-        private int[,] Numbers2 = new int[,]
-        {
-            // distance, angle = number
-            {  24,  90 },// 0
-            { 150, 113 },// 1
-            {  84,  47 },// 2
-            {  31, 130 },// 3
-            {  60,  44 },// 4
-            { 163,  94 },// 5
-            { 125,  58 },// 6
-            {  76, 143 },// 7
-            { 161,  81 },// 8
-            { 117, 129 },// 9
-            { 165,  90 },// 10
-            { 154,  72 },// 11
-            {  53, 141 },// 12
-            { 142,  65 },// 13
-            { 135, 119 },// 14
-            {  38,  55 },// 15
-            { 160, 103 },// 16
-            { 105,  50 },// 17
-            {  98, 136 },// 18
-            {  49,  48 },// 19
-            { 142, 115 },// 20
-            {  74,  45 },// 21
-            { 107, 132 },// 22
-            { 164,  86 },// 23
-            { 161,  99 },// 24
-            {  94,  48 },// 25
-            {  26, 111 },// 26
-            { 134,  60 },// 27
-            {  66, 141 },// 28
-            {  87, 138 },// 29
-            { 158,  78 },// 30
-            { 126, 124 },// 31
-            {  28,  62 },// 32
-            { 155, 108 },// 33
-            { 115,  55 },// 34 
-            {  45, 138 },// 35
-            { 148,  68 } // 36
-        };
+        private int[,] NumbersByAngle;
 
         private readonly double radian = 180.0F / (float)Math.PI;
 
         public bool CalibrateFlag { get => _calibrateFlag; set => _calibrateFlag = value; }
 
-        private int FindWinnerNumber(int distance, int angle)
+        private int FindNumberByAngle(int distance, int angle)
         {
             int winner = -1;
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(Numbers[i, 0] - distance) < 3) &&
-                    (Math.Abs(Numbers[i, 1] - angle) < 3))
+                if ((Math.Abs(NumbersByAngle[i, 0] - distance) < 3) &&
+                    (Math.Abs(NumbersByAngle[i, 1] - angle) < 3))
                 {
                     winner = i;
                     break;
@@ -759,8 +729,8 @@ namespace VideoRecolector
         {
             int distance = int.Parse(this.tbAvgDist.Text);
             int angle = int.Parse(this.tbAvgAngle.Text);
-            Numbers[this.comboBox1.SelectedIndex, 0] = distance;
-            Numbers[this.comboBox1.SelectedIndex, 1] = angle;
+            NumbersByAngle[this.comboBox1.SelectedIndex, 0] = distance;
+            NumbersByAngle[this.comboBox1.SelectedIndex, 1] = angle;
         }
 
         private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
@@ -824,6 +794,11 @@ namespace VideoRecolector
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.AddApplicationToStartup();
+        }
+
         private void GuardarNumeroGanador(int numero)
         {
             string cadena = ProtocoloNAPSA.FormatearCadenaNumeroGanador(numero);
@@ -853,7 +828,7 @@ namespace VideoRecolector
         {
             using (var stream = new StreamReader(@"./data.json"))
             {
-                this.Numbers = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
+                this.NumbersByAngle = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
             }
         }
 
@@ -862,7 +837,7 @@ namespace VideoRecolector
             // write the data (overwrites)
             using (var stream = new StreamWriter(@"./data.json", append: false))
             {
-                stream.Write(JsonConvert.SerializeObject(this.Numbers));
+                stream.Write(JsonConvert.SerializeObject(this.NumbersByAngle));
             }
         }
 

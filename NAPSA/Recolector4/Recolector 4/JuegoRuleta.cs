@@ -28,10 +28,12 @@ namespace VideoRecolector
 
         private ESTADO_JUEGO currentState = ESTADO_JUEGO.STATE_0;
         private int contadorEstadoActual = 0;
+        private int contadorNumeroGanador = 0; // Veces que recibio el numero ganador 
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private int _rpm = 0;
         private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
         private int _WinnerNumber = -1;
+        private int _NewWinnerNumber = -1;
         private int _LastWinnerNumber = -1;
         private WINNER_CMD_TYPE _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD; // 1=Winner number 2=Winner status 0=no cmd
 
@@ -96,10 +98,25 @@ namespace VideoRecolector
         {
             if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
             {
-                _WinnerNumber = winner;
-                _haveNewWinner = true;
-                currentState = ESTADO_JUEGO.WINNING_NUMBER;
-                this.contadorEstadoActual = 0;
+                // No new number
+                if (_NewWinnerNumber != winner)
+                {
+                    _NewWinnerNumber = winner;
+                    this.contadorNumeroGanador++;
+                }
+                else
+                {
+                    this.contadorNumeroGanador++;
+                    if (this.contadorNumeroGanador > 1)
+                    {
+                        _haveNewWinner = true;
+                        _WinnerNumber = _NewWinnerNumber;
+                        _NewWinnerNumber = -1;
+                        contadorNumeroGanador = 0;
+                        currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                        this.contadorEstadoActual = 0;
+                    }
+                }
             }
         }
 
