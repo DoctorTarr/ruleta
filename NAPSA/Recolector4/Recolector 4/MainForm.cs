@@ -321,12 +321,12 @@ namespace VideoRecolector
 
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
 
-            for (int i = 0; i < 37; i++)
-            {
-                this.comboBox1.Items.Add(i.ToString());
-            }
-            this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
+            //for (int i = 0; i < 37; i++)
+            //{
+            //    this.comboBox1.Items.Add(i.ToString());
+            //}
+            //this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            //this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
 
             this.bDebouncedBallFound = RawKeyPressed();
             this.bBallStateChanged = true;
@@ -649,6 +649,47 @@ namespace VideoRecolector
 
         //Single-zero wheel 
         //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
+        private int[,] RouletteNumbers =
+        {
+           { 0, 2},
+           {32, 1},
+           {15, 0},
+           {19, 1},
+           { 4, 0},
+           {21, 1},
+           { 2, 0},
+           {25, 1},
+           {17, 0},
+           {34, 1},
+           { 6, 0},
+           {27, 1},
+           {13, 0},
+           {36, 1},
+           {11, 0},
+           {30, 1},
+           { 8, 0},
+           {23, 1},
+           {10, 0},
+           { 5, 1},
+           {24, 0},
+           {16, 1},
+           {33, 0},
+           { 1, 1},
+           {20, 0},
+           {14, 1},
+           {31, 0},
+           { 9, 1},
+           {22, 0},
+           {18, 1},
+           {29, 0},
+           { 7, 1},
+           {28, 0},
+           {12, 1},
+           {35, 0},
+           { 3, 1},
+           {26, 0},
+        };
+
         //Double-zero wheel 
         //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
         //Triple-zero wheel 
@@ -729,8 +770,8 @@ namespace VideoRecolector
         {
             int distance = int.Parse(this.tbAvgDist.Text);
             int angle = int.Parse(this.tbAvgAngle.Text);
-            NumbersByAngle[this.comboBox1.SelectedIndex, 0] = distance;
-            NumbersByAngle[this.comboBox1.SelectedIndex, 1] = angle;
+            //NumbersByAngle[this.comboBox1.SelectedIndex, 0] = distance;
+            //NumbersByAngle[this.comboBox1.SelectedIndex, 1] = angle;
         }
 
         private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)

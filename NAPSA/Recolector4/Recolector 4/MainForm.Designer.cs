@@ -235,7 +235,6 @@ namespace VideoRecolector
             this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.checkBox34 = new System.Windows.Forms.CheckBox();
             this.checkBox35 = new System.Windows.Forms.CheckBox();
@@ -281,6 +280,8 @@ namespace VideoRecolector
             this.tbAvgDist = new System.Windows.Forms.TextBox();
             this.btnSetNumber = new System.Windows.Forms.Button();
             this.btnSaveNumTable = new System.Windows.Forms.Button();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -765,7 +766,8 @@ namespace VideoRecolector
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.comboBox1);
+            this.groupBox4.Controls.Add(this.radioButton2);
+            this.groupBox4.Controls.Add(this.radioButton1);
             this.groupBox4.Controls.Add(this.checkBox36);
             this.groupBox4.Controls.Add(this.checkBox34);
             this.groupBox4.Controls.Add(this.checkBox35);
@@ -811,20 +813,12 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.tbAvgDist);
             this.groupBox4.Controls.Add(this.btnSetNumber);
             this.groupBox4.Controls.Add(this.btnSaveNumTable);
-            this.groupBox4.Location = new System.Drawing.Point(697, 112);
+            this.groupBox4.Location = new System.Drawing.Point(697, 75);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(85, 677);
             this.groupBox4.TabIndex = 62;
             this.groupBox4.TabStop = false;
             this.groupBox4.Visible = false;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(3, 54);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(76, 21);
-            this.comboBox1.TabIndex = 118;
             // 
             // checkBox36
             // 
@@ -1358,6 +1352,30 @@ namespace VideoRecolector
             this.btnSaveNumTable.UseVisualStyleBackColor = true;
             this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1.ForeColor = System.Drawing.Color.LimeGreen;
+            this.radioButton1.Location = new System.Drawing.Point(7, 54);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(32, 17);
+            this.radioButton1.TabIndex = 118;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "0";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(40, 54);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(31, 17);
+            this.radioButton2.TabIndex = 119;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "0";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1484,10 +1502,11 @@ namespace VideoRecolector
         private CheckBox checkBox27;
         private ContextMenuStrip mnuSystemTray;
         private ToolStripMenuItem cerrarToolStripMenuItem;
-        private ComboBox comboBox1;
         private Button btnAddToBoot;
         private Label lblWinner;
         private Label label15;
+        private RadioButton radioButton2;
+        private RadioButton radioButton1;
     }
 }
 
