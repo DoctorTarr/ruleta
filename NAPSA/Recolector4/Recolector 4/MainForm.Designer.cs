@@ -1507,6 +1507,7 @@ namespace VideoRecolector
         private Label label15;
         private RadioButton radioButton2;
         private RadioButton radioButton1;
+        private RadioButton[] btnArray; // Declaring array of Button
     }
 }
 
