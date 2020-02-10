@@ -203,7 +203,6 @@ namespace VideoRecolector
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.lblWinner = new System.Windows.Forms.Label();
-            this.btnAddToBoot = new System.Windows.Forms.Button();
             this.cbCalibrateNumbers = new System.Windows.Forms.CheckBox();
             this.txtWinner = new System.Windows.Forms.TextBox();
             this.lblFPS = new System.Windows.Forms.Label();
@@ -235,6 +234,13 @@ namespace VideoRecolector
             this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.lblAvgY = new System.Windows.Forms.Label();
+            this.lblAvgX = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.lblAvgAngle = new System.Windows.Forms.Label();
+            this.lblAvgDist = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.checkBox36 = new System.Windows.Forms.CheckBox();
             this.checkBox34 = new System.Windows.Forms.CheckBox();
             this.checkBox35 = new System.Windows.Forms.CheckBox();
@@ -253,6 +259,7 @@ namespace VideoRecolector
             this.checkBox20 = new System.Windows.Forms.CheckBox();
             this.checkBox21 = new System.Windows.Forms.CheckBox();
             this.checkBox18 = new System.Windows.Forms.CheckBox();
+            this.btnCalibrateNumber = new System.Windows.Forms.Button();
             this.checkBox19 = new System.Windows.Forms.CheckBox();
             this.checkBox17 = new System.Windows.Forms.CheckBox();
             this.checkBox16 = new System.Windows.Forms.CheckBox();
@@ -273,13 +280,9 @@ namespace VideoRecolector
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox0 = new System.Windows.Forms.CheckBox();
             this.lblTestCount = new System.Windows.Forms.Label();
-            this.btnCalibrateNumber = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.tbAvgAngle = new System.Windows.Forms.TextBox();
-            this.tbAvgDist = new System.Windows.Forms.TextBox();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.btnSaveNumTable = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -405,7 +408,6 @@ namespace VideoRecolector
             // 
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.lblWinner);
-            this.groupBox3.Controls.Add(this.btnAddToBoot);
             this.groupBox3.Controls.Add(this.cbCalibrateNumbers);
             this.groupBox3.Controls.Add(this.txtWinner);
             this.groupBox3.Controls.Add(this.lblFPS);
@@ -434,7 +436,7 @@ namespace VideoRecolector
             // 
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label15.Location = new System.Drawing.Point(495, 446);
+            this.label15.Location = new System.Drawing.Point(260, 467);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 63;
@@ -443,23 +445,13 @@ namespace VideoRecolector
             // lblWinner
             // 
             this.lblWinner.AutoSize = true;
+            this.lblWinner.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWinner.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblWinner.Location = new System.Drawing.Point(533, 446);
+            this.lblWinner.Location = new System.Drawing.Point(307, 467);
             this.lblWinner.Name = "lblWinner";
-            this.lblWinner.Size = new System.Drawing.Size(13, 13);
+            this.lblWinner.Size = new System.Drawing.Size(18, 16);
             this.lblWinner.TabIndex = 62;
             this.lblWinner.Text = "--";
-            // 
-            // btnAddToBoot
-            // 
-            this.btnAddToBoot.Location = new System.Drawing.Point(11, 457);
-            this.btnAddToBoot.Name = "btnAddToBoot";
-            this.btnAddToBoot.Size = new System.Drawing.Size(97, 23);
-            this.btnAddToBoot.TabIndex = 61;
-            this.btnAddToBoot.Text = "Agregar al Inicio";
-            this.btnAddToBoot.UseVisualStyleBackColor = true;
-            this.btnAddToBoot.Visible = false;
-            this.btnAddToBoot.Click += new System.EventHandler(this.button1_Click);
             // 
             // cbCalibrateNumbers
             // 
@@ -481,13 +473,14 @@ namespace VideoRecolector
             this.txtWinner.Name = "txtWinner";
             this.txtWinner.Size = new System.Drawing.Size(117, 31);
             this.txtWinner.TabIndex = 59;
+            this.txtWinner.Text = "---";
             this.txtWinner.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lblFPS
             // 
             this.lblFPS.AutoSize = true;
             this.lblFPS.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblFPS.Location = new System.Drawing.Point(114, 462);
+            this.lblFPS.Location = new System.Drawing.Point(176, 426);
             this.lblFPS.Name = "lblFPS";
             this.lblFPS.Size = new System.Drawing.Size(21, 13);
             this.lblFPS.TabIndex = 58;
@@ -533,7 +526,7 @@ namespace VideoRecolector
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label11.Location = new System.Drawing.Point(167, 467);
+            this.label11.Location = new System.Drawing.Point(8, 467);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(75, 13);
             this.label11.TabIndex = 55;
@@ -566,9 +559,9 @@ namespace VideoRecolector
             // 
             this.textBox5.Enabled = false;
             this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(246, 462);
+            this.textBox5.Location = new System.Drawing.Point(89, 462);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(145, 22);
+            this.textBox5.Size = new System.Drawing.Size(165, 22);
             this.textBox5.TabIndex = 54;
             // 
             // textBox4
@@ -653,7 +646,7 @@ namespace VideoRecolector
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label4.Location = new System.Drawing.Point(100, 21);
+            this.label4.Location = new System.Drawing.Point(100, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 28;
@@ -727,10 +720,10 @@ namespace VideoRecolector
             this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProtocolo.Location = new System.Drawing.Point(698, 12);
+            this.txtProtocolo.Location = new System.Drawing.Point(698, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(84, 57);
+            this.txtProtocolo.Size = new System.Drawing.Size(78, 76);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -764,6 +757,13 @@ namespace VideoRecolector
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.lblAvgY);
+            this.groupBox4.Controls.Add(this.lblAvgX);
+            this.groupBox4.Controls.Add(this.label18);
+            this.groupBox4.Controls.Add(this.label19);
+            this.groupBox4.Controls.Add(this.lblAvgAngle);
+            this.groupBox4.Controls.Add(this.lblAvgDist);
+            this.groupBox4.Controls.Add(this.comboBox1);
             this.groupBox4.Controls.Add(this.checkBox36);
             this.groupBox4.Controls.Add(this.checkBox34);
             this.groupBox4.Controls.Add(this.checkBox35);
@@ -782,6 +782,7 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.checkBox20);
             this.groupBox4.Controls.Add(this.checkBox21);
             this.groupBox4.Controls.Add(this.checkBox18);
+            this.groupBox4.Controls.Add(this.btnCalibrateNumber);
             this.groupBox4.Controls.Add(this.checkBox19);
             this.groupBox4.Controls.Add(this.checkBox17);
             this.groupBox4.Controls.Add(this.checkBox16);
@@ -802,13 +803,9 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.checkBox1);
             this.groupBox4.Controls.Add(this.checkBox0);
             this.groupBox4.Controls.Add(this.lblTestCount);
-            this.groupBox4.Controls.Add(this.btnCalibrateNumber);
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label12);
-            this.groupBox4.Controls.Add(this.tbAvgAngle);
-            this.groupBox4.Controls.Add(this.tbAvgDist);
             this.groupBox4.Controls.Add(this.btnSetNumber);
-            this.groupBox4.Controls.Add(this.btnSaveNumTable);
             this.groupBox4.Location = new System.Drawing.Point(697, 75);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(85, 677);
@@ -816,12 +813,88 @@ namespace VideoRecolector
             this.groupBox4.TabStop = false;
             this.groupBox4.Visible = false;
             // 
+            // lblAvgY
+            // 
+            this.lblAvgY.AutoSize = true;
+            this.lblAvgY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvgY.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblAvgY.Location = new System.Drawing.Point(26, 120);
+            this.lblAvgY.Name = "lblAvgY";
+            this.lblAvgY.Size = new System.Drawing.Size(19, 13);
+            this.lblAvgY.TabIndex = 124;
+            this.lblAvgY.Text = "---";
+            this.lblAvgY.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblAvgX
+            // 
+            this.lblAvgX.AutoSize = true;
+            this.lblAvgX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvgX.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblAvgX.Location = new System.Drawing.Point(26, 107);
+            this.lblAvgX.Name = "lblAvgX";
+            this.lblAvgX.Size = new System.Drawing.Size(19, 13);
+            this.lblAvgX.TabIndex = 123;
+            this.lblAvgX.Text = "---";
+            this.lblAvgX.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label18.Location = new System.Drawing.Point(7, 120);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(17, 13);
+            this.label18.TabIndex = 122;
+            this.label18.Text = "Y:";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label19.Location = new System.Drawing.Point(7, 107);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(17, 13);
+            this.label19.TabIndex = 121;
+            this.label19.Text = "X:";
+            // 
+            // lblAvgAngle
+            // 
+            this.lblAvgAngle.AutoSize = true;
+            this.lblAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvgAngle.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblAvgAngle.Location = new System.Drawing.Point(25, 94);
+            this.lblAvgAngle.Name = "lblAvgAngle";
+            this.lblAvgAngle.Size = new System.Drawing.Size(19, 13);
+            this.lblAvgAngle.TabIndex = 120;
+            this.lblAvgAngle.Text = "---";
+            this.lblAvgAngle.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // lblAvgDist
+            // 
+            this.lblAvgDist.AutoSize = true;
+            this.lblAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAvgDist.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblAvgDist.Location = new System.Drawing.Point(25, 81);
+            this.lblAvgDist.Name = "lblAvgDist";
+            this.lblAvgDist.Size = new System.Drawing.Size(19, 13);
+            this.lblAvgDist.TabIndex = 119;
+            this.lblAvgDist.Text = "---";
+            this.lblAvgDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(4, 11);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(73, 21);
+            this.comboBox1.TabIndex = 118;
+            // 
             // checkBox36
             // 
             this.checkBox36.AutoSize = true;
             this.checkBox36.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox36.ForeColor = System.Drawing.Color.Black;
-            this.checkBox36.Location = new System.Drawing.Point(3, 654);
+            this.checkBox36.Location = new System.Drawing.Point(6, 596);
             this.checkBox36.Name = "checkBox36";
             this.checkBox36.Size = new System.Drawing.Size(40, 17);
             this.checkBox36.TabIndex = 117;
@@ -833,7 +906,7 @@ namespace VideoRecolector
             this.checkBox34.AutoSize = true;
             this.checkBox34.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox34.ForeColor = System.Drawing.Color.Red;
-            this.checkBox34.Location = new System.Drawing.Point(41, 633);
+            this.checkBox34.Location = new System.Drawing.Point(44, 575);
             this.checkBox34.Name = "checkBox34";
             this.checkBox34.Size = new System.Drawing.Size(33, 17);
             this.checkBox34.TabIndex = 116;
@@ -845,7 +918,7 @@ namespace VideoRecolector
             this.checkBox35.AutoSize = true;
             this.checkBox35.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox35.ForeColor = System.Drawing.Color.Black;
-            this.checkBox35.Location = new System.Drawing.Point(3, 633);
+            this.checkBox35.Location = new System.Drawing.Point(6, 575);
             this.checkBox35.Name = "checkBox35";
             this.checkBox35.Size = new System.Drawing.Size(40, 17);
             this.checkBox35.TabIndex = 115;
@@ -857,7 +930,7 @@ namespace VideoRecolector
             this.checkBox32.AutoSize = true;
             this.checkBox32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox32.ForeColor = System.Drawing.Color.Red;
-            this.checkBox32.Location = new System.Drawing.Point(40, 611);
+            this.checkBox32.Location = new System.Drawing.Point(43, 553);
             this.checkBox32.Name = "checkBox32";
             this.checkBox32.Size = new System.Drawing.Size(40, 17);
             this.checkBox32.TabIndex = 114;
@@ -869,7 +942,7 @@ namespace VideoRecolector
             this.checkBox33.AutoSize = true;
             this.checkBox33.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox33.ForeColor = System.Drawing.Color.Black;
-            this.checkBox33.Location = new System.Drawing.Point(3, 611);
+            this.checkBox33.Location = new System.Drawing.Point(6, 553);
             this.checkBox33.Name = "checkBox33";
             this.checkBox33.Size = new System.Drawing.Size(40, 17);
             this.checkBox33.TabIndex = 113;
@@ -881,7 +954,7 @@ namespace VideoRecolector
             this.checkBox30.AutoSize = true;
             this.checkBox30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox30.ForeColor = System.Drawing.Color.Red;
-            this.checkBox30.Location = new System.Drawing.Point(40, 588);
+            this.checkBox30.Location = new System.Drawing.Point(43, 530);
             this.checkBox30.Name = "checkBox30";
             this.checkBox30.Size = new System.Drawing.Size(33, 17);
             this.checkBox30.TabIndex = 112;
@@ -893,7 +966,7 @@ namespace VideoRecolector
             this.checkBox31.AutoSize = true;
             this.checkBox31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox31.ForeColor = System.Drawing.Color.Black;
-            this.checkBox31.Location = new System.Drawing.Point(3, 588);
+            this.checkBox31.Location = new System.Drawing.Point(6, 530);
             this.checkBox31.Name = "checkBox31";
             this.checkBox31.Size = new System.Drawing.Size(40, 17);
             this.checkBox31.TabIndex = 111;
@@ -905,7 +978,7 @@ namespace VideoRecolector
             this.checkBox28.AutoSize = true;
             this.checkBox28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox28.ForeColor = System.Drawing.Color.Red;
-            this.checkBox28.Location = new System.Drawing.Point(40, 565);
+            this.checkBox28.Location = new System.Drawing.Point(43, 507);
             this.checkBox28.Name = "checkBox28";
             this.checkBox28.Size = new System.Drawing.Size(40, 17);
             this.checkBox28.TabIndex = 110;
@@ -917,7 +990,7 @@ namespace VideoRecolector
             this.checkBox29.AutoSize = true;
             this.checkBox29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox29.ForeColor = System.Drawing.Color.Black;
-            this.checkBox29.Location = new System.Drawing.Point(3, 565);
+            this.checkBox29.Location = new System.Drawing.Point(6, 507);
             this.checkBox29.Name = "checkBox29";
             this.checkBox29.Size = new System.Drawing.Size(40, 17);
             this.checkBox29.TabIndex = 109;
@@ -929,7 +1002,7 @@ namespace VideoRecolector
             this.checkBox26.AutoSize = true;
             this.checkBox26.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox26.ForeColor = System.Drawing.Color.Red;
-            this.checkBox26.Location = new System.Drawing.Point(40, 542);
+            this.checkBox26.Location = new System.Drawing.Point(43, 484);
             this.checkBox26.Name = "checkBox26";
             this.checkBox26.Size = new System.Drawing.Size(33, 17);
             this.checkBox26.TabIndex = 108;
@@ -941,7 +1014,7 @@ namespace VideoRecolector
             this.checkBox27.AutoSize = true;
             this.checkBox27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox27.ForeColor = System.Drawing.Color.Black;
-            this.checkBox27.Location = new System.Drawing.Point(3, 542);
+            this.checkBox27.Location = new System.Drawing.Point(6, 484);
             this.checkBox27.Name = "checkBox27";
             this.checkBox27.Size = new System.Drawing.Size(40, 17);
             this.checkBox27.TabIndex = 107;
@@ -953,7 +1026,7 @@ namespace VideoRecolector
             this.checkBox24.AutoSize = true;
             this.checkBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox24.ForeColor = System.Drawing.Color.Red;
-            this.checkBox24.Location = new System.Drawing.Point(41, 519);
+            this.checkBox24.Location = new System.Drawing.Point(44, 461);
             this.checkBox24.Name = "checkBox24";
             this.checkBox24.Size = new System.Drawing.Size(40, 17);
             this.checkBox24.TabIndex = 106;
@@ -965,7 +1038,7 @@ namespace VideoRecolector
             this.checkBox25.AutoSize = true;
             this.checkBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox25.ForeColor = System.Drawing.Color.Black;
-            this.checkBox25.Location = new System.Drawing.Point(4, 519);
+            this.checkBox25.Location = new System.Drawing.Point(7, 461);
             this.checkBox25.Name = "checkBox25";
             this.checkBox25.Size = new System.Drawing.Size(40, 17);
             this.checkBox25.TabIndex = 105;
@@ -977,7 +1050,7 @@ namespace VideoRecolector
             this.checkBox22.AutoSize = true;
             this.checkBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox22.ForeColor = System.Drawing.Color.Red;
-            this.checkBox22.Location = new System.Drawing.Point(41, 496);
+            this.checkBox22.Location = new System.Drawing.Point(44, 438);
             this.checkBox22.Name = "checkBox22";
             this.checkBox22.Size = new System.Drawing.Size(33, 17);
             this.checkBox22.TabIndex = 104;
@@ -989,7 +1062,7 @@ namespace VideoRecolector
             this.checkBox23.AutoSize = true;
             this.checkBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox23.ForeColor = System.Drawing.Color.Black;
-            this.checkBox23.Location = new System.Drawing.Point(4, 496);
+            this.checkBox23.Location = new System.Drawing.Point(7, 438);
             this.checkBox23.Name = "checkBox23";
             this.checkBox23.Size = new System.Drawing.Size(40, 17);
             this.checkBox23.TabIndex = 103;
@@ -1001,7 +1074,7 @@ namespace VideoRecolector
             this.checkBox20.AutoSize = true;
             this.checkBox20.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox20.ForeColor = System.Drawing.Color.Red;
-            this.checkBox20.Location = new System.Drawing.Point(41, 473);
+            this.checkBox20.Location = new System.Drawing.Point(44, 415);
             this.checkBox20.Name = "checkBox20";
             this.checkBox20.Size = new System.Drawing.Size(40, 17);
             this.checkBox20.TabIndex = 102;
@@ -1013,7 +1086,7 @@ namespace VideoRecolector
             this.checkBox21.AutoSize = true;
             this.checkBox21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox21.ForeColor = System.Drawing.Color.Black;
-            this.checkBox21.Location = new System.Drawing.Point(4, 473);
+            this.checkBox21.Location = new System.Drawing.Point(7, 415);
             this.checkBox21.Name = "checkBox21";
             this.checkBox21.Size = new System.Drawing.Size(40, 17);
             this.checkBox21.TabIndex = 101;
@@ -1025,19 +1098,32 @@ namespace VideoRecolector
             this.checkBox18.AutoSize = true;
             this.checkBox18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox18.ForeColor = System.Drawing.Color.Red;
-            this.checkBox18.Location = new System.Drawing.Point(41, 450);
+            this.checkBox18.Location = new System.Drawing.Point(44, 392);
             this.checkBox18.Name = "checkBox18";
             this.checkBox18.Size = new System.Drawing.Size(33, 17);
             this.checkBox18.TabIndex = 100;
             this.checkBox18.Text = "5";
             this.checkBox18.UseVisualStyleBackColor = true;
             // 
+            // btnCalibrateNumber
+            // 
+            this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
+            this.btnCalibrateNumber.Location = new System.Drawing.Point(4, 51);
+            this.btnCalibrateNumber.Name = "btnCalibrateNumber";
+            this.btnCalibrateNumber.Size = new System.Drawing.Size(73, 27);
+            this.btnCalibrateNumber.TabIndex = 69;
+            this.btnCalibrateNumber.Text = "Calibrar";
+            this.btnCalibrateNumber.UseVisualStyleBackColor = true;
+            this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
+            // 
             // checkBox19
             // 
             this.checkBox19.AutoSize = true;
             this.checkBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox19.ForeColor = System.Drawing.Color.Black;
-            this.checkBox19.Location = new System.Drawing.Point(4, 450);
+            this.checkBox19.Location = new System.Drawing.Point(7, 392);
             this.checkBox19.Name = "checkBox19";
             this.checkBox19.Size = new System.Drawing.Size(40, 17);
             this.checkBox19.TabIndex = 99;
@@ -1049,7 +1135,7 @@ namespace VideoRecolector
             this.checkBox17.AutoSize = true;
             this.checkBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox17.ForeColor = System.Drawing.Color.Red;
-            this.checkBox17.Location = new System.Drawing.Point(41, 427);
+            this.checkBox17.Location = new System.Drawing.Point(44, 369);
             this.checkBox17.Name = "checkBox17";
             this.checkBox17.Size = new System.Drawing.Size(40, 17);
             this.checkBox17.TabIndex = 98;
@@ -1061,7 +1147,7 @@ namespace VideoRecolector
             this.checkBox16.AutoSize = true;
             this.checkBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox16.ForeColor = System.Drawing.Color.Black;
-            this.checkBox16.Location = new System.Drawing.Point(3, 427);
+            this.checkBox16.Location = new System.Drawing.Point(6, 369);
             this.checkBox16.Name = "checkBox16";
             this.checkBox16.Size = new System.Drawing.Size(33, 17);
             this.checkBox16.TabIndex = 97;
@@ -1073,7 +1159,7 @@ namespace VideoRecolector
             this.checkBox15.AutoSize = true;
             this.checkBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox15.ForeColor = System.Drawing.Color.Red;
-            this.checkBox15.Location = new System.Drawing.Point(41, 404);
+            this.checkBox15.Location = new System.Drawing.Point(44, 346);
             this.checkBox15.Name = "checkBox15";
             this.checkBox15.Size = new System.Drawing.Size(40, 17);
             this.checkBox15.TabIndex = 96;
@@ -1085,7 +1171,7 @@ namespace VideoRecolector
             this.checkBox14.AutoSize = true;
             this.checkBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox14.ForeColor = System.Drawing.Color.Black;
-            this.checkBox14.Location = new System.Drawing.Point(4, 404);
+            this.checkBox14.Location = new System.Drawing.Point(7, 346);
             this.checkBox14.Name = "checkBox14";
             this.checkBox14.Size = new System.Drawing.Size(40, 17);
             this.checkBox14.TabIndex = 95;
@@ -1097,7 +1183,7 @@ namespace VideoRecolector
             this.checkBox13.AutoSize = true;
             this.checkBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox13.ForeColor = System.Drawing.Color.Red;
-            this.checkBox13.Location = new System.Drawing.Point(41, 378);
+            this.checkBox13.Location = new System.Drawing.Point(44, 320);
             this.checkBox13.Name = "checkBox13";
             this.checkBox13.Size = new System.Drawing.Size(40, 17);
             this.checkBox13.TabIndex = 94;
@@ -1109,7 +1195,7 @@ namespace VideoRecolector
             this.checkBox12.AutoSize = true;
             this.checkBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox12.ForeColor = System.Drawing.Color.Black;
-            this.checkBox12.Location = new System.Drawing.Point(4, 381);
+            this.checkBox12.Location = new System.Drawing.Point(7, 323);
             this.checkBox12.Name = "checkBox12";
             this.checkBox12.Size = new System.Drawing.Size(40, 17);
             this.checkBox12.TabIndex = 93;
@@ -1121,7 +1207,7 @@ namespace VideoRecolector
             this.checkBox11.AutoSize = true;
             this.checkBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox11.ForeColor = System.Drawing.Color.Red;
-            this.checkBox11.Location = new System.Drawing.Point(40, 358);
+            this.checkBox11.Location = new System.Drawing.Point(43, 300);
             this.checkBox11.Name = "checkBox11";
             this.checkBox11.Size = new System.Drawing.Size(40, 17);
             this.checkBox11.TabIndex = 92;
@@ -1133,7 +1219,7 @@ namespace VideoRecolector
             this.checkBox10.AutoSize = true;
             this.checkBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox10.ForeColor = System.Drawing.Color.Black;
-            this.checkBox10.Location = new System.Drawing.Point(3, 360);
+            this.checkBox10.Location = new System.Drawing.Point(6, 302);
             this.checkBox10.Name = "checkBox10";
             this.checkBox10.Size = new System.Drawing.Size(33, 17);
             this.checkBox10.TabIndex = 91;
@@ -1145,7 +1231,7 @@ namespace VideoRecolector
             this.checkBox9.AutoSize = true;
             this.checkBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox9.ForeColor = System.Drawing.Color.Red;
-            this.checkBox9.Location = new System.Drawing.Point(41, 335);
+            this.checkBox9.Location = new System.Drawing.Point(44, 277);
             this.checkBox9.Name = "checkBox9";
             this.checkBox9.Size = new System.Drawing.Size(40, 17);
             this.checkBox9.TabIndex = 90;
@@ -1157,7 +1243,7 @@ namespace VideoRecolector
             this.checkBox8.AutoSize = true;
             this.checkBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox8.ForeColor = System.Drawing.Color.Black;
-            this.checkBox8.Location = new System.Drawing.Point(3, 337);
+            this.checkBox8.Location = new System.Drawing.Point(6, 279);
             this.checkBox8.Name = "checkBox8";
             this.checkBox8.Size = new System.Drawing.Size(40, 17);
             this.checkBox8.TabIndex = 89;
@@ -1169,7 +1255,7 @@ namespace VideoRecolector
             this.checkBox7.AutoSize = true;
             this.checkBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox7.ForeColor = System.Drawing.Color.Red;
-            this.checkBox7.Location = new System.Drawing.Point(41, 312);
+            this.checkBox7.Location = new System.Drawing.Point(44, 254);
             this.checkBox7.Name = "checkBox7";
             this.checkBox7.Size = new System.Drawing.Size(40, 17);
             this.checkBox7.TabIndex = 88;
@@ -1181,7 +1267,7 @@ namespace VideoRecolector
             this.checkBox6.AutoSize = true;
             this.checkBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox6.ForeColor = System.Drawing.Color.Black;
-            this.checkBox6.Location = new System.Drawing.Point(3, 314);
+            this.checkBox6.Location = new System.Drawing.Point(6, 256);
             this.checkBox6.Name = "checkBox6";
             this.checkBox6.Size = new System.Drawing.Size(33, 17);
             this.checkBox6.TabIndex = 87;
@@ -1193,7 +1279,7 @@ namespace VideoRecolector
             this.checkBox5.AutoSize = true;
             this.checkBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox5.ForeColor = System.Drawing.Color.Red;
-            this.checkBox5.Location = new System.Drawing.Point(41, 289);
+            this.checkBox5.Location = new System.Drawing.Point(44, 231);
             this.checkBox5.Name = "checkBox5";
             this.checkBox5.Size = new System.Drawing.Size(40, 17);
             this.checkBox5.TabIndex = 86;
@@ -1205,7 +1291,7 @@ namespace VideoRecolector
             this.checkBox4.AutoSize = true;
             this.checkBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox4.ForeColor = System.Drawing.Color.Black;
-            this.checkBox4.Location = new System.Drawing.Point(3, 289);
+            this.checkBox4.Location = new System.Drawing.Point(6, 231);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(33, 17);
             this.checkBox4.TabIndex = 85;
@@ -1217,7 +1303,7 @@ namespace VideoRecolector
             this.checkBox3.AutoSize = true;
             this.checkBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox3.ForeColor = System.Drawing.Color.Red;
-            this.checkBox3.Location = new System.Drawing.Point(41, 266);
+            this.checkBox3.Location = new System.Drawing.Point(44, 208);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(40, 17);
             this.checkBox3.TabIndex = 84;
@@ -1229,7 +1315,7 @@ namespace VideoRecolector
             this.checkBox2.AutoSize = true;
             this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox2.ForeColor = System.Drawing.Color.Black;
-            this.checkBox2.Location = new System.Drawing.Point(3, 266);
+            this.checkBox2.Location = new System.Drawing.Point(6, 208);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(40, 17);
             this.checkBox2.TabIndex = 83;
@@ -1241,7 +1327,7 @@ namespace VideoRecolector
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox1.ForeColor = System.Drawing.Color.Red;
-            this.checkBox1.Location = new System.Drawing.Point(41, 243);
+            this.checkBox1.Location = new System.Drawing.Point(44, 185);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(40, 17);
             this.checkBox1.TabIndex = 82;
@@ -1253,7 +1339,7 @@ namespace VideoRecolector
             this.checkBox0.AutoSize = true;
             this.checkBox0.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox0.ForeColor = System.Drawing.Color.LimeGreen;
-            this.checkBox0.Location = new System.Drawing.Point(3, 243);
+            this.checkBox0.Location = new System.Drawing.Point(6, 185);
             this.checkBox0.Name = "checkBox0";
             this.checkBox0.Size = new System.Drawing.Size(33, 17);
             this.checkBox0.TabIndex = 81;
@@ -1265,30 +1351,17 @@ namespace VideoRecolector
             // 
             this.lblTestCount.AutoSize = true;
             this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(63, 183);
+            this.lblTestCount.Location = new System.Drawing.Point(60, 35);
             this.lblTestCount.Name = "lblTestCount";
             this.lblTestCount.Size = new System.Drawing.Size(13, 13);
             this.lblTestCount.TabIndex = 70;
             this.lblTestCount.Text = "0";
             // 
-            // btnCalibrateNumber
-            // 
-            this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnCalibrateNumber.Location = new System.Drawing.Point(6, 107);
-            this.btnCalibrateNumber.Name = "btnCalibrateNumber";
-            this.btnCalibrateNumber.Size = new System.Drawing.Size(73, 38);
-            this.btnCalibrateNumber.TabIndex = 69;
-            this.btnCalibrateNumber.Text = "Calibrar Numero";
-            this.btnCalibrateNumber.UseVisualStyleBackColor = true;
-            this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
-            // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label13.Location = new System.Drawing.Point(4, 84);
+            this.label13.Location = new System.Drawing.Point(7, 94);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(17, 13);
             this.label13.TabIndex = 68;
@@ -1298,62 +1371,31 @@ namespace VideoRecolector
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label12.Location = new System.Drawing.Point(3, 59);
+            this.label12.Location = new System.Drawing.Point(6, 81);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(18, 13);
             this.label12.TabIndex = 67;
             this.label12.Text = "D:";
-            // 
-            // tbAvgAngle
-            // 
-            this.tbAvgAngle.Enabled = false;
-            this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgAngle.Location = new System.Drawing.Point(26, 79);
-            this.tbAvgAngle.Name = "tbAvgAngle";
-            this.tbAvgAngle.Size = new System.Drawing.Size(53, 22);
-            this.tbAvgAngle.TabIndex = 66;
-            // 
-            // tbAvgDist
-            // 
-            this.tbAvgDist.Enabled = false;
-            this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgDist.Location = new System.Drawing.Point(26, 54);
-            this.tbAvgDist.Name = "tbAvgDist";
-            this.tbAvgDist.Size = new System.Drawing.Size(53, 22);
-            this.tbAvgDist.TabIndex = 65;
             // 
             // btnSetNumber
             // 
             this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnSetNumber.Location = new System.Drawing.Point(5, 199);
+            this.btnSetNumber.Location = new System.Drawing.Point(6, 141);
             this.btnSetNumber.Name = "btnSetNumber";
             this.btnSetNumber.Size = new System.Drawing.Size(74, 38);
             this.btnSetNumber.TabIndex = 64;
-            this.btnSetNumber.Text = "Guardar Numero";
+            this.btnSetNumber.Text = "Guardar Calibracion";
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
-            // 
-            // btnSaveNumTable
-            // 
-            this.btnSaveNumTable.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnSaveNumTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSaveNumTable.ForeColor = System.Drawing.Color.Black;
-            this.btnSaveNumTable.Location = new System.Drawing.Point(3, 10);
-            this.btnSaveNumTable.Name = "btnSaveNumTable";
-            this.btnSaveNumTable.Size = new System.Drawing.Size(76, 38);
-            this.btnSaveNumTable.TabIndex = 62;
-            this.btnSaveNumTable.Text = "Guardar Tabla";
-            this.btnSaveNumTable.UseVisualStyleBackColor = true;
-            this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
-            this.ClientSize = new System.Drawing.Size(791, 749);
+            this.ClientSize = new System.Drawing.Size(791, 759);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtProtocolo);
@@ -1429,10 +1471,7 @@ namespace VideoRecolector
         private Button btnCalibrateNumber;
         private Label label13;
         private Label label12;
-        private TextBox tbAvgAngle;
-        private TextBox tbAvgDist;
         private Button btnSetNumber;
-        private Button btnSaveNumTable;
         private TextBox txtWinner;
         private CheckBox cbCalibrateNumbers;
         private CheckBox checkBox17;
@@ -1474,10 +1513,16 @@ namespace VideoRecolector
         private CheckBox checkBox27;
         private ContextMenuStrip mnuSystemTray;
         private ToolStripMenuItem cerrarToolStripMenuItem;
-        private Button btnAddToBoot;
         private Label lblWinner;
         private Label label15;
-        private RadioButton[] btnArray; // Declaring array of Button
+        //private CheckBox[] chkbNumbers; // Declaring array of Button
+        private ComboBox comboBox1;
+        private Label lblAvgAngle;
+        private Label lblAvgDist;
+        private Label lblAvgY;
+        private Label lblAvgX;
+        private Label label18;
+        private Label label19;
     }
 }
 

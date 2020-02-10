@@ -130,27 +130,24 @@ namespace VideoRecolector
             if (cbCalibrateCamera.Checked)
             {
                 this._calibrateFlag = true;
-                this.btnAddToBoot.Visible = true;
                 this.lblFPS.Visible = true;
             }
             else
             {
                 this._calibrateFlag = false;
-                this.btnAddToBoot.Visible = false;
-                this.btnSaveNumTable.Visible = false;
                 this.groupBox4.Visible = false;
                 this.lblFPS.Visible = false;
             }
         }
 
-        public void AddApplicationToStartup()
-        {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-            {
-                key.SetValue(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "\"" + Application.ExecutablePath + "\"");
-                MessageBox.Show("Agregado al arranque");
-            }
-        }
+        //public void AddApplicationToStartup()
+        //{
+        //    using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
+        //    {
+        //        key.SetValue(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "\"" + Application.ExecutablePath + "\"");
+        //        MessageBox.Show("Agregado al arranque");
+        //    }
+        //}
 
 
         private void btnIniciarDemo_Click(object sender, EventArgs e)
@@ -192,6 +189,8 @@ namespace VideoRecolector
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
                 tbVideoStatus.Text = "ON";
+                this.bDebouncedBallFound = RawBallFound();
+                this.bBallStateChanged = true;
             }
             catch (Exception ex)
             {
@@ -219,7 +218,8 @@ namespace VideoRecolector
                 tbZeroPosX.Text = "";
                 tbZeroPosY.Text = "";
                 lblBallOn.Text = "";
-                bDebouncedBallFound = false;
+                this.bDebouncedBallFound = false;
+                this.bBallStateChanged = true;
                 this._rpm = 0;
                 _isMoving = false;
                 this._WinnerNumber = -1;
@@ -321,15 +321,13 @@ namespace VideoRecolector
 
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
 
-            //for (int i = 0; i < 37; i++)
-            //{
-            //    this.comboBox1.Items.Add(i.ToString());
-            //}
-            //this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            //this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
+            for (int i = 0; i < 37; i++)
+            {
+                this.comboBox1.Items.Add(RouletteNumbers[i,0].ToString());
+            }
+            this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
 
-            this.bDebouncedBallFound = RawKeyPressed();
-            this.bBallStateChanged = true;
 
         }
 
@@ -338,7 +336,7 @@ namespace VideoRecolector
         const int RELEASE_MSEC = 400; // Stable time before registering released
 
         // This function reads the key state from the hardware.
-        bool RawKeyPressed()
+        bool RawBallFound()
         {
             return _ballPocketsArea.Contains(BallPos);
         }
@@ -346,29 +344,26 @@ namespace VideoRecolector
 
         // Service routine called every CHECK_MSEC to
         // debounce both edges
-        void DebounceSwitch1(ref bool Key_changed, ref bool Key_pressed)
+        void DebounceSwitch1()
         {
-            bool DebouncedKeyPress = this.bDebouncedBallFound;
-            bool RawState = RawKeyPressed();
-            Key_changed = false;
-            Key_pressed = DebouncedKeyPress;
-            if (RawState == DebouncedKeyPress)
+            bool RawState = RawBallFound();
+            this.bBallStateChanged = false;
+            if (RawState == this.bDebouncedBallFound)
             {
                 // Set the timer which allows a change from current state.
-                if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                 else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
             }
             else
             {
                 // Key has changed - wait for new state to become stable.
-                if (--this.iBallUnchangeCount == 0)
+                if (--this.iBallUnchangeCount <= 0)
                 {
                     // Timer expired - accept the change.
-                    DebouncedKeyPress = RawState;
-                    Key_changed = true;
-                    Key_pressed = DebouncedKeyPress;
+                    this.bDebouncedBallFound = RawState;
+                    this.bBallStateChanged = false;
                     // And reset the timer.
-                    if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                    if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                     else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
                 }
             }
@@ -433,26 +428,21 @@ namespace VideoRecolector
                 // 		314, 175
                 //241, 246        381,246
                 //      314, 314
-                DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
+                DebounceSwitch1();
                 _Angle = GetAngleOfPointToZero(BallPosToCenter);
                 textBox2.Text = _Angle.ToString();
                 if (this.bDebouncedBallFound)
                 {
                     _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
                     textBox1.Text = _Distance.ToString();
-
-                }
-
-                if (this.bBallStateChanged)
-                {
                     lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                    if(!this.bDebouncedBallFound)
+                    if (!this.bDebouncedBallFound)
                     {
                         winner = -1;
                         lblWinner.Text = "";
                     }
-                }
 
+                }
 
                 if (Math.Abs(ZeroAngleToCenter-90) < 2)
                 {
@@ -694,7 +684,12 @@ namespace VideoRecolector
         //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
         //Triple-zero wheel 
         //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        private int[,] NumbersByAngle;
+
+        // Numbers by Angle
+        private int[,] NumbersByDistAngle;
+
+        // Numbers by Coordinates XY
+        private int[,] NumbersByXY;
 
         private readonly double radian = 180.0F / (float)Math.PI;
 
@@ -706,8 +701,8 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByAngle[i, 0] - distance) < 3) &&
-                    (Math.Abs(NumbersByAngle[i, 1] - angle) < 3))
+                if ((Math.Abs(NumbersByDistAngle[i, 0] - distance) < 3) &&
+                    (Math.Abs(NumbersByDistAngle[i, 1] - angle) < 3))
                 {
                     winner = i;
                     break;
@@ -716,6 +711,24 @@ namespace VideoRecolector
 
             return winner;
         }
+
+        private int FindNumberByXY(System.Drawing.Point ballXY)
+        {
+            int winner = -1;
+
+            for (int i = 0; i < 37; i++)
+            {
+                if ((Math.Abs(NumbersByXY[i, 0] - ballXY.X) < 3) &&
+                    (Math.Abs(NumbersByXY[i, 1] - ballXY.Y) < 3))
+                {
+                    winner = i;
+                    break;
+                }
+            }
+
+            return winner;
+        }
+
         #endregion
 
         #region Game state handling
@@ -738,11 +751,6 @@ namespace VideoRecolector
             while (!(now.AddMinutes(1.0) < DateTime.Now));
         }
 
-        private void btnSaveNumTable_Click(object sender, EventArgs e)
-        {
-            WriteNumbersTable();
-        }
-
         private void btnCalibrateNumber_Click(object sender, EventArgs e)
         {
             int acumDist = 0;
@@ -757,21 +765,54 @@ namespace VideoRecolector
                 count++;
                 acumDist += this._Distance;
                 averageDist = acumDist / count;
-                this.tbAvgDist.Text = averageDist.ToString();
+                this.lblAvgDist.Text = averageDist.ToString();
 
                 acumAngle += this._Angle;
                 averageAngle = acumAngle / count;
-                this.tbAvgAngle.Text = averageAngle.ToString();
+                this.lblAvgAngle.Text = averageAngle.ToString();
                 this.lblTestCount.Text = count.ToString();
+
+                this.lblAvgX.Text = this.BallPosToCenter.X.ToString();
+                this.lblAvgY.Text = this.BallPosToCenter.Y.ToString();
             }
         }
 
         private void btnSetNumber_Click(object sender, EventArgs e)
         {
-            int distance = int.Parse(this.tbAvgDist.Text);
-            int angle = int.Parse(this.tbAvgAngle.Text);
-            //NumbersByAngle[this.comboBox1.SelectedIndex, 0] = distance;
-            //NumbersByAngle[this.comboBox1.SelectedIndex, 1] = angle;
+            int num = int.Parse(this.comboBox1.SelectedItem.ToString());
+            int distance = int.Parse(this.lblAvgDist.Text);
+            int angle = int.Parse(this.lblAvgAngle.Text);
+
+            // Check if distance and angle values are already assigned to another number
+            int winner = FindNumberByAngle(distance, angle);
+            if ((winner != -1) && (winner != num))
+            {
+                DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    MessageBox.Show("Seleccione otro numero");
+                    return; // Do not update
+                }
+            }
+            NumbersByDistAngle[num, 0] = distance;
+            NumbersByDistAngle[num, 1] = angle;
+
+            // Check if X and Y values are already assigned to another number
+            winner = FindNumberByXY(BallPosToCenter);
+            if ((winner != -1) && (winner != num))
+            {
+                DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.No)
+                {
+                    MessageBox.Show("Seleccione otro numero");
+                    return; // Do not update
+                }
+            }
+            NumbersByXY[num, 0] = BallPosToCenter.X;
+            NumbersByXY[num, 1] = BallPosToCenter.Y;
+
+            WriteNumbersTable();
+            MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
         }
 
         private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
@@ -825,19 +866,13 @@ namespace VideoRecolector
         {
             if (cbCalibrateNumbers.Checked)
             {
-                this.btnSaveNumTable.Visible = true;
+                this.comboBox1.Select(0, 1);
                 this.groupBox4.Visible = true;
             }
             else
             {
-                this.btnSaveNumTable.Visible = false;
                 this.groupBox4.Visible = false;
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.AddApplicationToStartup();
         }
 
         private void GuardarNumeroGanador(int numero)
@@ -867,18 +902,29 @@ namespace VideoRecolector
 
         private void ReadNumbersTable()
         {
-            using (var stream = new StreamReader(@"./data.json"))
+            // Read numbers data for distance and angle detection
+            using (var stream = new StreamReader(@"./dataDA.json"))
             {
-                this.NumbersByAngle = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
+                this.NumbersByDistAngle = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
+            }
+            // Read numbers' data for ball's X & Y detection
+            using (var stream = new StreamReader(@"./dataXY.json"))
+            {
+                this.NumbersByXY = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
             }
         }
 
         private void WriteNumbersTable()
         {
-            // write the data (overwrites)
-            using (var stream = new StreamWriter(@"./data.json", append: false))
+            // write the data (overwrites) distance and angle detection data
+            using (var stream = new StreamWriter(@"./dataDA.json", append: false))
             {
-                stream.Write(JsonConvert.SerializeObject(this.NumbersByAngle));
+                stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
+            }
+            // write the data (overwrites) X & Y detection data
+            using (var stream = new StreamWriter(@"./dataXY.json", append: false))
+            {
+                stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
             }
         }
 
