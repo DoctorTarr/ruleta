@@ -189,7 +189,7 @@ namespace VideoRecolector
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
                 tbVideoStatus.Text = "ON";
-                this.bDebouncedBallFound = RawBallFound();
+                this.bDebouncedBallFound = RawKeyPressed();
                 this.bBallStateChanged = true;
             }
             catch (Exception ex)
@@ -308,7 +308,7 @@ namespace VideoRecolector
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
             _centerArea = new Rectangle(266, 198, 100, 100);
             _centerPoint = _centerArea.Center();
-            _zeroCenterArea = new Rectangle(308, 148, 20, 25);
+            _zeroCenterArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);
             
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
@@ -336,7 +336,7 @@ namespace VideoRecolector
         const int RELEASE_MSEC = 400; // Stable time before registering released
 
         // This function reads the key state from the hardware.
-        bool RawBallFound()
+        bool RawKeyPressed()
         {
             return _ballPocketsArea.Contains(BallPos);
         }
@@ -344,26 +344,29 @@ namespace VideoRecolector
 
         // Service routine called every CHECK_MSEC to
         // debounce both edges
-        void DebounceSwitch1()
+        void DebounceSwitch1(ref bool Key_changed, ref bool Key_pressed)
         {
-            bool RawState = RawBallFound();
-            this.bBallStateChanged = false;
-            if (RawState == this.bDebouncedBallFound)
+            bool DebouncedKeyPress = this.bDebouncedBallFound;
+            bool RawState = RawKeyPressed();
+            Key_changed = false;
+            Key_pressed = DebouncedKeyPress;
+            if (RawState == DebouncedKeyPress)
             {
                 // Set the timer which allows a change from current state.
-                if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                 else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
             }
             else
             {
                 // Key has changed - wait for new state to become stable.
-                if (--this.iBallUnchangeCount <= 0)
+                if (--this.iBallUnchangeCount == 0)
                 {
                     // Timer expired - accept the change.
-                    this.bDebouncedBallFound = RawState;
-                    this.bBallStateChanged = false;
+                    DebouncedKeyPress = RawState;
+                    Key_changed = true;
+                    Key_pressed = DebouncedKeyPress;
                     // And reset the timer.
-                    if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                    if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                     else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
                 }
             }
@@ -423,19 +426,19 @@ namespace VideoRecolector
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
                 tbBolaPosX.Text = BallPosToCenter.X.ToString();
                 tbBolaPosY.Text = BallPosToCenter.Y.ToString();
-                
+
                 //    Roulette slots
                 // 		314, 175
                 //241, 246        381,246
                 //      314, 314
-                DebounceSwitch1();
+                DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
+                lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
                 _Angle = GetAngleOfPointToZero(BallPosToCenter);
                 textBox2.Text = _Angle.ToString();
                 if (this.bDebouncedBallFound)
                 {
                     _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
                     textBox1.Text = _Distance.ToString();
-                    lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
                     if (!this.bDebouncedBallFound)
                     {
                         winner = -1;
@@ -446,20 +449,17 @@ namespace VideoRecolector
 
                 if (Math.Abs(ZeroAngleToCenter-90) < 2)
                 {
-                    //if (bZeroFound && bDebouncedBallFound)
+                    winner = FindNumberByAngle(_Distance, _Angle);
+
+                    if (winner > -1)
                     {
-                        winner = FindNumberByAngle(_Distance, _Angle);
-
-                        if (winner > -1)
-                        {
-                            _WinnerNumber = winner;
-                            juego.SetNewWinnerNumber(_WinnerNumber);
-                            lblWinner.Text = string.Format("{0}", _WinnerNumber);
-                        }
-                        else
-                            lblWinner.Text = "";
-
+                        _WinnerNumber = winner;
+                        juego.SetNewWinnerNumber(_WinnerNumber);
+                        lblWinner.Text = string.Format("{0}", _WinnerNumber);
                     }
+                    else
+                        lblWinner.Text = "";
+
                 }
 
                 if (_calibrateFlag)
@@ -511,9 +511,12 @@ namespace VideoRecolector
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                BallPos = objectRect.Center();
-                BallPosToCenter.X = BallPos.X - _centerPoint.X;
-                BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
+                if (objectRect.Width >= _ballBlobCounter.MinWidth)
+                {
+                    BallPos = objectRect.Center();
+                    BallPosToCenter.X = BallPos.X - _centerPoint.X;
+                    BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
+                }
             }
 
             return _colorFilterImage;
@@ -712,14 +715,14 @@ namespace VideoRecolector
             return winner;
         }
 
-        private int FindNumberByXY(System.Drawing.Point ballXY)
+        private int FindNumberByXY()
         {
             int winner = -1;
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByXY[i, 0] - ballXY.X) < 3) &&
-                    (Math.Abs(NumbersByXY[i, 1] - ballXY.Y) < 3))
+                if ((Math.Abs(NumbersByXY[i, 0] - BallPosToCenter.X) < 3) &&
+                    (Math.Abs(NumbersByXY[i, 1] - BallPosToCenter.Y) < 3))
                 {
                     winner = i;
                     break;
@@ -798,7 +801,7 @@ namespace VideoRecolector
             NumbersByDistAngle[num, 1] = angle;
 
             // Check if X and Y values are already assigned to another number
-            winner = FindNumberByXY(BallPosToCenter);
+            winner = FindNumberByXY();
             if ((winner != -1) && (winner != num))
             {
                 DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
