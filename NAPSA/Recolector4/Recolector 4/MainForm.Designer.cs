@@ -280,8 +280,6 @@ namespace VideoRecolector
             this.tbAvgDist = new System.Windows.Forms.TextBox();
             this.btnSetNumber = new System.Windows.Forms.Button();
             this.btnSaveNumTable = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
@@ -766,8 +764,6 @@ namespace VideoRecolector
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.radioButton2);
-            this.groupBox4.Controls.Add(this.radioButton1);
             this.groupBox4.Controls.Add(this.checkBox36);
             this.groupBox4.Controls.Add(this.checkBox34);
             this.groupBox4.Controls.Add(this.checkBox35);
@@ -1280,7 +1276,7 @@ namespace VideoRecolector
             this.btnCalibrateNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCalibrateNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCalibrateNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnCalibrateNumber.Location = new System.Drawing.Point(6, 142);
+            this.btnCalibrateNumber.Location = new System.Drawing.Point(6, 107);
             this.btnCalibrateNumber.Name = "btnCalibrateNumber";
             this.btnCalibrateNumber.Size = new System.Drawing.Size(73, 38);
             this.btnCalibrateNumber.TabIndex = 69;
@@ -1292,7 +1288,7 @@ namespace VideoRecolector
             // 
             this.label13.AutoSize = true;
             this.label13.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label13.Location = new System.Drawing.Point(4, 119);
+            this.label13.Location = new System.Drawing.Point(4, 84);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(17, 13);
             this.label13.TabIndex = 68;
@@ -1302,7 +1298,7 @@ namespace VideoRecolector
             // 
             this.label12.AutoSize = true;
             this.label12.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label12.Location = new System.Drawing.Point(3, 94);
+            this.label12.Location = new System.Drawing.Point(3, 59);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(18, 13);
             this.label12.TabIndex = 67;
@@ -1312,7 +1308,7 @@ namespace VideoRecolector
             // 
             this.tbAvgAngle.Enabled = false;
             this.tbAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgAngle.Location = new System.Drawing.Point(26, 114);
+            this.tbAvgAngle.Location = new System.Drawing.Point(26, 79);
             this.tbAvgAngle.Name = "tbAvgAngle";
             this.tbAvgAngle.Size = new System.Drawing.Size(53, 22);
             this.tbAvgAngle.TabIndex = 66;
@@ -1321,7 +1317,7 @@ namespace VideoRecolector
             // 
             this.tbAvgDist.Enabled = false;
             this.tbAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbAvgDist.Location = new System.Drawing.Point(26, 89);
+            this.tbAvgDist.Location = new System.Drawing.Point(26, 54);
             this.tbAvgDist.Name = "tbAvgDist";
             this.tbAvgDist.Size = new System.Drawing.Size(53, 22);
             this.tbAvgDist.TabIndex = 65;
@@ -1351,30 +1347,6 @@ namespace VideoRecolector
             this.btnSaveNumTable.Text = "Guardar Tabla";
             this.btnSaveNumTable.UseVisualStyleBackColor = true;
             this.btnSaveNumTable.Click += new System.EventHandler(this.btnSaveNumTable_Click);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.ForeColor = System.Drawing.Color.LimeGreen;
-            this.radioButton1.Location = new System.Drawing.Point(7, 54);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(32, 17);
-            this.radioButton1.TabIndex = 118;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "0";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(40, 54);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(31, 17);
-            this.radioButton2.TabIndex = 119;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "0";
-            this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -1505,8 +1477,6 @@ namespace VideoRecolector
         private Button btnAddToBoot;
         private Label lblWinner;
         private Label label15;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
         private RadioButton[] btnArray; // Declaring array of Button
     }
 }
