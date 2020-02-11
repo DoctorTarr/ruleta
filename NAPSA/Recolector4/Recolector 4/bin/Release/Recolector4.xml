@@ -11,7 +11,6 @@
       <inputassembly refid="e2e04041-a8a1-466c-b9e9-8126a675fd0b">
         <option>honoroas</option>
         <option>stripoa</option>
-        <option>library</option>
         <option>transformxaml</option>
         <file dir="C:\Projects-drtarr\ruleta\NAPSA\Recolector4\Recolector 4\bin\Release" name="Recolector 4.exe" />
       </inputassembly>

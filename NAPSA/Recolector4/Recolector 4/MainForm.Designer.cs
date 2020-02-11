@@ -217,7 +217,7 @@ namespace VideoRecolector
             this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
             this.btnStartCamara = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.tbBallAngleToCenter = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbBolaPosY = new System.Windows.Forms.TextBox();
@@ -615,14 +615,14 @@ namespace VideoRecolector
             this.label9.TabIndex = 34;
             this.label9.Text = "Angulo:";
             // 
-            // textBox2
+            // tbBallAngleToCenter
             // 
-            this.textBox2.Enabled = false;
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(268, 15);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(58, 22);
-            this.textBox2.TabIndex = 31;
+            this.tbBallAngleToCenter.Enabled = false;
+            this.tbBallAngleToCenter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbBallAngleToCenter.Location = new System.Drawing.Point(268, 15);
+            this.tbBallAngleToCenter.Name = "tbBallAngleToCenter";
+            this.tbBallAngleToCenter.Size = new System.Drawing.Size(58, 22);
+            this.tbBallAngleToCenter.TabIndex = 31;
             // 
             // groupBox2
             // 
@@ -634,7 +634,7 @@ namespace VideoRecolector
             this.groupBox2.Controls.Add(this.pbBall);
             this.groupBox2.Controls.Add(this.pictureBox1);
             this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.textBox2);
+            this.groupBox2.Controls.Add(this.tbBallAngleToCenter);
             this.groupBox2.Location = new System.Drawing.Point(354, 501);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(337, 251);
@@ -1448,7 +1448,7 @@ namespace VideoRecolector
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.PictureBox pbBall;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox tbBallAngleToCenter;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox textBox4;

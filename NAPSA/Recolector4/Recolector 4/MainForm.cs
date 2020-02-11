@@ -47,7 +47,7 @@ namespace VideoRecolector
         private Rectangle _ballPocketsArea; // Cylinder area to detect ball presence
         private Rectangle _centerArea; // Center of the roulette area
         private System.Drawing.Point _centerPoint; // Center of the roulette area rectangle
-        private Rectangle _zeroCenterArea; // Where the zero is at 12 am
+        private Rectangle _zeroNumberArea; // Where the zero is at 12 am
 
 
         // Drawing variables
@@ -208,7 +208,7 @@ namespace VideoRecolector
                 pbZero.Image = null;
                 pbBall.Image = null;
                 textBox1.Text = "";
-                textBox2.Text = "";
+                tbBallAngleToCenter.Text = "";
                 txtWinner.Text = "";
                 textBox4.Text = "";
                 tbBolaPosX.Text = "";
@@ -253,7 +253,7 @@ namespace VideoRecolector
             _g.DrawRectangle(_penred, _ballPocketsArea);
             _g.DrawRectangle(_penred, _centerPoint.X, _centerPoint.Y, 1, 1);
 
-            _g.DrawRectangle(_penblue, _zeroCenterArea);
+            _g.DrawRectangle(_penblue, _zeroNumberArea);
         }
 
 
@@ -306,7 +306,7 @@ namespace VideoRecolector
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
             _centerArea = new Rectangle(266, 198, 100, 100);
             _centerPoint = _centerArea.Center();
-            _zeroCenterArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);
+            _zeroNumberArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);
             
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
@@ -406,7 +406,6 @@ namespace VideoRecolector
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
                 ZeroPos.X = -640;
-                _ZeroAngleToCenter = 720;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 if (ZeroPos.X != -640)
                 {
@@ -415,6 +414,11 @@ namespace VideoRecolector
 
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
                     tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+                }
+                else
+                {
+                    _ZeroAngleToCenter = 720;
+                    tbZeroPosAngle.Text = "---";
                 }
 
 
@@ -427,10 +431,12 @@ namespace VideoRecolector
                     tbBolaPosY.Text = BallPosToCenter.Y.ToString();
 
                     _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
-                    textBox2.Text = _BallAngleToCenter.ToString();
+                    tbBallAngleToCenter.Text = _BallAngleToCenter.ToString();
                 }
                 else
                 {
+                    tbBolaPosX.Text = "---";
+                    tbBolaPosY.Text = "---";
                     _BallAngleToCenter = 720;
                 }
 
@@ -444,7 +450,7 @@ namespace VideoRecolector
                 {
                     _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
                     textBox1.Text = _DistanceZeroBall.ToString();
-                    if (Math.Abs(_ZeroAngleToCenter - 90) < 2)
+                    if (_zeroNumberArea.Contains(ZeroPos))
                     {
                         winner = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
 
@@ -457,18 +463,13 @@ namespace VideoRecolector
                             }
                             lblWinner.Text = string.Format("{0}", _WinnerNumber);
                         }
-                        else
-                        {
-                            winner = -1;
-                            lblWinner.Text = "--";
-                        }
                     }
                 }
-                //else
-                //{
-                //    winner = -1;
-                //    lblWinner.Text = "--";
-                //}
+                else
+                {
+                    winner = -1;
+                    lblWinner.Text = "--";
+                }
 
 
                 if (_calibrateFlag)
