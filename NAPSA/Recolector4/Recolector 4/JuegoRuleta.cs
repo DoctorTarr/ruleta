@@ -236,7 +236,7 @@ namespace VideoRecolector
                         break;
 
                     case WINNER_CMD_TYPE.WINNER_STATUS_CMD:
-                        if (this.contadorEstadoActual > 60)// Send the winner number cmd 65 times (aprox 30 secs)
+                        if ((this.contadorEstadoActual > 60) || (!this._isBallPresent)) // Send the winner number cmd 65 times (aprox 30 secs)
                         {
                             currentState = ESTADO_JUEGO.BEFORE_GAME; // Just in case
                             _WinnerNumberCmd = WINNER_CMD_TYPE.NO_WINNER_CMD;
