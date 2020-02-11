@@ -31,7 +31,7 @@ namespace VideoRecolector
         private int contadorNumeroGanador = 0; // Veces que recibio el numero ganador 
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private int _rpm = 0;
-        private const int TABLE_CLOSED_TIMEOUT = 1 * 60 * 2;
+        private const int TABLE_CLOSED_TIMEOUT = 3 * 60 * 2;
         private int _WinnerNumber = -1;
         private int _NewWinnerNumber = -1;
         private int _LastWinnerNumber = -1;
@@ -162,12 +162,21 @@ namespace VideoRecolector
         // Process PLACE_YOUR_BETS state
         public void CheckPlaceYourBetsState()
         {
-            this.contadorEstadoActual++;
-            if (this._isMoving)
+            if (!this._isMoving)
+            {
+                this.contadorEstadoActual++;
+                if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
+                {
+                    currentState = ESTADO_JUEGO.TABLE_CLOSED;
+                    this.contadorEstadoActual = 0;
+                }
+            }
+            else
             {
                 // If ball is not in pocket => NO MORE BETS (a.k.a. Good Luck)
                 if (!this._isBallPresent)
                 {
+                    this.contadorEstadoActual++;
                     _haveNewWinner = false;
                     if (this.contadorEstadoActual > 10)
                     {
@@ -175,14 +184,11 @@ namespace VideoRecolector
                         this.contadorEstadoActual = 0;
                     }
                 }
-            }
-            else
-            {
-                if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
+                else
                 {
-                    currentState = ESTADO_JUEGO.TABLE_CLOSED;
                     this.contadorEstadoActual = 0;
                 }
+
             }
         }
 

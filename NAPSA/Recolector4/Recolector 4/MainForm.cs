@@ -14,6 +14,7 @@ using Microsoft.Win32;
 using System.IO;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Linq;
 
 namespace VideoRecolector
 {
@@ -69,6 +70,9 @@ namespace VideoRecolector
         private int iBallUnchangeCount = 0;
 
         private int _WinnerNumber = -1;
+
+        private int _DetectionMethod = 0; // 0 == Distance/Angle
+                                          // 1 = X/Y
 
         private bool _calibrateFlag = false;
 
@@ -189,7 +193,8 @@ namespace VideoRecolector
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
                 tbVideoStatus.Text = "ON";
-                this.bDebouncedBallFound = RawKeyPressed();
+                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.bDebouncedBallFound = RawBallFound();
                 this.bBallStateChanged = true;
             }
             catch (Exception ex)
@@ -332,11 +337,11 @@ namespace VideoRecolector
         }
 
         const int CHECK_MSEC = 40; // Read hardware every 5 msec
-        const int PRESS_MSEC = 200; // Stable time before registering pressed
-        const int RELEASE_MSEC = 400; // Stable time before registering released
+        const int PRESS_MSEC = 80; // Stable time before registering pressed
+        const int RELEASE_MSEC = 800; // Stable time before registering released
 
         // This function reads the key state from the hardware.
-        bool RawKeyPressed()
+        bool RawBallFound()
         {
             return _ballPocketsArea.Contains(BallPos);
         }
@@ -344,16 +349,14 @@ namespace VideoRecolector
 
         // Service routine called every CHECK_MSEC to
         // debounce both edges
-        void DebounceSwitch1(ref bool Key_changed, ref bool Key_pressed)
+        void DebounceSwitch1()
         {
-            bool DebouncedKeyPress = this.bDebouncedBallFound;
-            bool RawState = RawKeyPressed();
-            Key_changed = false;
-            Key_pressed = DebouncedKeyPress;
-            if (RawState == DebouncedKeyPress)
+            bool RawState = RawBallFound();
+            this.bBallStateChanged = false;
+            if (RawState == this.bDebouncedBallFound)
             {
                 // Set the timer which allows a change from current state.
-                if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                 else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
             }
             else
@@ -362,11 +365,10 @@ namespace VideoRecolector
                 if (--this.iBallUnchangeCount == 0)
                 {
                     // Timer expired - accept the change.
-                    DebouncedKeyPress = RawState;
-                    Key_changed = true;
-                    Key_pressed = DebouncedKeyPress;
+                    this.bDebouncedBallFound = RawState;
+                    this.bBallStateChanged = true;
                     // And reset the timer.
-                    if (DebouncedKeyPress) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                    if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
                     else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
                 }
             }
@@ -431,7 +433,7 @@ namespace VideoRecolector
                 // 		314, 175
                 //241, 246        381,246
                 //      314, 314
-                DebounceSwitch1(ref this.bBallStateChanged, ref this.bDebouncedBallFound);
+                DebounceSwitch1();
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
                 _Angle = GetAngleOfPointToZero(BallPosToCenter);
                 textBox2.Text = _Angle.ToString();
@@ -439,27 +441,27 @@ namespace VideoRecolector
                 {
                     _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
                     textBox1.Text = _Distance.ToString();
-                    if (!this.bDebouncedBallFound)
-                    {
-                        winner = -1;
-                        lblWinner.Text = "";
-                    }
-
+                }
+                else
+                {
+                    winner = -1;
+                    lblWinner.Text = "--";
                 }
 
-                if (Math.Abs(ZeroAngleToCenter-90) < 2)
+                //if (Math.Abs(ZeroAngleToCenter - 90) < 2)
+                if (ZeroAngleToCenter == 90)
                 {
                     winner = FindNumberByAngle(_Distance, _Angle);
 
                     if (winner > -1)
                     {
                         _WinnerNumber = winner;
-                        juego.SetNewWinnerNumber(_WinnerNumber);
+                        if (!_calibrateFlag)
+                        {
+                            juego.SetNewWinnerNumber(_WinnerNumber);
+                        }
                         lblWinner.Text = string.Format("{0}", _WinnerNumber);
                     }
-                    else
-                        lblWinner.Text = "";
-
                 }
 
                 if (_calibrateFlag)
@@ -521,18 +523,6 @@ namespace VideoRecolector
 
             return _colorFilterImage;
         }
-
-        //private System.Drawing.Point[] ToPointsArray(List<IntPoint> points)
-        //{
-        //    System.Drawing.Point[] array = new System.Drawing.Point[points.Count];
-
-        //    for (int i = 0, n = points.Count; i < n; i++)
-        //    {
-        //        array[i] = new System.Drawing.Point(points[i].X, points[i].Y);
-        //    }
-
-        //    return array;
-        //}
 
         #endregion
 
@@ -869,6 +859,9 @@ namespace VideoRecolector
         {
             if (cbCalibrateNumbers.Checked)
             {
+                juego.SetCurrentState(JuegoRuleta.ESTADO_JUEGO.TABLE_CLOSED);
+                this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
+                this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
                 this.comboBox1.Select(0, 1);
                 this.groupBox4.Visible = true;
             }
@@ -923,11 +916,13 @@ namespace VideoRecolector
             using (var stream = new StreamWriter(@"./dataDA.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
+                stream.Flush();
             }
             // write the data (overwrites) X & Y detection data
             using (var stream = new StreamWriter(@"./dataXY.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
+                stream.Flush();
             }
         }
 

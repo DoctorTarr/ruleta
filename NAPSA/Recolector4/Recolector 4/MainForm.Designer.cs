@@ -78,8 +78,8 @@ namespace VideoRecolector
         private void tmrMain_Tick(object sender, EventArgs e)
         {
             textBox4.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
-
             textBox5.Text = estadoMesa.ToString();
+
             int winner = juego.GetCurrentWinnerNumber();
 
             txtWinner.Text = (winner == -1) ? "--" : winner.ToString();
@@ -115,7 +115,6 @@ namespace VideoRecolector
             else
             {
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
-
                 if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
                 {
                     if (juego.GetCurrentWinnerNumberCmd() == JuegoRuleta.WINNER_CMD_TYPE.WINNER_NUMBER_CMD)
@@ -723,7 +722,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(698, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(78, 76);
+            this.txtProtocolo.Size = new System.Drawing.Size(78, 66);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
