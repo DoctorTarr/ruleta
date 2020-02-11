@@ -520,7 +520,7 @@ namespace VideoRecolector
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                if (objectRect.Width >= _ballBlobCounter.MinWidth)
+                if (objectRect.Width >= 4)
                 {
                     BallPos = objectRect.Center();
                     BallPosToCenter.X = BallPos.X - _centerPoint.X;
