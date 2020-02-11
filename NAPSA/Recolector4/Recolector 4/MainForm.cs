@@ -58,13 +58,12 @@ namespace VideoRecolector
 
         // Positioning variables
         private System.Drawing.Point ZeroPos, ZeroPosToCenter, BallPos, BallPosToCenter;
-        private int ZeroAngleToCenter = 0;
+        private int _ZeroAngleToCenter = 0;
 
         // Measurement variables
-        private int _Distance = 0, _Angle = 0;
+        private int _DistanceZeroBall = 0, _BallAngleToCenter = 0;
 
         // Winner number variables
-        private bool bZeroFound = false;
         private bool bDebouncedBallFound = false;
         private bool bBallStateChanged = false;
         private int iBallUnchangeCount = 0;
@@ -118,11 +117,14 @@ namespace VideoRecolector
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
                 this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.bBallStateChanged = false;
                 this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             }
             else
             {
                 StartCamera();
+                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.bBallStateChanged = false;
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
                 this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME;
@@ -143,15 +145,6 @@ namespace VideoRecolector
                 this.lblFPS.Visible = false;
             }
         }
-
-        //public void AddApplicationToStartup()
-        //{
-        //    using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true))
-        //    {
-        //        key.SetValue(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, "\"" + Application.ExecutablePath + "\"");
-        //        MessageBox.Show("Agregado al arranque");
-        //    }
-        //}
 
 
         private void btnIniciarDemo_Click(object sender, EventArgs e)
@@ -337,7 +330,7 @@ namespace VideoRecolector
         }
 
         const int CHECK_MSEC = 40; // Read hardware every 5 msec
-        const int PRESS_MSEC = 80; // Stable time before registering pressed
+        const int PRESS_MSEC = 400; // Stable time before registering pressed
         const int RELEASE_MSEC = 800; // Stable time before registering released
 
         // This function reads the key state from the hardware.
@@ -351,8 +344,8 @@ namespace VideoRecolector
         // debounce both edges
         void DebounceSwitch1()
         {
-            bool RawState = RawBallFound();
             this.bBallStateChanged = false;
+            bool RawState = RawBallFound();
             if (RawState == this.bDebouncedBallFound)
             {
                 // Set the timer which allows a change from current state.
@@ -413,21 +406,33 @@ namespace VideoRecolector
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
                 ZeroPos.X = -640;
-                ZeroAngleToCenter = 0;
+                _ZeroAngleToCenter = 720;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-                tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-                bZeroFound = ZeroPos.X != -640;
-                if (bZeroFound)
+                if (ZeroPos.X != -640)
                 {
-                    ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
-                    tbZeroPosAngle.Text = ZeroAngleToCenter.ToString();
+                    tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                    tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+
+                    _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+                    tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
                 }
+
 
                 BallPos.X = -640;
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
-                tbBolaPosX.Text = BallPosToCenter.X.ToString();
-                tbBolaPosY.Text = BallPosToCenter.Y.ToString();
+
+                if (BallPos.X != -640)
+                {
+                    tbBolaPosX.Text = BallPosToCenter.X.ToString();
+                    tbBolaPosY.Text = BallPosToCenter.Y.ToString();
+
+                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
+                    textBox2.Text = _BallAngleToCenter.ToString();
+                }
+                else
+                {
+                    _BallAngleToCenter = 720;
+                }
 
                 //    Roulette slots
                 // 		314, 175
@@ -435,34 +440,36 @@ namespace VideoRecolector
                 //      314, 314
                 DebounceSwitch1();
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                _Angle = GetAngleOfPointToZero(BallPosToCenter);
-                textBox2.Text = _Angle.ToString();
                 if (this.bDebouncedBallFound)
                 {
-                    _Distance = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                    textBox1.Text = _Distance.ToString();
-                }
-                else
-                {
-                    winner = -1;
-                    lblWinner.Text = "--";
-                }
-
-                //if (Math.Abs(ZeroAngleToCenter - 90) < 2)
-                if (ZeroAngleToCenter == 90)
-                {
-                    winner = FindNumberByAngle(_Distance, _Angle);
-
-                    if (winner > -1)
+                    _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
+                    textBox1.Text = _DistanceZeroBall.ToString();
+                    if (Math.Abs(_ZeroAngleToCenter - 90) < 2)
                     {
-                        _WinnerNumber = winner;
-                        if (!_calibrateFlag)
+                        winner = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+
+                        if (winner > -1)
                         {
-                            juego.SetNewWinnerNumber(_WinnerNumber);
+                            _WinnerNumber = winner;
+                            if (!_calibrateFlag)
+                            {
+                                juego.SetNewWinnerNumber(_WinnerNumber);
+                            }
+                            lblWinner.Text = string.Format("{0}", _WinnerNumber);
                         }
-                        lblWinner.Text = string.Format("{0}", _WinnerNumber);
+                        else
+                        {
+                            winner = -1;
+                            lblWinner.Text = "--";
+                        }
                     }
                 }
+                //else
+                //{
+                //    winner = -1;
+                //    lblWinner.Text = "--";
+                //}
+
 
                 if (_calibrateFlag)
                     CalibrateCamera(_BsourceFrame);
@@ -694,7 +701,7 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByDistAngle[i, 0] - distance) < 3) &&
+                if ((Math.Abs(NumbersByDistAngle[i, 0] - distance) < 2) &&
                     (Math.Abs(NumbersByDistAngle[i, 1] - angle) < 3))
                 {
                     winner = i;
@@ -750,23 +757,29 @@ namespace VideoRecolector
             int acumAngle = 0;
             int averageDist = 0;
             int averageAngle = 0;
-            int count = 0;
+            int countDistance = 0;
+            int countAngle = 0;
 
             for (int i = 0; i < 100; i++)
             {
                 Application.DoEvents();
-                count++;
-                acumDist += this._Distance;
-                averageDist = acumDist / count;
+                countDistance++;
+                acumDist += this._DistanceZeroBall;
+                averageDist = acumDist / countDistance;
                 this.lblAvgDist.Text = averageDist.ToString();
 
-                acumAngle += this._Angle;
-                averageAngle = acumAngle / count;
-                this.lblAvgAngle.Text = averageAngle.ToString();
-                this.lblTestCount.Text = count.ToString();
+                if (this._BallAngleToCenter != 720)
+                {
+                    countAngle++;
+                    acumAngle += this._BallAngleToCenter;
+                    averageAngle = acumAngle / countAngle;
+                    this.lblAvgAngle.Text = averageAngle.ToString();
+                }
 
                 this.lblAvgX.Text = this.BallPosToCenter.X.ToString();
                 this.lblAvgY.Text = this.BallPosToCenter.Y.ToString();
+
+                this.lblTestCount.Text = i.ToString();
             }
         }
 
@@ -868,6 +881,20 @@ namespace VideoRecolector
             else
             {
                 this.groupBox4.Visible = false;
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.comboBox1.Visible)
+            {
+                int num = int.Parse(this.comboBox1.SelectedItem.ToString());
+
+                this.lblAvgDist.Text = NumbersByDistAngle[num, 0].ToString();
+                this.lblAvgAngle.Text = NumbersByDistAngle[num, 1].ToString();
+
+                this.lblAvgX.Text = this.NumbersByXY[num, 0].ToString();
+                this.lblAvgY.Text = this.NumbersByXY[num, 1].ToString();
             }
         }
 
