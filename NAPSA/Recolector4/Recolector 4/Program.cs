@@ -1,5 +1,6 @@
 ﻿using DASYS.Recolector.BLL;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -18,6 +19,9 @@ namespace VideoRecolector
             {
                 if (instanceCountOne)
                 {
+                    using (Process p = Process.GetCurrentProcess())
+                        p.PriorityClass = ProcessPriorityClass.High;
+
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     try

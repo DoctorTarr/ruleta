@@ -200,8 +200,7 @@ namespace VideoRecolector
         // Process NO_MORE_BETS state (waiting for winning number)
         public void CheckNoMoreBetsState()
         {
-            this.contadorEstadoActual++;
-            if ((_NewWinnerNumber != -1) && (this.contadorEstadoActual > 3 * 2))
+            if ((_NewWinnerNumber != -1) && (this.contadorEstadoActual > 2 * 3))
             {
                 this._haveNewWinner = true;
                 this._WinnerNumber = _NewWinnerNumber;
@@ -216,6 +215,7 @@ namespace VideoRecolector
             }
             else
             {
+                this.contadorEstadoActual++;
                 if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
                 {
                     currentState = ESTADO_JUEGO.TABLE_CLOSED;

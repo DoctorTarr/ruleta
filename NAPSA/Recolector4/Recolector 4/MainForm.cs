@@ -210,8 +210,6 @@ namespace VideoRecolector
 
                 pbZero.Image = null;
                 pbBall.Image = null;
-                textBox1.Text = "";
-                tbBallAngleToCenter.Text = "";
                 txtWinner.Text = "";
                 lblEstadoRuleta.Text = "";
                 tbBolaPosX.Text = "";
@@ -395,52 +393,36 @@ namespace VideoRecolector
             lock (this)
             {
                 int winner = -1;
+                bool bZeroFound = false;
+                bool bBallFound = false;
 
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
-                //textBox4.Text = _BsourceFrame.Width.ToString();
-                //textBox5.Text = _BsourceFrame.Height.ToString();
-
-                this._rpm = (int)(1000.0f * detector.ProcessFrame(args.Frame));
-                _isMoving = (this._rpm > 0);
-
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
-
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
+                this._rpm = (int)(1000.0f * detector.ProcessFrame(_BsourceFrame));
+                _isMoving = (this._rpm > 0);
+
                 ZeroPos.X = -640;
-                pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-                if (ZeroPos.X != -640)
-                {
-                    tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                    tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-
-                    _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
-                    tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
-                }
-                else
-                {
-                    _ZeroAngleToCenter = 720;
-                    tbZeroPosAngle.Text = "---";
-                }
-
-
+                _ZeroAngleToCenter = 720;
                 BallPos.X = -640;
+                _BallAngleToCenter = 720;
+
+                pbZero.Image = ZeroBlobDetection(_BsourceFrame);
+                bZeroFound = ZeroPos.X != -640;
+
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
+                bBallFound = BallPos.X != -640;
 
-                if (BallPos.X != -640)
+                if (bZeroFound)
                 {
-                    tbBolaPosX.Text = BallPosToCenter.X.ToString();
-                    tbBolaPosY.Text = BallPosToCenter.Y.ToString();
-
-                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
-                    tbBallAngleToCenter.Text = _BallAngleToCenter.ToString();
+                    _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
                 }
-                else
+ 
+                if (bBallFound)
                 {
-                    tbBolaPosX.Text = "---";
-                    tbBolaPosY.Text = "---";
-                    _BallAngleToCenter = 720;
+                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
                 }
 
                 //    Roulette slots
@@ -452,9 +434,16 @@ namespace VideoRecolector
                 if (this.bDebouncedBallFound)
                 {
                     _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                    textBox1.Text = _DistanceZeroBall.ToString();
-                    if (_zeroNumberArea.Contains(ZeroPos))
+                    if (bZeroFound && _zeroNumberArea.Contains(ZeroPos))
                     {
+                        tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                        tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                        tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+
+                        tbBolaPosX.Text = BallPosToCenter.X.ToString();
+                        tbBolaPosY.Text = BallPosToCenter.Y.ToString();
+                        txtDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+
                         winner = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
 
                         if (winner > -1)
@@ -476,9 +465,12 @@ namespace VideoRecolector
 
 
                 if (_calibrateFlag)
+                {
                     CalibrateCamera(_BsourceFrame);
+                }
 
                 args.Frame = _BsourceFrame;
+
             }
         }
 
@@ -919,6 +911,11 @@ namespace VideoRecolector
                 this.lblAvgX.Text = this.NumbersByXY[num, 0].ToString();
                 this.lblAvgY.Text = this.NumbersByXY[num, 1].ToString();
             }
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
         }
 
         private void GuardarNumeroGanador(int numero)
