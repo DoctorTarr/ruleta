@@ -98,22 +98,22 @@ namespace VideoRecolector
         {
             if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
             {
-                this.contadorNumeroGanador++;
                 // New number is coming
                 if (this._NewWinnerNumber != winner)
                 {
                     this._NewWinnerNumber = winner;
+                    this.contadorNumeroGanador=1;
                 }
                 else
                 {
+                    this.contadorNumeroGanador++;
                     if (this.contadorNumeroGanador > 1)
                     {
                         this._haveNewWinner = true;
                         this._WinnerNumber = _NewWinnerNumber;
                         this._NewWinnerNumber = -1;
                         this.contadorNumeroGanador = 0;
-                        this.currentState = ESTADO_JUEGO.WINNING_NUMBER;
-                        this.contadorEstadoActual = 0;
+                        CheckNoMoreBetsState();
                     }
                 }
             }
@@ -200,7 +200,7 @@ namespace VideoRecolector
         public void CheckNoMoreBetsState()
         {
             this.contadorEstadoActual++;
-            if (_isBallPresent && _haveNewWinner)
+            if (_haveNewWinner)
             {
                 currentState = ESTADO_JUEGO.WINNING_NUMBER;
                 this.contadorEstadoActual = 0;
