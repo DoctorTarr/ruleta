@@ -787,6 +787,7 @@ namespace VideoRecolector
         private void btnSetNumber_Click(object sender, EventArgs e)
         {
             int num = int.Parse(this.comboBox1.SelectedItem.ToString());
+            int index = this.comboBox1.SelectedIndex;
             int distance = int.Parse(this.lblAvgDist.Text);
             int angle = int.Parse(this.lblAvgAngle.Text);
 
@@ -819,6 +820,7 @@ namespace VideoRecolector
             NumbersByXY[num, 1] = BallPosToCenter.Y;
 
             WriteNumbersTable();
+            chkbNumbers[index].CheckState = CheckState.Checked;
             MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
         }
 
@@ -876,7 +878,7 @@ namespace VideoRecolector
                 juego.SetCurrentState(JuegoRuleta.ESTADO_JUEGO.TABLE_CLOSED);
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
                 this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
-                this.comboBox1.Select(0, 1);
+                this.comboBox1.SelectedIndex = 0;
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
             }

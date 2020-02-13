@@ -37,6 +37,16 @@ namespace VideoRecolector
         #region Form_Load, Closing
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // assign number of controls 
+            int chkNum = 37; // 37 numeros
+
+            chkbNumbers = new System.Windows.Forms.CheckBox[chkNum + 1];
+            for (int i = 0; i < chkNum + 1; i++)
+            {
+                // Initialize one variable
+                chkbNumbers[i] = new System.Windows.Forms.CheckBox();
+            }
+
             this.azarNumero = new Random((int)DateTime.Now.Ticks);
             this.LeerUltimoNumero();
             if (Pase.UltimoPase == null)
@@ -194,13 +204,6 @@ namespace VideoRecolector
             int yPos = 185;
             int chkNum = 37; // 37 numeros
 
-            // assign number of controls 
-            chkbNumbers = new System.Windows.Forms.CheckBox[chkNum + 1];
-            for (int i = 0; i < chkNum + 1; i++)
-            {
-                // Initialize one variable
-                chkbNumbers[i] = new System.Windows.Forms.CheckBox();
-            }
             int n = 0;
             while (n < chkNum)
             {
@@ -208,6 +211,7 @@ namespace VideoRecolector
                 chkbNumbers[n].Width = 40;
                 chkbNumbers[n].Height = 18;
                 chkbNumbers[n].Font = new Font(chkbNumbers[n].Font, System.Drawing.FontStyle.Bold);
+
                 switch (this.RouletteNumbers[n, 1])
                 {
                     case 0:
@@ -223,18 +227,23 @@ namespace VideoRecolector
                 }
 
                 chkbNumbers[n].Text = chkbNumbers[n].Tag.ToString();
-                if (this.RouletteNumbers[n, 0] == 5) // Two checkbox per row
-                {
-                    yPos = 185;
-                    xPos = xPos + chkbNumbers[n].Width + 2;
-                }
                 chkbNumbers[n].Left = xPos;
                 chkbNumbers[n].Top = yPos;
-                yPos = yPos + chkbNumbers[n].Height + 2;
+                if (xPos > 6)
+                {
+                    // Two checkbox per row
+                    yPos = yPos + chkbNumbers[n].Height + 2;
+                    xPos = 6;
+                }
+                else
+                    xPos = xPos + chkbNumbers[n].Width + 2;
+
                 pnlCalibration.Controls.Add(chkbNumbers[n]); // Let panel hold the Checkbox
                                                              // the Event of click Checkbox
                 chkbNumbers[n].Click += new System.EventHandler(ClickCheckBox);
+                chkbNumbers[n].CheckState = CheckState.Unchecked;
                 n++;
+
             }
         }
 
