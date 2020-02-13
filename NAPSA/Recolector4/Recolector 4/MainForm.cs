@@ -92,6 +92,9 @@ namespace VideoRecolector
         private JuegoRuleta.ESTADO_JUEGO estadoMesa;
         private JuegoRuleta juego;
 
+        // Number of numbers calibrated
+        private int numCalibrated = 0;
+
 
         public MainForm()
         {
@@ -820,7 +823,12 @@ namespace VideoRecolector
             NumbersByXY[num, 1] = BallPosToCenter.Y;
 
             WriteNumbersTable();
-            chkbNumbers[index].CheckState = CheckState.Checked;
+            if (chkbNumbers[index].CheckState != CheckState.Checked)
+            {
+                chkbNumbers[index].CheckState = CheckState.Checked;
+                this.numCalibrated++;
+                lblChkCount.Text = this.numCalibrated.ToString();
+            }
             MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
         }
 
@@ -879,6 +887,8 @@ namespace VideoRecolector
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
                 this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
                 this.comboBox1.SelectedIndex = 0;
+                this.numCalibrated = 0;
+                lblChkCount.Text = this.numCalibrated.ToString();
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
             }
@@ -943,17 +953,24 @@ namespace VideoRecolector
 
         private void WriteNumbersTable()
         {
-            // write the data (overwrites) distance and angle detection data
-            using (var stream = new StreamWriter(@"./dataDA.json", append: false))
+            try
             {
-                stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
-                stream.Flush();
+                // write the data (overwrites) distance and angle detection data
+                using (var stream = new StreamWriter(@"./dataDA.json", append: false))
+                {
+                    stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
+                    stream.Flush();
+                }
+                // write the data (overwrites) X & Y detection data
+                using (var stream = new StreamWriter(@"./dataXY.json", append: false))
+                {
+                    stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
+                    stream.Flush();
+                }
             }
-            // write the data (overwrites) X & Y detection data
-            using (var stream = new StreamWriter(@"./dataXY.json", append: false))
+            catch (Exception e)
             {
-                stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
-                stream.Flush();
+                MessageBox.Show(e.ToString(), "Error grabando archivos de calibracion");
             }
         }
 

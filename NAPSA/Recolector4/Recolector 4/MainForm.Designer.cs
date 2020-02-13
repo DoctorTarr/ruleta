@@ -194,8 +194,13 @@ namespace VideoRecolector
         // Result of the event click Checkbox
         public void ClickCheckBox(Object sender, System.EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("You have clicked checkbox " +
-                ((System.Windows.Forms.CheckBox)sender).Tag.ToString());
+            System.Windows.Forms.CheckBox chkBox = (System.Windows.Forms.CheckBox)sender;
+
+            // Ignore direct click
+            if (chkBox.CheckState == CheckState.Checked)
+            {
+                chkBox.CheckState = CheckState.Unchecked;
+            }
         }
 
         private void ShowNumbersCheckBox()
@@ -316,6 +321,8 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.lblChkCount = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -756,7 +763,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(676, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(78, 66);
+            this.txtProtocolo.Size = new System.Drawing.Size(85, 66);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -790,6 +797,8 @@ namespace VideoRecolector
             // 
             // pnlCalibration
             // 
+            this.pnlCalibration.Controls.Add(this.lblChkCount);
+            this.pnlCalibration.Controls.Add(this.label17);
             this.pnlCalibration.Controls.Add(this.lblAvgY);
             this.pnlCalibration.Controls.Add(this.lblAvgX);
             this.pnlCalibration.Controls.Add(this.label18);
@@ -904,7 +913,7 @@ namespace VideoRecolector
             // 
             this.lblTestCount.AutoSize = true;
             this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(60, 35);
+            this.lblTestCount.Location = new System.Drawing.Point(66, 120);
             this.lblTestCount.Name = "lblTestCount";
             this.lblTestCount.Size = new System.Drawing.Size(13, 13);
             this.lblTestCount.TabIndex = 70;
@@ -942,6 +951,26 @@ namespace VideoRecolector
             this.btnSetNumber.Text = "Guardar Calibracion";
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label17.Location = new System.Drawing.Point(6, 35);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(59, 13);
+            this.label17.TabIndex = 125;
+            this.label17.Text = "Calibrados:";
+            // 
+            // lblChkCount
+            // 
+            this.lblChkCount.AutoSize = true;
+            this.lblChkCount.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblChkCount.Location = new System.Drawing.Point(64, 35);
+            this.lblChkCount.Name = "lblChkCount";
+            this.lblChkCount.Size = new System.Drawing.Size(13, 13);
+            this.lblChkCount.TabIndex = 126;
+            this.lblChkCount.Text = "0";
             // 
             // MainForm
             // 
@@ -1035,6 +1064,8 @@ namespace VideoRecolector
         private Label lblEstadoRuleta;
         private Label label16;
         private TextBox txtbDisplayStatus;
+        private Label lblChkCount;
+        private Label label17;
     }
 }
 
