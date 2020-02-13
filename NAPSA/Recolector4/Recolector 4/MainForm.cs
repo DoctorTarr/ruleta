@@ -789,47 +789,56 @@ namespace VideoRecolector
 
         private void btnSetNumber_Click(object sender, EventArgs e)
         {
-            int num = int.Parse(this.comboBox1.SelectedItem.ToString());
-            int index = this.comboBox1.SelectedIndex;
-            int distance = int.Parse(this.lblAvgDist.Text);
-            int angle = int.Parse(this.lblAvgAngle.Text);
-
-            // Check if distance and angle values are already assigned to another number
-            int winner = FindNumberByAngle(distance, angle);
-            if ((winner != -1) && (winner != num))
+            try
             {
-                DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.No)
+                int num = int.Parse(this.comboBox1.SelectedItem.ToString());
+                int index = this.comboBox1.SelectedIndex;
+                int distance = int.Parse(this.lblAvgDist.Text);
+                int angle = int.Parse(this.lblAvgAngle.Text);
+
+                // Check if distance and angle values are already assigned to another number
+                int winner = FindNumberByAngle(distance, angle);
+                if ((winner != -1) && (winner != num))
                 {
-                    MessageBox.Show("Seleccione otro numero");
-                    return; // Do not update
+                    DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        MessageBox.Show("Seleccione otro numero");
+                        return; // Do not update
+                    }
                 }
-            }
-            NumbersByDistAngle[num, 0] = distance;
-            NumbersByDistAngle[num, 1] = angle;
 
-            // Check if X and Y values are already assigned to another number
-            winner = FindNumberByXY();
-            if ((winner != -1) && (winner != num))
-            {
-                DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
-                if (dialogResult == DialogResult.No)
+                // Check if X and Y values are already assigned to another number
+                winner = FindNumberByXY();
+                if ((winner != -1) && (winner != num))
                 {
-                    MessageBox.Show("Seleccione otro numero");
-                    return; // Do not update
+                    DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.No)
+                    {
+                        MessageBox.Show("Seleccione otro numero");
+                        return; // Do not update
+                    }
                 }
-            }
-            NumbersByXY[num, 0] = BallPosToCenter.X;
-            NumbersByXY[num, 1] = BallPosToCenter.Y;
 
-            WriteNumbersTable();
-            if (chkbNumbers[index].CheckState != CheckState.Checked)
-            {
-                chkbNumbers[index].CheckState = CheckState.Checked;
-                this.numCalibrated++;
-                lblChkCount.Text = this.numCalibrated.ToString();
+                NumbersByDistAngle[num, 0] = distance;
+                NumbersByDistAngle[num, 1] = angle;
+
+                NumbersByXY[num, 0] = BallPosToCenter.X;
+                NumbersByXY[num, 1] = BallPosToCenter.Y;
+
+                WriteNumbersTable();
+                if (chkbNumbers[index].CheckState != CheckState.Checked)
+                {
+                    chkbNumbers[index].CheckState = CheckState.Checked;
+                    this.numCalibrated++;
+                    lblChkCount.Text = this.numCalibrated.ToString();
+                }
+                MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
             }
-            MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al grabar la calibracion. Requiere credenciales de administrador" + ex.GetType().ToString());
+            }
         }
 
         private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
@@ -953,24 +962,17 @@ namespace VideoRecolector
 
         private void WriteNumbersTable()
         {
-            try
+            // write the data (overwrites) distance and angle detection data
+            using (var stream = new StreamWriter(@"./dataDA.json", append: false))
             {
-                // write the data (overwrites) distance and angle detection data
-                using (var stream = new StreamWriter(@"./dataDA.json", append: false))
-                {
-                    stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
-                    stream.Flush();
-                }
-                // write the data (overwrites) X & Y detection data
-                using (var stream = new StreamWriter(@"./dataXY.json", append: false))
-                {
-                    stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
-                    stream.Flush();
-                }
+                stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
+                stream.Flush();
             }
-            catch (Exception e)
+            // write the data (overwrites) X & Y detection data
+            using (var stream = new StreamWriter(@"./dataXY.json", append: false))
             {
-                MessageBox.Show(e.ToString(), "Error grabando archivos de calibracion");
+                stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
+                stream.Flush();
             }
         }
 
