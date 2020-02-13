@@ -141,7 +141,7 @@ namespace VideoRecolector
             else
             {
                 this._calibrateFlag = false;
-                this.groupBox4.Visible = false;
+                this.pnlCalibration.Visible = false;
                 this.lblFPS.Visible = false;
             }
         }
@@ -877,11 +877,12 @@ namespace VideoRecolector
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
                 this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
                 this.comboBox1.Select(0, 1);
-                this.groupBox4.Visible = true;
+                ShowNumbersCheckBox();
+                this.pnlCalibration.Visible = true;
             }
             else
             {
-                this.groupBox4.Visible = false;
+                this.pnlCalibration.Visible = false;
             }
         }
 
