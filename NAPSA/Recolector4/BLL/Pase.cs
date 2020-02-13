@@ -214,12 +214,17 @@ namespace DASYS.Recolector.BLL
       ResultadoStatus.EstadoJuego statusEstado = ResultadoStatus.EstadoJuego.Indeterminado;
       try
       {
-        int int32 = Utils.Datos.NullToInt32((object) Common.oConexiones[0].DbExecuteNonQuery(new QueryEngine()
-        {
-          QueryName = "estadoSelectUltimo"
-        }));
-        if (int32 < 7)
-          statusEstado = (ResultadoStatus.EstadoJuego) int32;
+        //int int32 = Utils.Datos.NullToInt32((object) Common.oConexiones[0].DbExecuteNonQuery(new QueryEngine()
+        //{
+        //  QueryName = "estadoSelectUltimo"
+        //}));
+        //if (int32 < 7)
+        //  statusEstado = (ResultadoStatus.EstadoJuego) int32;
+        QueryEngine query = new QueryEngine();
+        query.QueryName = "estadoSelectUltimo";
+        int num = (int)Common.oConexiones[0].DbExecuteScalar(query);
+        if (num < 7)
+            statusEstado = (ResultadoStatus.EstadoJuego)num;
       }
       catch
       {

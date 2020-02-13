@@ -210,7 +210,7 @@ namespace VideoRecolector
                 textBox1.Text = "";
                 tbBallAngleToCenter.Text = "";
                 txtWinner.Text = "";
-                textBox4.Text = "";
+                lblEstadoRuleta.Text = "";
                 tbBolaPosX.Text = "";
                 tbBolaPosY.Text = "";
                 tbZeroPosX.Text = "";

@@ -77,9 +77,9 @@ namespace VideoRecolector
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-            textBox4.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
-            textBox5.Text = estadoMesa.ToString();
-
+            lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
+            txtbGameStatus.Text = estadoMesa.ToString();
+            txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
             int winner = juego.GetCurrentWinnerNumber();
 
             txtWinner.Text = (winner == -1) ? "--" : winner.ToString();
@@ -189,6 +189,14 @@ namespace VideoRecolector
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.tbBolaPosY = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tbBolaPosX = new System.Windows.Forms.TextBox();
+            this.pbBall = new System.Windows.Forms.PictureBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tbBallAngleToCenter = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.tbZeroPosAngle = new System.Windows.Forms.TextBox();
@@ -200,32 +208,24 @@ namespace VideoRecolector
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtbDisplayStatus = new System.Windows.Forms.TextBox();
+            this.lblEstadoRuleta = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.lblWinner = new System.Windows.Forms.Label();
             this.cbCalibrateNumbers = new System.Windows.Forms.CheckBox();
             this.txtWinner = new System.Windows.Forms.TextBox();
             this.lblFPS = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.lblBallOn = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tbVideoStatus = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtbGameStatus = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
             this.btnStartCamara = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.tbBallAngleToCenter = new System.Windows.Forms.TextBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.tbBolaPosY = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbBolaPosX = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.pbBall = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
@@ -283,17 +283,23 @@ namespace VideoRecolector
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.mnuSystemTray.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.tbBolaPosY);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.tbBolaPosX);
+            this.groupBox1.Controls.Add(this.pbBall);
+            this.groupBox1.Controls.Add(this.label9);
+            this.groupBox1.Controls.Add(this.tbBallAngleToCenter);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label14);
             this.groupBox1.Controls.Add(this.tbZeroPosAngle);
@@ -302,17 +308,94 @@ namespace VideoRecolector
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.tbZeroPosX);
             this.groupBox1.Controls.Add(this.pbZero);
-            this.groupBox1.Location = new System.Drawing.Point(12, 501);
+            this.groupBox1.Location = new System.Drawing.Point(8, 501);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(337, 251);
+            this.groupBox1.Size = new System.Drawing.Size(662, 251);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label6.Location = new System.Drawing.Point(338, -1);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.TabIndex = 42;
+            this.label6.Text = "Detección Bola";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label4.Location = new System.Drawing.Point(432, 19);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(17, 13);
+            this.label4.TabIndex = 39;
+            this.label4.Text = "Y:";
+            // 
+            // tbBolaPosY
+            // 
+            this.tbBolaPosY.Enabled = false;
+            this.tbBolaPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbBolaPosY.Location = new System.Drawing.Point(455, 15);
+            this.tbBolaPosY.Name = "tbBolaPosY";
+            this.tbBolaPosY.Size = new System.Drawing.Size(65, 22);
+            this.tbBolaPosY.TabIndex = 38;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label5.Location = new System.Drawing.Point(338, 19);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(17, 13);
+            this.label5.TabIndex = 37;
+            this.label5.Text = "X:";
+            // 
+            // tbBolaPosX
+            // 
+            this.tbBolaPosX.Enabled = false;
+            this.tbBolaPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbBolaPosX.Location = new System.Drawing.Point(361, 15);
+            this.tbBolaPosX.Name = "tbBolaPosX";
+            this.tbBolaPosX.Size = new System.Drawing.Size(65, 22);
+            this.tbBolaPosX.TabIndex = 36;
+            // 
+            // pbBall
+            // 
+            this.pbBall.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbBall.Location = new System.Drawing.Point(337, 41);
+            this.pbBall.Name = "pbBall";
+            this.pbBall.Size = new System.Drawing.Size(320, 200);
+            this.pbBall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbBall.TabIndex = 35;
+            this.pbBall.TabStop = false;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label9.Location = new System.Drawing.Point(542, 19);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(43, 13);
+            this.label9.TabIndex = 41;
+            this.label9.Text = "Angulo:";
+            // 
+            // tbBallAngleToCenter
+            // 
+            this.tbBallAngleToCenter.Enabled = false;
+            this.tbBallAngleToCenter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbBallAngleToCenter.Location = new System.Drawing.Point(591, 15);
+            this.tbBallAngleToCenter.Name = "tbBallAngleToCenter";
+            this.tbBallAngleToCenter.Size = new System.Drawing.Size(58, 22);
+            this.tbBallAngleToCenter.TabIndex = 40;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label3.Location = new System.Drawing.Point(4, 0);
+            this.label3.Location = new System.Drawing.Point(8, -1);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(98, 13);
             this.label3.TabIndex = 24;
@@ -322,7 +405,7 @@ namespace VideoRecolector
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label14.Location = new System.Drawing.Point(212, 18);
+            this.label14.Location = new System.Drawing.Point(212, 19);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(43, 13);
             this.label14.TabIndex = 30;
@@ -332,7 +415,7 @@ namespace VideoRecolector
             // 
             this.tbZeroPosAngle.Enabled = false;
             this.tbZeroPosAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosAngle.Location = new System.Drawing.Point(260, 13);
+            this.tbZeroPosAngle.Location = new System.Drawing.Point(260, 14);
             this.tbZeroPosAngle.Name = "tbZeroPosAngle";
             this.tbZeroPosAngle.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosAngle.TabIndex = 29;
@@ -341,7 +424,7 @@ namespace VideoRecolector
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(100, 18);
+            this.label2.Location = new System.Drawing.Point(100, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 13);
             this.label2.TabIndex = 28;
@@ -351,7 +434,7 @@ namespace VideoRecolector
             // 
             this.tbZeroPosY.Enabled = false;
             this.tbZeroPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosY.Location = new System.Drawing.Point(123, 13);
+            this.tbZeroPosY.Location = new System.Drawing.Point(123, 14);
             this.tbZeroPosY.Name = "tbZeroPosY";
             this.tbZeroPosY.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosY.TabIndex = 27;
@@ -360,7 +443,7 @@ namespace VideoRecolector
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label1.Location = new System.Drawing.Point(4, 18);
+            this.label1.Location = new System.Drawing.Point(8, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(17, 13);
             this.label1.TabIndex = 26;
@@ -370,7 +453,7 @@ namespace VideoRecolector
             // 
             this.tbZeroPosX.Enabled = false;
             this.tbZeroPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosX.Location = new System.Drawing.Point(24, 13);
+            this.tbZeroPosX.Location = new System.Drawing.Point(29, 14);
             this.tbZeroPosX.Name = "tbZeroPosX";
             this.tbZeroPosX.Size = new System.Drawing.Size(65, 22);
             this.tbZeroPosX.TabIndex = 25;
@@ -389,7 +472,7 @@ namespace VideoRecolector
             // 
             this.textBox1.Enabled = false;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(598, 421);
+            this.textBox1.Location = new System.Drawing.Point(591, 421);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(58, 22);
             this.textBox1.TabIndex = 29;
@@ -405,37 +488,67 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label16);
+            this.groupBox3.Controls.Add(this.txtbDisplayStatus);
+            this.groupBox3.Controls.Add(this.lblEstadoRuleta);
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.lblWinner);
             this.groupBox3.Controls.Add(this.cbCalibrateNumbers);
             this.groupBox3.Controls.Add(this.txtWinner);
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
-            this.groupBox3.Controls.Add(this.btnIniciarDemo);
             this.groupBox3.Controls.Add(this.lblBallOn);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.tbVideoStatus);
             this.groupBox3.Controls.Add(this.label10);
-            this.groupBox3.Controls.Add(this.textBox5);
-            this.groupBox3.Controls.Add(this.textBox4);
+            this.groupBox3.Controls.Add(this.txtbGameStatus);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.cbCalibrateCamera);
             this.groupBox3.Controls.Add(this.btnStartCamara);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.videoSourcePlayer1);
             this.groupBox3.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.groupBox3.Location = new System.Drawing.Point(12, 3);
+            this.groupBox3.Location = new System.Drawing.Point(8, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(679, 492);
+            this.groupBox3.Size = new System.Drawing.Size(662, 492);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label16.Location = new System.Drawing.Point(403, 469);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(80, 13);
+            this.label16.TabIndex = 66;
+            this.label16.Text = "Estado Display:";
+            // 
+            // txtbDisplayStatus
+            // 
+            this.txtbDisplayStatus.Enabled = false;
+            this.txtbDisplayStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtbDisplayStatus.Location = new System.Drawing.Point(484, 464);
+            this.txtbDisplayStatus.Name = "txtbDisplayStatus";
+            this.txtbDisplayStatus.Size = new System.Drawing.Size(165, 22);
+            this.txtbDisplayStatus.TabIndex = 65;
+            // 
+            // lblEstadoRuleta
+            // 
+            this.lblEstadoRuleta.AutoSize = true;
+            this.lblEstadoRuleta.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblEstadoRuleta.Location = new System.Drawing.Point(588, 448);
+            this.lblEstadoRuleta.Name = "lblEstadoRuleta";
+            this.lblEstadoRuleta.Size = new System.Drawing.Size(43, 13);
+            this.lblEstadoRuleta.TabIndex = 64;
+            this.lblEstadoRuleta.Text = "M-RPM";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label15.Location = new System.Drawing.Point(260, 467);
+            this.label15.Location = new System.Drawing.Point(260, 468);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(36, 13);
             this.label15.TabIndex = 63;
@@ -456,7 +569,7 @@ namespace VideoRecolector
             // 
             this.cbCalibrateNumbers.AutoSize = true;
             this.cbCalibrateNumbers.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.cbCalibrateNumbers.Location = new System.Drawing.Point(383, 444);
+            this.cbCalibrateNumbers.Location = new System.Drawing.Point(383, 441);
             this.cbCalibrateNumbers.Name = "cbCalibrateNumbers";
             this.cbCalibrateNumbers.Size = new System.Drawing.Size(106, 17);
             this.cbCalibrateNumbers.TabIndex = 60;
@@ -496,26 +609,11 @@ namespace VideoRecolector
             this.label8.TabIndex = 56;
             this.label8.Text = "Ganador:";
             // 
-            // btnIniciarDemo
-            // 
-            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnIniciarDemo.Enabled = false;
-            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(598, 457);
-            this.btnIniciarDemo.Name = "btnIniciarDemo";
-            this.btnIniciarDemo.Size = new System.Drawing.Size(64, 23);
-            this.btnIniciarDemo.TabIndex = 51;
-            this.btnIniciarDemo.Text = "Demo";
-            this.btnIniciarDemo.UseVisualStyleBackColor = true;
-            this.btnIniciarDemo.Visible = false;
-            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
-            // 
             // lblBallOn
             // 
             this.lblBallOn.AutoSize = true;
             this.lblBallOn.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblBallOn.Location = new System.Drawing.Point(571, 467);
+            this.lblBallOn.Location = new System.Drawing.Point(627, 448);
             this.lblBallOn.Name = "lblBallOn";
             this.lblBallOn.Size = new System.Drawing.Size(22, 13);
             this.lblBallOn.TabIndex = 54;
@@ -525,7 +623,7 @@ namespace VideoRecolector
             // 
             this.label11.AutoSize = true;
             this.label11.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label11.Location = new System.Drawing.Point(8, 467);
+            this.label11.Location = new System.Drawing.Point(8, 468);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(75, 13);
             this.label11.TabIndex = 55;
@@ -548,45 +646,36 @@ namespace VideoRecolector
             // 
             this.label10.AutoSize = true;
             this.label10.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label10.Location = new System.Drawing.Point(409, 467);
+            this.label10.Location = new System.Drawing.Point(508, 448);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(77, 13);
             this.label10.TabIndex = 36;
             this.label10.Text = "Estado Ruleta:";
             // 
-            // textBox5
+            // txtbGameStatus
             // 
-            this.textBox5.Enabled = false;
-            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(89, 462);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(165, 22);
-            this.textBox5.TabIndex = 54;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Enabled = false;
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(492, 462);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(73, 22);
-            this.textBox4.TabIndex = 35;
+            this.txtbGameStatus.Enabled = false;
+            this.txtbGameStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtbGameStatus.Location = new System.Drawing.Point(89, 463);
+            this.txtbGameStatus.Name = "txtbGameStatus";
+            this.txtbGameStatus.Size = new System.Drawing.Size(165, 22);
+            this.txtbGameStatus.TabIndex = 54;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label7.Location = new System.Drawing.Point(489, 424);
+            this.label7.Location = new System.Drawing.Point(505, 424);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(103, 13);
+            this.label7.Size = new System.Drawing.Size(80, 13);
             this.label7.TabIndex = 30;
-            this.label7.Text = "Distancia Cero-Bola:";
+            this.label7.Text = "Dist. Cero-Bola:";
             // 
             // cbCalibrateCamera
             // 
             this.cbCalibrateCamera.AutoSize = true;
             this.cbCalibrateCamera.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.cbCalibrateCamera.Location = new System.Drawing.Point(383, 423);
+            this.cbCalibrateCamera.Location = new System.Drawing.Point(383, 421);
             this.cbCalibrateCamera.Name = "cbCalibrateCamera";
             this.cbCalibrateCamera.Size = new System.Drawing.Size(100, 17);
             this.cbCalibrateCamera.TabIndex = 13;
@@ -605,109 +694,20 @@ namespace VideoRecolector
             this.btnStartCamara.UseVisualStyleBackColor = true;
             this.btnStartCamara.Click += new System.EventHandler(this.btnStartCamara_Click);
             // 
-            // label9
+            // btnIniciarDemo
             // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label9.Location = new System.Drawing.Point(219, 20);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(43, 13);
-            this.label9.TabIndex = 34;
-            this.label9.Text = "Angulo:";
-            // 
-            // tbBallAngleToCenter
-            // 
-            this.tbBallAngleToCenter.Enabled = false;
-            this.tbBallAngleToCenter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBallAngleToCenter.Location = new System.Drawing.Point(268, 15);
-            this.tbBallAngleToCenter.Name = "tbBallAngleToCenter";
-            this.tbBallAngleToCenter.Size = new System.Drawing.Size(58, 22);
-            this.tbBallAngleToCenter.TabIndex = 31;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.tbBolaPosY);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.tbBolaPosX);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.pbBall);
-            this.groupBox2.Controls.Add(this.pictureBox1);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.tbBallAngleToCenter);
-            this.groupBox2.Location = new System.Drawing.Point(354, 501);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(337, 251);
-            this.groupBox2.TabIndex = 30;
-            this.groupBox2.TabStop = false;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label4.Location = new System.Drawing.Point(100, 19);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(17, 13);
-            this.label4.TabIndex = 28;
-            this.label4.Text = "Y:";
-            // 
-            // tbBolaPosY
-            // 
-            this.tbBolaPosY.Enabled = false;
-            this.tbBolaPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBolaPosY.Location = new System.Drawing.Point(123, 15);
-            this.tbBolaPosY.Name = "tbBolaPosY";
-            this.tbBolaPosY.Size = new System.Drawing.Size(65, 22);
-            this.tbBolaPosY.TabIndex = 27;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label5.Location = new System.Drawing.Point(7, 19);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(17, 13);
-            this.label5.TabIndex = 26;
-            this.label5.Text = "X:";
-            // 
-            // tbBolaPosX
-            // 
-            this.tbBolaPosX.Enabled = false;
-            this.tbBolaPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBolaPosX.Location = new System.Drawing.Point(30, 15);
-            this.tbBolaPosX.Name = "tbBolaPosX";
-            this.tbBolaPosX.Size = new System.Drawing.Size(65, 22);
-            this.tbBolaPosX.TabIndex = 25;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label6.Location = new System.Drawing.Point(7, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 13);
-            this.label6.TabIndex = 24;
-            this.label6.Text = "Detección de Bola";
-            // 
-            // pbBall
-            // 
-            this.pbBall.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbBall.Location = new System.Drawing.Point(6, 41);
-            this.pbBall.Name = "pbBall";
-            this.pbBall.Size = new System.Drawing.Size(320, 200);
-            this.pbBall.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbBall.TabIndex = 12;
-            this.pbBall.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Location = new System.Drawing.Point(344, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(84, 250);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 12;
-            this.pictureBox1.TabStop = false;
+            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnIniciarDemo.Enabled = false;
+            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
+            this.btnIniciarDemo.Location = new System.Drawing.Point(6, 644);
+            this.btnIniciarDemo.Name = "btnIniciarDemo";
+            this.btnIniciarDemo.Size = new System.Drawing.Size(64, 23);
+            this.btnIniciarDemo.TabIndex = 51;
+            this.btnIniciarDemo.Text = "Demo";
+            this.btnIniciarDemo.UseVisualStyleBackColor = true;
+            this.btnIniciarDemo.Visible = false;
+            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
             // 
             // tmrDemo
             // 
@@ -719,7 +719,7 @@ namespace VideoRecolector
             this.txtProtocolo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.txtProtocolo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProtocolo.Location = new System.Drawing.Point(698, 3);
+            this.txtProtocolo.Location = new System.Drawing.Point(676, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
             this.txtProtocolo.Size = new System.Drawing.Size(78, 66);
@@ -762,6 +762,7 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.label19);
             this.groupBox4.Controls.Add(this.lblAvgAngle);
             this.groupBox4.Controls.Add(this.lblAvgDist);
+            this.groupBox4.Controls.Add(this.btnIniciarDemo);
             this.groupBox4.Controls.Add(this.comboBox1);
             this.groupBox4.Controls.Add(this.checkBox36);
             this.groupBox4.Controls.Add(this.checkBox34);
@@ -805,7 +806,7 @@ namespace VideoRecolector
             this.groupBox4.Controls.Add(this.label13);
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.btnSetNumber);
-            this.groupBox4.Location = new System.Drawing.Point(697, 75);
+            this.groupBox4.Location = new System.Drawing.Point(676, 75);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(85, 677);
             this.groupBox4.TabIndex = 62;
@@ -1395,8 +1396,7 @@ namespace VideoRecolector
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
-            this.ClientSize = new System.Drawing.Size(791, 759);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(768, 759);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.groupBox3);
@@ -1411,13 +1411,10 @@ namespace VideoRecolector
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbBall)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.mnuSystemTray.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -1440,32 +1437,21 @@ namespace VideoRecolector
         private System.Windows.Forms.Button btnStartCamara;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.CheckBox cbCalibrateCamera;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox tbBolaPosY;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbBolaPosX;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.PictureBox pbBall;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox tbBallAngleToCenter;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Timer tmrDemo;
         private System.Windows.Forms.Button btnIniciarDemo;
         private System.Windows.Forms.TextBox txtProtocolo;
         private System.Windows.Forms.Timer tmrMain;
         private System.Windows.Forms.TextBox tbVideoStatus;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox txtbGameStatus;
         private System.Windows.Forms.Label lblBallOn;
         private System.Windows.Forms.Label lblFPS;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private Label label14;
         private TextBox tbZeroPosAngle;
-        private PictureBox pictureBox1;
         private GroupBox groupBox4;
         private Label lblTestCount;
         private Button btnCalibrateNumber;
@@ -1523,6 +1509,17 @@ namespace VideoRecolector
         private Label lblAvgX;
         private Label label18;
         private Label label19;
+        private Label label6;
+        private Label label4;
+        private TextBox tbBolaPosY;
+        private Label label5;
+        private TextBox tbBolaPosX;
+        private PictureBox pbBall;
+        private Label label9;
+        private TextBox tbBallAngleToCenter;
+        private Label lblEstadoRuleta;
+        private Label label16;
+        private TextBox txtbDisplayStatus;
     }
 }
 
