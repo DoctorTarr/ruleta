@@ -98,22 +98,21 @@ namespace VideoRecolector
         {
             if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
             {
-                // No new number
-                if (_NewWinnerNumber != winner)
+                this.contadorNumeroGanador++;
+                // New number is coming
+                if (this._NewWinnerNumber != winner)
                 {
-                    _NewWinnerNumber = winner;
-                    this.contadorNumeroGanador++;
+                    this._NewWinnerNumber = winner;
                 }
                 else
                 {
-                    this.contadorNumeroGanador++;
                     if (this.contadorNumeroGanador > 1)
                     {
-                        _haveNewWinner = true;
-                        _WinnerNumber = _NewWinnerNumber;
-                        _NewWinnerNumber = -1;
-                        contadorNumeroGanador = 0;
-                        currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                        this._haveNewWinner = true;
+                        this._WinnerNumber = _NewWinnerNumber;
+                        this._NewWinnerNumber = -1;
+                        this.contadorNumeroGanador = 0;
+                        this.currentState = ESTADO_JUEGO.WINNING_NUMBER;
                         this.contadorEstadoActual = 0;
                     }
                 }
@@ -123,6 +122,11 @@ namespace VideoRecolector
         public  WINNER_CMD_TYPE GetCurrentWinnerNumberCmd()
         {
             return this._WinnerNumberCmd;
+        }
+
+        public int GetContadorNumeroGanador()
+        {
+            return this.contadorNumeroGanador;
         }
 
         // Process TABLE_CLOSED state

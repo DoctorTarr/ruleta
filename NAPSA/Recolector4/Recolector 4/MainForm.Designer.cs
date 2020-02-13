@@ -91,9 +91,10 @@ namespace VideoRecolector
             lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
             txtbGameStatus.Text = estadoMesa.ToString();
             txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
-            int winner = juego.GetCurrentWinnerNumber();
 
+            int winner = juego.GetCurrentWinnerNumber();
             txtWinner.Text = (winner == -1) ? "--" : winner.ToString();
+            lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
 
             if (this._calibrateFlag || this.cbCalibrateNumbers.Checked)
             {
@@ -309,6 +310,8 @@ namespace VideoRecolector
             this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlCalibration = new System.Windows.Forms.GroupBox();
+            this.lblChkCount = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.lblAvgY = new System.Windows.Forms.Label();
             this.lblAvgX = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -321,8 +324,7 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.label17 = new System.Windows.Forms.Label();
-            this.lblChkCount = new System.Windows.Forms.Label();
+            this.lblWinCount = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -529,6 +531,7 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.lblWinCount);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.txtbDisplayStatus);
             this.groupBox3.Controls.Add(this.lblEstadoRuleta);
@@ -819,6 +822,26 @@ namespace VideoRecolector
             this.pnlCalibration.TabStop = false;
             this.pnlCalibration.Visible = false;
             // 
+            // lblChkCount
+            // 
+            this.lblChkCount.AutoSize = true;
+            this.lblChkCount.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblChkCount.Location = new System.Drawing.Point(64, 35);
+            this.lblChkCount.Name = "lblChkCount";
+            this.lblChkCount.Size = new System.Drawing.Size(13, 13);
+            this.lblChkCount.TabIndex = 126;
+            this.lblChkCount.Text = "0";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label17.Location = new System.Drawing.Point(6, 35);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(59, 13);
+            this.label17.TabIndex = 125;
+            this.label17.Text = "Calibrados:";
+            // 
             // lblAvgY
             // 
             this.lblAvgY.AutoSize = true;
@@ -952,25 +975,15 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
-            // label17
+            // lblWinCount
             // 
-            this.label17.AutoSize = true;
-            this.label17.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label17.Location = new System.Drawing.Point(6, 35);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(59, 13);
-            this.label17.TabIndex = 125;
-            this.label17.Text = "Calibrados:";
-            // 
-            // lblChkCount
-            // 
-            this.lblChkCount.AutoSize = true;
-            this.lblChkCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblChkCount.Location = new System.Drawing.Point(64, 35);
-            this.lblChkCount.Name = "lblChkCount";
-            this.lblChkCount.Size = new System.Drawing.Size(13, 13);
-            this.lblChkCount.TabIndex = 126;
-            this.lblChkCount.Text = "0";
+            this.lblWinCount.AutoSize = true;
+            this.lblWinCount.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblWinCount.Location = new System.Drawing.Point(341, 468);
+            this.lblWinCount.Name = "lblWinCount";
+            this.lblWinCount.Size = new System.Drawing.Size(13, 13);
+            this.lblWinCount.TabIndex = 67;
+            this.lblWinCount.Text = "0";
             // 
             // MainForm
             // 
@@ -1066,6 +1079,7 @@ namespace VideoRecolector
         private TextBox txtbDisplayStatus;
         private Label lblChkCount;
         private Label label17;
+        private Label lblWinCount;
     }
 }
 
