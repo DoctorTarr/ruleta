@@ -94,30 +94,6 @@ namespace VideoRecolector
             return _LastWinnerNumber;
         }
 
-        public void SetNewWinnerNumber(int winner)
-        {
-            if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
-            {
-                // New number is coming
-                if (this._NewWinnerNumber != winner)
-                {
-                    this._NewWinnerNumber = winner;
-                    this.contadorNumeroGanador=1;
-                }
-                else
-                {
-                    this.contadorNumeroGanador++;
-                    if (this.contadorNumeroGanador > 1)
-                    {
-                        this._haveNewWinner = true;
-                        this._WinnerNumber = _NewWinnerNumber;
-                        this._NewWinnerNumber = -1;
-                        this.contadorNumeroGanador = 0;
-                        CheckNoMoreBetsState();
-                    }
-                }
-            }
-        }
 
         public  WINNER_CMD_TYPE GetCurrentWinnerNumberCmd()
         {
@@ -196,10 +172,43 @@ namespace VideoRecolector
             }
         }
 
+        public void SetNewWinnerNumber(int winner)
+        {
+            if (currentState == ESTADO_JUEGO.NO_MORE_BETS)
+            {
+                // New number is coming
+                if (this._NewWinnerNumber != winner)
+                {
+                    this._NewWinnerNumber = winner;
+                    this.contadorNumeroGanador = 1;
+                }
+                else
+                {
+                    this.contadorNumeroGanador++;
+                    if (this.contadorNumeroGanador > 1)
+                    {
+                        this._haveNewWinner = true;
+                        this._WinnerNumber = _NewWinnerNumber;
+                        this._NewWinnerNumber = -1;
+                        this.contadorNumeroGanador = 0;
+                        CheckNoMoreBetsState();
+                    }
+                }
+            }
+        }
+
         // Process NO_MORE_BETS state (waiting for winning number)
         public void CheckNoMoreBetsState()
         {
             this.contadorEstadoActual++;
+            if ((_NewWinnerNumber != -1) && (this.contadorEstadoActual > 3 * 2))
+            {
+                this._haveNewWinner = true;
+                this._WinnerNumber = _NewWinnerNumber;
+                this._NewWinnerNumber = -1;
+                this.contadorNumeroGanador = 0;
+            }
+
             if (_haveNewWinner)
             {
                 currentState = ESTADO_JUEGO.WINNING_NUMBER;
