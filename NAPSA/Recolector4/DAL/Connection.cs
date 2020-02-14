@@ -412,7 +412,7 @@ label_15:
     public DbDataReader DbExecuteReaderString(string queryString)
     {
       DbDataReader dbDataReader = (DbDataReader) null;
-      DbCommand dbCommand = (DbCommand) null;
+      //DbCommand dbCommand = (DbCommand) null;
       try
       {
         if (this.AbrirConexion())
@@ -431,7 +431,7 @@ label_15:
       }
       finally
       {
-        dbCommand = (DbCommand) null;
+        //dbCommand = (DbCommand) null;
       }
       return dbDataReader;
     }
@@ -439,7 +439,7 @@ label_15:
     public object DbExecuteScalarString(string queryString)
     {
       object obj = (object) null;
-      DbCommand dbCommand = (DbCommand) null;
+      //DbCommand dbCommand = (DbCommand) null;
       try
       {
         if (this.AbrirConexion())
@@ -458,7 +458,7 @@ label_15:
       }
       finally
       {
-        dbCommand = (DbCommand) null;
+        //dbCommand = (DbCommand) null;
       }
       return obj;
     }
@@ -470,7 +470,7 @@ label_15:
 
     public int DbExecuteNonQueryString(string queryString)
     {
-      DbCommand dbCommand = (DbCommand) null;
+      //DbCommand dbCommand = (DbCommand) null;
       int num = -1;
       try
       {
@@ -500,7 +500,7 @@ label_15:
       }
       finally
       {
-        dbCommand = (DbCommand) null;
+        //dbCommand = (DbCommand) null;
       }
       return num;
     }
@@ -522,7 +522,7 @@ label_15:
 
     private DataSet _dataSetExecuteReader(QueryEngine query, bool esSP)
     {
-      DbCommand dbCommand = (DbCommand) null;
+      //DbCommand dbCommand = (DbCommand) null;
       DataSet dataSet = (DataSet) null;
       try
       {
@@ -564,7 +564,7 @@ label_15:
       }
       finally
       {
-        dbCommand = (DbCommand) null;
+        dataSet = (DataSet) null;
       }
       return dataSet;
     }

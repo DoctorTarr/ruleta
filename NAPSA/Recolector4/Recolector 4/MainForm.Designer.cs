@@ -88,6 +88,7 @@ namespace VideoRecolector
         #region Main Timer
         private void tmrMain_Tick(object sender, EventArgs e)
         {
+
             lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
             txtbGameStatus.Text = estadoMesa.ToString();
             txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();

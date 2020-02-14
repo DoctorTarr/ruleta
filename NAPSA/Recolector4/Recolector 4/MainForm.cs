@@ -70,7 +70,7 @@ namespace VideoRecolector
 
         private int _WinnerNumber = -1;
 
-        private int _DetectionMethod = 0; // 0 == Distance/Angle
+        //private int _DetectionMethod = 0; // 0 == Distance/Angle
                                           // 1 = X/Y
 
         private bool _calibrateFlag = false;
@@ -80,6 +80,8 @@ namespace VideoRecolector
         private bool _isMoving = false;
         //private float motionAlarmLevel = 0.003f;
         private int _rpm = 0;
+        private int _rpmCounter = 0;
+        private float movePercentage = 0.0f;
 
         // Demo variables
         private int estadoDemo;
@@ -401,8 +403,15 @@ namespace VideoRecolector
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-                this._rpm = (int)(1000.0f * detector.ProcessFrame(_BsourceFrame));
-                _isMoving = (this._rpm > 0);
+                this.movePercentage = detector.ProcessFrame(_BsourceFrame);
+                _isMoving = (this.movePercentage > 0.01f);
+                if (!this._isMoving)
+                {
+                    this._rpmCounter = 0;
+                    this._rpm = 0;
+                }
+
+                //this._rpm = (int)(1000.0f * this.movePercentage);
 
                 ZeroPos.X = -640;
                 _ZeroAngleToCenter = 720;
@@ -431,10 +440,16 @@ namespace VideoRecolector
                 //      314, 314
                 DebounceSwitch1();
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                if (this.bDebouncedBallFound)
+                if (bZeroFound && _zeroNumberArea.Contains(ZeroPos))
                 {
+                    if (this._rpmCounter > 0)
+                    {
+                        this._rpm = 1500 / this._rpmCounter;
+                        this._rpmCounter = 0;
+                    }
+
                     _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                    if (bZeroFound && _zeroNumberArea.Contains(ZeroPos))
+                    if (this.bDebouncedBallFound)
                     {
                         tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
                         tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
@@ -459,6 +474,9 @@ namespace VideoRecolector
                 }
                 else
                 {
+                    if (this._isMoving)
+                        this._rpmCounter++;
+
                     winner = -1;
                     lblWinner.Text = "--";
                 }

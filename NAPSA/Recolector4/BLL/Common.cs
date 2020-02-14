@@ -150,7 +150,7 @@ namespace DASYS.Recolector.BLL
       string nombrePantalla,
       string filtroVista)
     {
-      DataSet dataSet = (DataSet) null;
+      //DataSet dataSet = (DataSet) null;
       DataView dataView = (DataView) null;
       QueryEngine queryEngine = (QueryEngine) null;
       try
@@ -212,7 +212,7 @@ namespace DASYS.Recolector.BLL
       }
       catch (Exception ex)
       {
-        dataSet = (DataSet) null;
+        dataView = (DataView) null;
         throw new Exception(ex.Message);
       }
       return dataView;
