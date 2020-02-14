@@ -187,6 +187,7 @@ namespace VideoRecolector
                 videoSource.Password = "Qwer1234";
                 videoSourcePlayer1.VideoSource = videoSource;
                 videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(get_Frame);
+                videoSourcePlayer1.VideoSource.VideoSourceError += new VideoSourceErrorEventHandler(videoSourcePlayer1_VideoSourceError);
 
                 videoSourcePlayer1.Start();
                 tbVideoStatus.BackColor = Color.Red;
@@ -199,6 +200,11 @@ namespace VideoRecolector
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void videoSourcePlayer1_VideoSourceError(object sender, VideoSourceErrorEventArgs eventArgs)
+        {
+            Common.Logger.Escribir("*** Error en Cerrar() ***" + eventArgs.Exception.ToString(), true);
         }
 
         private void StopCamera()
@@ -411,24 +417,19 @@ namespace VideoRecolector
                     this._rpm = 0;
                 }
 
-                //this._rpm = (int)(1000.0f * this.movePercentage);
-
                 ZeroPos.X = -640;
-                _ZeroAngleToCenter = 720;
-                BallPos.X = -640;
-                _BallAngleToCenter = 720;
-
+                _ZeroAngleToCenter = 0;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 bZeroFound = ZeroPos.X != -640;
-
-                pbBall.Image = BallBlobDetection(_BsourceFrame);
-                bBallFound = BallPos.X != -640;
-
                 if (bZeroFound)
                 {
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
                 }
- 
+
+                BallPos.X = -640;
+                _BallAngleToCenter = 0;
+                pbBall.Image = BallBlobDetection(_BsourceFrame);
+                bBallFound = BallPos.X != -640;
                 if (bBallFound)
                 {
                     _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
@@ -715,8 +716,8 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByDistAngle[i, 0] - distance) < 2) &&
-                    (Math.Abs(NumbersByDistAngle[i, 1] - angle) < 3))
+                if ((Math.Abs(NumbersByDistAngle[i, 1] - angle) < 3) &&
+                    (Math.Abs(NumbersByDistAngle[i, 0] - distance) < 2))
                 {
                     winner = i;
                     break;
@@ -957,7 +958,8 @@ namespace VideoRecolector
             }
             catch (Exception ex)
             {
-                int num = (int)MessageBox.Show(ex.Message);
+//                int num = (int)MessageBox.Show(ex.Message);
+                Common.Logger.Escribir("*** Error en Cerrar() ***" + ex.Message.ToString(), true);
             }
         }
 
