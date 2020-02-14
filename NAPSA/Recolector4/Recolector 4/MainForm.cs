@@ -403,6 +403,7 @@ namespace VideoRecolector
                 int winner = -1;
                 bool bZeroFound = false;
                 bool bBallFound = false;
+                bool bZeroFoundAt12 = false;
 
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
@@ -423,7 +424,25 @@ namespace VideoRecolector
                 bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
                 {
+                    bZeroFoundAt12 = _zeroNumberArea.Contains(ZeroPos);
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+                    if (bZeroFoundAt12)
+                    {
+                        if (this._rpmCounter > 0)
+                        {
+                            this._rpm = 1500 / this._rpmCounter;
+                            this._rpmCounter = 0;
+                        }
+
+                        tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                        tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                        tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+                    }
+                    else
+                    {
+                        if (this._isMoving)
+                            this._rpmCounter++;
+                    }
                 }
 
                 BallPos.X = -640;
@@ -441,21 +460,11 @@ namespace VideoRecolector
                 //      314, 314
                 DebounceSwitch1();
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                if (bZeroFound && _zeroNumberArea.Contains(ZeroPos))
+                if (bZeroFoundAt12)
                 {
-                    if (this._rpmCounter > 0)
-                    {
-                        this._rpm = 1500 / this._rpmCounter;
-                        this._rpmCounter = 0;
-                    }
-
-                    _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
                     if (this.bDebouncedBallFound)
                     {
-                        tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                        tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-                        tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
-
+                        _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
                         tbBolaPosX.Text = BallPosToCenter.X.ToString();
                         tbBolaPosY.Text = BallPosToCenter.Y.ToString();
                         txtDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
@@ -475,9 +484,6 @@ namespace VideoRecolector
                 }
                 else
                 {
-                    if (this._isMoving)
-                        this._rpmCounter++;
-
                     winner = -1;
                     lblWinner.Text = "--";
                 }
