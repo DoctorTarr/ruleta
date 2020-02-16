@@ -19,8 +19,8 @@ namespace VideoRecolector
             {
                 if (instanceCountOne)
                 {
-                    using (Process p = Process.GetCurrentProcess())
-                        p.PriorityClass = ProcessPriorityClass.High;
+                    //using (Process p = Process.GetCurrentProcess())
+                    //    p.PriorityClass = ProcessPriorityClass.High;
 
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
@@ -47,7 +47,8 @@ namespace VideoRecolector
                     }
                     catch (Exception ex)
                     {
-                        int num = (int)MessageBox.Show(ex.Message, "Error");
+                        //int num = (int)MessageBox.Show(ex.Message, "Error");
+                        Common.Logger.Escribir("Error! " + ex.Message, true);
                     }
 
                 }

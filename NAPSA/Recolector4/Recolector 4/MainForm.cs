@@ -15,6 +15,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Linq;
+using System.Diagnostics;
 
 namespace VideoRecolector
 {
@@ -204,7 +205,7 @@ namespace VideoRecolector
 
         private void videoSourcePlayer1_VideoSourceError(object sender, VideoSourceErrorEventArgs eventArgs)
         {
-            Common.Logger.Escribir("*** Error en Cerrar() ***" + eventArgs.Exception.ToString(), true);
+            //Common.Logger.Escribir("*** Error en Cerrar() ***" + eventArgs.Exception.ToString(), true);
         }
 
         private void StopCamera()
@@ -464,20 +465,36 @@ namespace VideoRecolector
                 {
                     if (this.bDebouncedBallFound)
                     {
+                        Stopwatch stopWatch = new Stopwatch();
+
                         _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
                         tbBolaPosX.Text = BallPosToCenter.X.ToString();
                         tbBolaPosY.Text = BallPosToCenter.Y.ToString();
                         txtDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
 
-                        winner = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+                        //winner = (this._rpm < 40) ? FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter) :
+                        //                            FindNumberByXY();
+
+                        // Find numbers opposite to zero by XY
+                        stopWatch.Start();
+                        winner = (_BallAngleToCenter <= -88 && _BallAngleToCenter >= -92) ?
+                                                    FindNumberByXY() :
+                                                    FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+                        stopWatch.Stop();
+
+                        // Get the elapsed time as a TimeSpan value.
+                        TimeSpan ts = stopWatch.Elapsed;
+
+                        // Format and display the TimeSpan value.
+                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                            ts.Hours, ts.Minutes, ts.Seconds,
+                            ts.Milliseconds / 10);
+                        MessageBox.Show("RunTime " + elapsedTime);
 
                         if (winner > -1)
                         {
                             _WinnerNumber = winner;
-                            if (!_calibrateFlag)
-                            {
-                                juego.SetNewWinnerNumber(_WinnerNumber);
-                            }
+                            juego.SetNewWinnerNumber(_WinnerNumber);
                             lblWinner.Text = string.Format("{0}", _WinnerNumber);
                         }
                     }
@@ -718,6 +735,7 @@ namespace VideoRecolector
 
         private int FindNumberByAngle(int distance, int angle)
         {
+
             int winner = -1;
 
             for (int i = 0; i < 37; i++)

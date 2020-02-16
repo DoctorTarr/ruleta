@@ -90,9 +90,9 @@ namespace DASYS.Recolector.BLL
 
     public enum ProtocoloTipoPaquete
     {
-        NumeroGanador,
-        Status,
-        Null,
+      NumeroGanador,
+      Status,
+      Null,
     }
   }
 }

@@ -29,6 +29,7 @@ namespace VideoRecolector
         private ESTADO_JUEGO currentState = ESTADO_JUEGO.STATE_0;
         private int contadorEstadoActual = 0;
         private int contadorNumeroGanador = 0; // Veces que recibio el numero ganador 
+        private int contadorEsperaConfirmacionGanador = 0;
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private int _rpm = 0;
         private const int TABLE_CLOSED_TIMEOUT = 3 * 60 * 2;
@@ -200,7 +201,7 @@ namespace VideoRecolector
         // Process NO_MORE_BETS state (waiting for winning number)
         public void CheckNoMoreBetsState()
         {
-            if ((_NewWinnerNumber != -1) && (this.contadorEstadoActual > 2 * 3))
+            if ((_NewWinnerNumber != -1) && (this.contadorEsperaConfirmacionGanador > 2 * 3))
             {
                 this._haveNewWinner = true;
                 this._WinnerNumber = _NewWinnerNumber;
@@ -211,11 +212,15 @@ namespace VideoRecolector
             if (_haveNewWinner)
             {
                 currentState = ESTADO_JUEGO.WINNING_NUMBER;
+                this.contadorEsperaConfirmacionGanador = 0;
                 this.contadorEstadoActual = 0;
             }
             else
             {
                 this.contadorEstadoActual++;
+                if (_NewWinnerNumber != -1)
+                    this.contadorEsperaConfirmacionGanador++;
+
                 if (!this._isCameraOn || (this.contadorEstadoActual > TABLE_CLOSED_TIMEOUT)) // Despues de 8 minutos cierra la mesa
                 {
                     currentState = ESTADO_JUEGO.TABLE_CLOSED;

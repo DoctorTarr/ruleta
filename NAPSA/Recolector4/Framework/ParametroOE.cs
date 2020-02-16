@@ -54,7 +54,7 @@ namespace DASYS.Framework
     {
       ParametrosOE parametrosOe = new ParametrosOE();
       QueryEngine query = new QueryEngine();
-      //DataSet dataSet1 = (DataSet) null;
+      DataSet dataSet1 = (DataSet) null;
       try
       {
         parametrosOe = ParametroOE.ObtenerParametrosPorDefecto();
@@ -86,7 +86,7 @@ namespace DASYS.Framework
       }
       finally
       {
-        //dataSet1 = (DataSet) null;
+        dataSet1 = (DataSet) null;
       }
       return parametrosOe;
     }
@@ -95,7 +95,7 @@ namespace DASYS.Framework
     {
       string str = string.Empty;
       QueryEngine query = new QueryEngine();
-      //DataSet dataSet1 = (DataSet) null;
+      DataSet dataSet1 = (DataSet) null;
       try
       {
         if (Utils.oConexiones != null)
@@ -121,7 +121,7 @@ namespace DASYS.Framework
       }
       finally
       {
-        //dataSet1 = (DataSet) null;
+        dataSet1 = (DataSet) null;
       }
       return str;
     }

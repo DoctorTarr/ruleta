@@ -93,7 +93,7 @@ namespace DASYS.Framework
     {
       Parametros parametros = new Parametros();
       QueryEngine query = new QueryEngine();
-      //DataSet dataSet1 = (DataSet) null;
+      DataSet dataSet1 = (DataSet) null;
       try
       {
         parametros = Parametro.ObtenerParametrosPorDefecto();
@@ -137,7 +137,7 @@ namespace DASYS.Framework
       }
       finally
       {
-        //dataSet1 = (DataSet) null;
+        dataSet1 = (DataSet) null;
       }
       return parametros;
     }
@@ -148,7 +148,7 @@ namespace DASYS.Framework
       List<Parametro> parametros)
     {
       QueryEngine query = new QueryEngine();
-      //DataSet dataSet1 = (DataSet) null;
+      DataSet dataSet1 = (DataSet) null;
       Parametro parametro = (Parametro) null;
       try
       {
@@ -185,7 +185,7 @@ namespace DASYS.Framework
       }
       finally
       {
-        //dataSet1 = (DataSet) null;
+        dataSet1 = (DataSet) null;
       }
       return parametro;
     }
