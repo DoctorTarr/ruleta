@@ -208,7 +208,7 @@ namespace VideoRecolector
         private void ShowNumbersCheckBox()
         {
             int xPos = 6;
-            int yPos = 185;
+            int yPos = 192;
             int chkNum = 37; // 37 numeros
 
             int n = 0;
@@ -324,6 +324,7 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -788,6 +789,7 @@ namespace VideoRecolector
             // 
             // pnlCalibration
             // 
+            this.pnlCalibration.Controls.Add(this.label9);
             this.pnlCalibration.Controls.Add(this.lblChkCount);
             this.pnlCalibration.Controls.Add(this.label17);
             this.pnlCalibration.Controls.Add(this.lblAvgY);
@@ -924,7 +926,7 @@ namespace VideoRecolector
             // 
             this.lblTestCount.AutoSize = true;
             this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(64, 81);
+            this.lblTestCount.Location = new System.Drawing.Point(64, 136);
             this.lblTestCount.Name = "lblTestCount";
             this.lblTestCount.Size = new System.Drawing.Size(13, 13);
             this.lblTestCount.TabIndex = 70;
@@ -955,13 +957,23 @@ namespace VideoRecolector
             this.btnSetNumber.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnSetNumber.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetNumber.ForeColor = System.Drawing.Color.Black;
-            this.btnSetNumber.Location = new System.Drawing.Point(6, 141);
+            this.btnSetNumber.Location = new System.Drawing.Point(6, 152);
             this.btnSetNumber.Name = "btnSetNumber";
             this.btnSetNumber.Size = new System.Drawing.Size(74, 38);
             this.btnSetNumber.TabIndex = 64;
             this.btnSetNumber.Text = "Guardar Calibracion";
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label9.Location = new System.Drawing.Point(6, 136);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(58, 13);
+            this.label9.TabIndex = 127;
+            this.label9.Text = "Muestra #:";
             // 
             // MainForm
             // 
@@ -1056,6 +1068,7 @@ namespace VideoRecolector
         private Label lblWinCount;
         private Label label7;
         private TextBox txtDistZeroBall;
+        private Label label9;
     }
 }
 

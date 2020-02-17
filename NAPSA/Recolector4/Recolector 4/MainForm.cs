@@ -98,6 +98,26 @@ namespace VideoRecolector
         // Number of numbers calibrated
         private int numCalibrated = 0;
 
+        // For calibration
+        private int acumDist = 0;
+        private int countDistance = 0;
+        private int averageDist = 0;
+
+        private int acumAngle = 0;
+        private int countAngle = 0;
+        private int averageAngle = 0;
+
+        private int acumX = 0;
+        private int countX = 0;
+        private int averageX = 0;
+
+        private int acumY = 0;
+        private int countY = 0;
+        private int averageY = 0;
+
+        private int countCalibrationSamples = 0;
+        private bool isCalibrating = false;
+
 
         public MainForm()
         {
@@ -420,7 +440,7 @@ namespace VideoRecolector
                 }
 
                 ZeroPos.X = -640;
-                _ZeroAngleToCenter = 0;
+                _ZeroAngleToCenter = 720;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
@@ -465,32 +485,20 @@ namespace VideoRecolector
                 {
                     if (this.bDebouncedBallFound)
                     {
-                        Stopwatch stopWatch = new Stopwatch();
-
                         _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
                         tbBolaPosX.Text = BallPosToCenter.X.ToString();
                         tbBolaPosY.Text = BallPosToCenter.Y.ToString();
                         txtDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
 
+                        if (this.isCalibrating)
+                            AcumulateCalibration();
                         //winner = (this._rpm < 40) ? FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter) :
                         //                            FindNumberByXY();
 
                         // Find numbers opposite to zero by XY
-                        stopWatch.Start();
                         winner = (_BallAngleToCenter <= -88 && _BallAngleToCenter >= -92) ?
                                                     FindNumberByXY() :
                                                     FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
-                        stopWatch.Stop();
-
-                        // Get the elapsed time as a TimeSpan value.
-                        TimeSpan ts = stopWatch.Elapsed;
-
-                        // Format and display the TimeSpan value.
-                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-                            ts.Hours, ts.Minutes, ts.Seconds,
-                            ts.Milliseconds / 10);
-                        MessageBox.Show("RunTime " + elapsedTime);
-
                         if (winner > -1)
                         {
                             _WinnerNumber = winner;
@@ -504,6 +512,7 @@ namespace VideoRecolector
                     winner = -1;
                     lblWinner.Text = "--";
                 }
+
 
 
                 if (_calibrateFlag)
@@ -792,33 +801,63 @@ namespace VideoRecolector
 
         private void btnCalibrateNumber_Click(object sender, EventArgs e)
         {
-            int acumDist = 0;
-            int acumAngle = 0;
-            int averageDist = 0;
-            int averageAngle = 0;
-            int countDistance = 0;
-            int countAngle = 0;
+            this.acumDist = 0;
+            this.countDistance = 0;
+            this.averageDist = 0;
 
-            for (int i = 0; i < 100; i++)
+            this.acumAngle = 0;
+            this.countAngle = 0;
+            this.averageAngle = 0;
+
+            this.acumX = 0;
+            this.countX = 0;
+            this.averageX = 0;
+
+            this.acumY = 0;
+            this.countY = 0;
+            this.averageY = 0;
+
+            
+            this.countCalibrationSamples = 0;
+            this.isCalibrating = true;
+
+        }
+
+        private void AcumulateCalibration()
+        {
+            this.countCalibrationSamples++;
+            lblTestCount.Text = this.countCalibrationSamples.ToString();
+
+            countDistance++;
+            acumDist += this._DistanceZeroBall;
+
+            if (this._BallAngleToCenter != 720)
             {
-                Application.DoEvents();
-                countDistance++;
-                acumDist += this._DistanceZeroBall;
+                acumAngle += this._BallAngleToCenter;
+                countAngle++;
+            }
+
+            if (BallPosToCenter.X != 640)
+            {
+                this.countX++;
+                this.acumX += BallPosToCenter.X;
+                this.countY++;
+                this.acumY += BallPosToCenter.Y;
+            }
+
+            if (this.countCalibrationSamples >= 100)
+            {
                 averageDist = acumDist / countDistance;
                 this.lblAvgDist.Text = averageDist.ToString();
+                averageAngle = acumAngle / countAngle;
+                this.lblAvgAngle.Text = averageAngle.ToString();
+                this.averageX = this.acumX / this.countX;
+                this.averageY = this.acumY / this.countY;
 
-                if (this._BallAngleToCenter != 720)
-                {
-                    countAngle++;
-                    acumAngle += this._BallAngleToCenter;
-                    averageAngle = acumAngle / countAngle;
-                    this.lblAvgAngle.Text = averageAngle.ToString();
-                }
+                this.lblAvgX.Text = this.averageX.ToString();
+                this.lblAvgY.Text = this.averageY.ToString();
 
-                this.lblAvgX.Text = this.BallPosToCenter.X.ToString();
-                this.lblAvgY.Text = this.BallPosToCenter.Y.ToString();
-
-                this.lblTestCount.Text = i.ToString();
+                this.isCalibrating = false;
             }
         }
 
@@ -1014,6 +1053,20 @@ namespace VideoRecolector
             {
                 stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
                 stream.Flush();
+            }
+
+            using (var w = new StreamWriter(@"./dataDA.csv", append: false))
+            {
+                for (int i = 0; i < 37; i++)
+                {
+                    var first = NumbersByDistAngle[i, 0];
+                    var second = NumbersByDistAngle[i, 1];
+                    var third = NumbersByXY[i, 0];
+                    var fourth = NumbersByXY[i, 1];
+                    string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
+                    w.WriteLine(line);
+                    w.Flush();
+                }
             }
         }
 
