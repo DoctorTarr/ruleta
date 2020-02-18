@@ -183,16 +183,16 @@ namespace DASYS.NAPSA.Display2.GUI
           if (flag2)
           {
             if (flag3)
-              goto label_6;
+               return flag1;
           }
-          int num = (int) MessageBox.Show("No fue posible guardar el registro.");
+          Common.Logger.Escribir("Error en activar(): No fue posible guardar el registro.");
         }
       }
       catch (Exception ex)
       {
-        int num = (int) MessageBox.Show(ex.Message);
+        Common.Logger.Escribir($"Error ObtenerUltimoEstado(): {ex.Message} - {ex.StackTrace}");
       }
-label_6:
+
       return flag1;
     }
 

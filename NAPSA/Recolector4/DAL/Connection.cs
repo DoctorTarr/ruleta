@@ -144,23 +144,24 @@ namespace DASYS.DAL
         }
         else
         {
-          if (this.MyDbConnection.State != ConnectionState.Closed)
-          {
-            if (this.MyDbConnection.State != ConnectionState.Broken)
-              goto label_11;
-          }
-          this.MyDbConnection.Open();
-          this.estadoUltimaConexion = new bool?(true);
-          this.ultimaConexionCorrecta = new DateTime?(DateTime.Now);
-          flag = true;
+            if (this.MyDbConnection.State != ConnectionState.Closed)
+            {
+                if (this.MyDbConnection.State != ConnectionState.Broken)
+                    return flag;
+            }
+
+            this.MyDbConnection.Open();
+            this.estadoUltimaConexion = new bool?(true);
+            this.ultimaConexionCorrecta = new DateTime?(DateTime.Now);
+            flag = true;
         }
       }
-      catch
+      catch (Exception ex)
       {
         this.estadoUltimaConexion = new bool?(false);
-        throw;
+        throw ex;
       }
-label_11:
+
       return flag;
     }
 
@@ -316,32 +317,32 @@ label_17:
               command.Parameters.Add((object) parameter);
             }
           }
-          else
-          {
-            if (query.ParameterName.Count == 0 && query.ParameterType.Count == 0)
-            {
-              if (query.ParameterValue.Count == 0)
-                goto label_13;
-            }
-            throw new Exception("Must give Name, Type and Value to set parameters");
-          }
-label_13:
-          try
-          {
+//          else
+//          {
+//            if (query.ParameterName.Count == 0 && query.ParameterType.Count == 0)
+//            {
+//              if (query.ParameterValue.Count == 0)
+//                goto label_13;
+//            }
+//            throw new Exception("Must give Name, Type and Value to set parameters");
+//          }
+//label_13:
+//          try
+          //{
             obj = command.ExecuteScalar();
             if (this.transaccion == null)
               this.CerrarConexión();
-          }
-          catch (DbException ex)
-          {
-            this.DeshacerTransaccion();
-            throw;
-          }
+          //}
+          //catch (DbException ex)
+          //{
+          //  this.DeshacerTransaccion();
+          //  throw;
+          //}
         }
       }
-      catch
+      catch (Exception ex)
       {
-        throw;
+        throw ex;
       }
       return obj;
     }
@@ -391,7 +392,8 @@ label_13:
 label_15:
           try
           {
-            num = command.ExecuteNonQuery();
+            
+            num = (int)command.ExecuteNonQuery();
             if (this.transaccion == null)
               this.CerrarConexión();
           }

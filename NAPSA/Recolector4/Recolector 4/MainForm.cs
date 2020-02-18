@@ -421,6 +421,8 @@ namespace VideoRecolector
         {
             lock (this)
             {
+                int winnerDA = -1;
+                int winnerXY = -1;
                 int winner = -1;
                 bool bZeroFound = false;
                 bool bBallFound = false;
@@ -496,11 +498,30 @@ namespace VideoRecolector
                         //                            FindNumberByXY();
 
                         // Find numbers opposite to zero by XY
-                        winner = (_BallAngleToCenter <= -88 && _BallAngleToCenter >= -92) ?
-                                                    FindNumberByXY() :
-                                                    FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+                        //winner = ((_BallAngleToCenter <= -74 && _BallAngleToCenter >= -93) ||
+                        //          (_BallAngleToCenter <= -53 && _BallAngleToCenter >= -64) ||
+                        //          (_BallAngleToCenter <= -35 && _BallAngleToCenter >= -44) ) ?
+                        //                            FindNumberByXY() :
+                        //                            FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+                        winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
+                        if (winnerXY != -1)
+                        {
+                            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+                            if ((winnerDA != -1) && (winnerXY == winnerDA))
+                            {
+                                winner = winnerDA;
+                            }
+                            else
+                            {
+                                if (this._rpm > 0)
+                                    Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
+                            }
+                        }
+
                         if (winner > -1)
                         {
+                            //if (this._rpm > 0)
+                            //    Common.Logger.Escribir($"Winner: {winner} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - B D:{_DistanceZeroBall} - A:{_BallAngleToCenter} X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y}", true);
                             _WinnerNumber = winner;
                             juego.SetNewWinnerNumber(_WinnerNumber);
                             lblWinner.Text = string.Format("{0}", _WinnerNumber);
@@ -760,14 +781,14 @@ namespace VideoRecolector
             return winner;
         }
 
-        private int FindNumberByXY()
+        private int FindNumberByXY(int x, int y)
         {
             int winner = -1;
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByXY[i, 0] - BallPosToCenter.X) < 3) &&
-                    (Math.Abs(NumbersByXY[i, 1] - BallPosToCenter.Y) < 3))
+                if ((Math.Abs(NumbersByXY[i, 0] - x) < 3) &&
+                    (Math.Abs(NumbersByXY[i, 1] - y) < 3))
                 {
                     winner = i;
                     break;
@@ -851,10 +872,11 @@ namespace VideoRecolector
                 this.lblAvgDist.Text = averageDist.ToString();
                 averageAngle = acumAngle / countAngle;
                 this.lblAvgAngle.Text = averageAngle.ToString();
-                this.averageX = this.acumX / this.countX;
-                this.averageY = this.acumY / this.countY;
 
+                this.averageX = this.acumX / this.countX;
                 this.lblAvgX.Text = this.averageX.ToString();
+
+                this.averageY = this.acumY / this.countY;
                 this.lblAvgY.Text = this.averageY.ToString();
 
                 this.isCalibrating = false;
@@ -867,11 +889,9 @@ namespace VideoRecolector
             {
                 int num = int.Parse(this.comboBox1.SelectedItem.ToString());
                 int index = this.comboBox1.SelectedIndex;
-                int distance = int.Parse(this.lblAvgDist.Text);
-                int angle = int.Parse(this.lblAvgAngle.Text);
 
                 // Check if distance and angle values are already assigned to another number
-                int winner = FindNumberByAngle(distance, angle);
+                int winner = FindNumberByAngle(this.averageDist, this.averageAngle);
                 if ((winner != -1) && (winner != num))
                 {
                     DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
@@ -883,7 +903,7 @@ namespace VideoRecolector
                 }
 
                 // Check if X and Y values are already assigned to another number
-                winner = FindNumberByXY();
+                winner = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
                 if ((winner != -1) && (winner != num))
                 {
                     DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
@@ -894,11 +914,11 @@ namespace VideoRecolector
                     }
                 }
 
-                NumbersByDistAngle[num, 0] = distance;
-                NumbersByDistAngle[num, 1] = angle;
+                NumbersByDistAngle[num, 0] = this.averageDist;
+                NumbersByDistAngle[num, 1] = this.averageAngle;
 
-                NumbersByXY[num, 0] = BallPosToCenter.X;
-                NumbersByXY[num, 1] = BallPosToCenter.Y;
+                NumbersByXY[num, 0] = this.averageX;
+                NumbersByXY[num, 1] = this.averageY;
 
                 WriteNumbersTable();
                 if (chkbNumbers[index].CheckState != CheckState.Checked)

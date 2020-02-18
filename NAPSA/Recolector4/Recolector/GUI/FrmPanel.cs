@@ -47,13 +47,9 @@ namespace DASYS.GUI
                     Common.Logger.Escribir("La conexión a la base de datos ha fallado al iniciar.", true);
                 }
                 if (flag)
-                    goto label_5;
+                    return;
             }
             while (!(now.AddMinutes(1.0) < DateTime.Now));
-            goto label_6;
-        label_5:
-            return;
-        label_6:;
         }
 
         private bool abrirPuerto()
