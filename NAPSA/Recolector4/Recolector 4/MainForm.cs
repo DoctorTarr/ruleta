@@ -454,6 +454,8 @@ namespace VideoRecolector
                         if (this._rpmCounter > 0)
                         {
                             this._rpm = 1500 / this._rpmCounter;
+                            if (this._rpm > 60)
+                                this._rpm = 60;
                             this._rpmCounter = 0;
                         }
 
