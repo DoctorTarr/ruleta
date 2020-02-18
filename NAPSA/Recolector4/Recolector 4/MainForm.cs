@@ -511,20 +511,20 @@ namespace VideoRecolector
                             {
                                 winner = winnerDA;
                             }
-                            else
-                            {
-                                if (this._rpm > 0)
-                                    Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
-                            }
+                        //    else
+                        //    {
+                        //        if (this._rpm > 0)
+                        //            Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
+                        //    }
                         }
 
                         if (winner > -1)
                         {
-                            //if (this._rpm > 0)
-                            //    Common.Logger.Escribir($"Winner: {winner} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - B D:{_DistanceZeroBall} - A:{_BallAngleToCenter} X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y}", true);
                             _WinnerNumber = winner;
                             juego.SetNewWinnerNumber(_WinnerNumber);
                             lblWinner.Text = string.Format("{0}", _WinnerNumber);
+                            //if (this._rpm > 0)
+                            //    Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
                         }
                     }
                 }
@@ -770,8 +770,8 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByDistAngle[i, 1] - angle) < 3) &&
-                    (Math.Abs(NumbersByDistAngle[i, 0] - distance) < 2))
+                if ((Math.Abs(NumbersByDistAngle[i, 1] - angle) < 2) &&
+                    (Math.Abs(NumbersByDistAngle[i, 0] - distance) < 4))
                 {
                     winner = i;
                     break;
