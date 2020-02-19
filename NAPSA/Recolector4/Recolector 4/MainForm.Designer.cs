@@ -91,7 +91,8 @@ namespace VideoRecolector
 
             lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
             txtbGameStatus.Text = estadoMesa.ToString();
-            txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
+
+            //txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
 
             int winner = juego.GetCurrentWinnerNumber();
             txtWinner.Text = (winner == -1) ? "--" : winner.ToString();
@@ -567,6 +568,7 @@ namespace VideoRecolector
             this.label16.Size = new System.Drawing.Size(80, 13);
             this.label16.TabIndex = 66;
             this.label16.Text = "Estado Display:";
+            this.label16.Visible = false;
             // 
             // txtbDisplayStatus
             // 
@@ -576,6 +578,7 @@ namespace VideoRecolector
             this.txtbDisplayStatus.Name = "txtbDisplayStatus";
             this.txtbDisplayStatus.Size = new System.Drawing.Size(165, 22);
             this.txtbDisplayStatus.TabIndex = 65;
+            this.txtbDisplayStatus.Visible = false;
             // 
             // lblEstadoRuleta
             // 
@@ -778,12 +781,12 @@ namespace VideoRecolector
             this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cerrarToolStripMenuItem});
             this.mnuSystemTray.Name = "contextMenuStrip1";
-            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
+            this.mnuSystemTray.Size = new System.Drawing.Size(181, 48);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
@@ -811,6 +814,16 @@ namespace VideoRecolector
             this.pnlCalibration.TabIndex = 62;
             this.pnlCalibration.TabStop = false;
             this.pnlCalibration.Visible = false;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label9.Location = new System.Drawing.Point(6, 136);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(58, 13);
+            this.label9.TabIndex = 127;
+            this.label9.Text = "Muestra #:";
             // 
             // lblChkCount
             // 
@@ -964,16 +977,6 @@ namespace VideoRecolector
             this.btnSetNumber.Text = "Guardar Calibracion";
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label9.Location = new System.Drawing.Point(6, 136);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(58, 13);
-            this.label9.TabIndex = 127;
-            this.label9.Text = "Muestra #:";
             // 
             // MainForm
             // 

@@ -20,7 +20,7 @@ namespace VideoRecolector
                 if (instanceCountOne)
                 {
                     using (Process p = Process.GetCurrentProcess())
-                        p.PriorityClass = ProcessPriorityClass.High;
+                        p.PriorityClass = ProcessPriorityClass.RealTime;
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     try

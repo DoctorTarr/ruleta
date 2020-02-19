@@ -35,7 +35,8 @@ namespace DASYS.NAPSA.Display2.GUI
     private void InitializeComponent()
     {
       this.components = (IContainer) new Container();
-      ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof (FrmActivador));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmActivador));
+//      ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof (FrmActivador));
       this.txtLicencia = new TextBox();
       this.lblLicencia = new Label();
       this.lblActivacion = new Label();
@@ -114,9 +115,9 @@ namespace DASYS.NAPSA.Display2.GUI
       this.Controls.Add((Control) this.lblActivacion);
       this.Controls.Add((Control) this.lblLicencia);
       this.Controls.Add((Control) this.txtLicencia);
-      this.Icon = (Icon) componentResourceManager.GetObject("$this.Icon");
+      this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
       this.KeyPreview = true;
-      this.Name = nameof (FrmActivador);
+      this.Name = "FrmActivador";
       this.Text = "NAPSA - Activación del producto";
       this.Load += new EventHandler(this.FrmActivador_Load);
       this.KeyDown += new KeyEventHandler(this.FrmActivador_KeyDown);

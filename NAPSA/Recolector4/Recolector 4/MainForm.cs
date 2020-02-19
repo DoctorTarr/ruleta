@@ -122,6 +122,10 @@ namespace VideoRecolector
         public MainForm()
         {
             InitializeComponent();
+            //if (!Producto.VerificarActivacion())
+            //{
+            //    MessageBox.Show("Active el producto");
+            //}
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
             ReadNumbersTable();
@@ -1015,11 +1019,6 @@ namespace VideoRecolector
                 this.lblAvgX.Text = this.NumbersByXY[num, 0].ToString();
                 this.lblAvgY.Text = this.NumbersByXY[num, 1].ToString();
             }
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void GuardarNumeroGanador(int numero)
