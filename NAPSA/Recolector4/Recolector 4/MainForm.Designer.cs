@@ -311,6 +311,7 @@ namespace VideoRecolector
             this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlCalibration = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.lblChkCount = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.lblAvgY = new System.Windows.Forms.Label();
@@ -325,7 +326,6 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -758,7 +758,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(676, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(85, 66);
+            this.txtProtocolo.Size = new System.Drawing.Size(85, 56);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -781,12 +781,12 @@ namespace VideoRecolector
             this.mnuSystemTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cerrarToolStripMenuItem});
             this.mnuSystemTray.Name = "contextMenuStrip1";
-            this.mnuSystemTray.Size = new System.Drawing.Size(181, 48);
+            this.mnuSystemTray.Size = new System.Drawing.Size(107, 26);
             // 
             // cerrarToolStripMenuItem
             // 
             this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
             this.cerrarToolStripMenuItem.Text = "Cerrar";
             this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
             // 
@@ -983,7 +983,7 @@ namespace VideoRecolector
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnIniciarDemo;
-            this.ClientSize = new System.Drawing.Size(768, 759);
+            this.ClientSize = new System.Drawing.Size(768, 749);
             this.Controls.Add(this.pnlCalibration);
             this.Controls.Add(this.txtProtocolo);
             this.Controls.Add(this.groupBox3);

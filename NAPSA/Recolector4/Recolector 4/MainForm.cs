@@ -122,10 +122,12 @@ namespace VideoRecolector
         public MainForm()
         {
             InitializeComponent();
-            //if (!Producto.VerificarActivacion())
-            //{
-            //    MessageBox.Show("Active el producto");
-            //}
+            if (!Producto.VerificarActivacion())
+            {
+                MessageBox.Show("Producto No Activado. Por favor, actívelo", "PRODUCTO NO ACTIVADO",
+                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+                System.Environment.Exit(0);
+            }
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
             ReadNumbersTable();

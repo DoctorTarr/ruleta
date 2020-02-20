@@ -158,6 +158,10 @@
       <Project>{98a8ab5b-2db2-4a41-a723-82d5c88dd39c}</Project>
       <Name>BLL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{deb02105-c002-4670-92d5-a985ba773024}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="DASYS.NAPSA.Recolector4.config.xml">
