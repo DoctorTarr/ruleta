@@ -707,14 +707,15 @@ label_10:
           switch (HKEY)
           {
             case Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE:
-              string name = "Software\\" + nombreEntidad + "\\" + nombreProducto + "\\" + carpeta;
-              RegistryKey registryKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(name, true);
-              if (registryKey != null)
-              {
-                obj = registryKey.GetValue(clave);
+                string name = "Software\\" + nombreEntidad + "\\" + nombreProducto + "\\" + carpeta;
+                RegistryKey localKey = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry64);
+                localKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(name, false);
+                if (localKey != null)
+                {
+                    obj = localKey.GetValue(clave);
+                    break;
+                }
                 break;
-              }
-              break;
           }
         }
         catch (Exception ex)

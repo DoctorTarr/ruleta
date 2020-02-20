@@ -32,7 +32,7 @@ namespace VideoRecolector
         private int contadorEsperaConfirmacionGanador = 0;
         private bool _isMoving = false, _isCameraOn = false, _isBallPresent = false, _haveNewWinner = false;
         private int _rpm = 0;
-        private const int TABLE_CLOSED_TIMEOUT = 3 * 60 * 2;
+        private const int TABLE_CLOSED_TIMEOUT = 8 * 60 * 2; // 8 min * 60 secs * 2 (500 msec)
         private int _WinnerNumber = -1;
         private int _NewWinnerNumber = -1;
         private int _LastWinnerNumber = -1;

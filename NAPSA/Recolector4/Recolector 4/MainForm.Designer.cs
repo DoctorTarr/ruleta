@@ -286,6 +286,7 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkbCSV = new System.Windows.Forms.CheckBox();
             this.lblWinCount = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.txtbDisplayStatus = new System.Windows.Forms.TextBox();
@@ -523,6 +524,7 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkbCSV);
             this.groupBox3.Controls.Add(this.lblWinCount);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.txtbDisplayStatus);
@@ -549,6 +551,18 @@ namespace VideoRecolector
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
             // 
+            // chkbCSV
+            // 
+            this.chkbCSV.AutoSize = true;
+            this.chkbCSV.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkbCSV.Location = new System.Drawing.Point(383, 463);
+            this.chkbCSV.Name = "chkbCSV";
+            this.chkbCSV.Size = new System.Drawing.Size(88, 17);
+            this.chkbCSV.TabIndex = 128;
+            this.chkbCSV.Text = "Graba CSV";
+            this.chkbCSV.UseVisualStyleBackColor = true;
+            this.chkbCSV.Visible = false;
+            // 
             // lblWinCount
             // 
             this.lblWinCount.AutoSize = true;
@@ -563,7 +577,7 @@ namespace VideoRecolector
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label16.Location = new System.Drawing.Point(403, 469);
+            this.label16.Location = new System.Drawing.Point(508, 445);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(80, 13);
             this.label16.TabIndex = 66;
@@ -574,9 +588,9 @@ namespace VideoRecolector
             // 
             this.txtbDisplayStatus.Enabled = false;
             this.txtbDisplayStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbDisplayStatus.Location = new System.Drawing.Point(484, 464);
+            this.txtbDisplayStatus.Location = new System.Drawing.Point(511, 464);
             this.txtbDisplayStatus.Name = "txtbDisplayStatus";
-            this.txtbDisplayStatus.Size = new System.Drawing.Size(165, 22);
+            this.txtbDisplayStatus.Size = new System.Drawing.Size(138, 22);
             this.txtbDisplayStatus.TabIndex = 65;
             this.txtbDisplayStatus.Visible = false;
             // 
@@ -919,7 +933,7 @@ namespace VideoRecolector
             this.comboBox1.Location = new System.Drawing.Point(4, 11);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(73, 21);
-            this.comboBox1.TabIndex = 118;
+            this.comboBox1.TabIndex = 63;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // btnCalibrateNumber
@@ -930,7 +944,7 @@ namespace VideoRecolector
             this.btnCalibrateNumber.Location = new System.Drawing.Point(4, 51);
             this.btnCalibrateNumber.Name = "btnCalibrateNumber";
             this.btnCalibrateNumber.Size = new System.Drawing.Size(73, 27);
-            this.btnCalibrateNumber.TabIndex = 69;
+            this.btnCalibrateNumber.TabIndex = 64;
             this.btnCalibrateNumber.Text = "Calibrar";
             this.btnCalibrateNumber.UseVisualStyleBackColor = true;
             this.btnCalibrateNumber.Click += new System.EventHandler(this.btnCalibrateNumber_Click);
@@ -939,7 +953,7 @@ namespace VideoRecolector
             // 
             this.lblTestCount.AutoSize = true;
             this.lblTestCount.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblTestCount.Location = new System.Drawing.Point(64, 136);
+            this.lblTestCount.Location = new System.Drawing.Point(63, 136);
             this.lblTestCount.Name = "lblTestCount";
             this.lblTestCount.Size = new System.Drawing.Size(13, 13);
             this.lblTestCount.TabIndex = 70;
@@ -973,7 +987,7 @@ namespace VideoRecolector
             this.btnSetNumber.Location = new System.Drawing.Point(6, 152);
             this.btnSetNumber.Name = "btnSetNumber";
             this.btnSetNumber.Size = new System.Drawing.Size(74, 38);
-            this.btnSetNumber.TabIndex = 64;
+            this.btnSetNumber.TabIndex = 65;
             this.btnSetNumber.Text = "Guardar Calibracion";
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
@@ -1072,6 +1086,7 @@ namespace VideoRecolector
         private Label label7;
         private TextBox txtDistZeroBall;
         private Label label9;
+        private CheckBox chkbCSV;
     }
 }
 

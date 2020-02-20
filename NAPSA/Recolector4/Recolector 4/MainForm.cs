@@ -126,6 +126,8 @@ namespace VideoRecolector
             {
                 MessageBox.Show("Producto No Activado. Por favor, actívelo", "PRODUCTO NO ACTIVADO",
                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Form Form2 = new FrmActivador();
+                Form2.ShowDialog();
                 System.Environment.Exit(0);
             }
             CheckForIllegalCrossThreadCalls = false;
@@ -936,6 +938,12 @@ namespace VideoRecolector
                     lblChkCount.Text = this.numCalibrated.ToString();
                 }
                 MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
+                if (this.comboBox1.SelectedIndex < this.comboBox1.Items.Count - 1)
+                {
+                    this.comboBox1.SelectedIndex = this.comboBox1.SelectedIndex + 1;
+                }
+                else
+                    this.comboBox1.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -1002,10 +1010,12 @@ namespace VideoRecolector
                 lblChkCount.Text = this.numCalibrated.ToString();
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
+                this.chkbCSV.Visible = true;
             }
             else
             {
                 this.pnlCalibration.Visible = false;
+                this.chkbCSV.Visible = false;
             }
         }
 
@@ -1078,17 +1088,21 @@ namespace VideoRecolector
                 stream.Flush();
             }
 
-            using (var w = new StreamWriter(@"./dataDA.csv", append: false))
+            // Save csv data
+            if (chkbCSV.Checked)
             {
-                for (int i = 0; i < 37; i++)
+                using (var w = new StreamWriter(@"./dataDA.csv", append: false))
                 {
-                    var first = NumbersByDistAngle[i, 0];
-                    var second = NumbersByDistAngle[i, 1];
-                    var third = NumbersByXY[i, 0];
-                    var fourth = NumbersByXY[i, 1];
-                    string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
-                    w.WriteLine(line);
-                    w.Flush();
+                    for (int i = 0; i < 37; i++)
+                    {
+                        var first = NumbersByDistAngle[i, 0];
+                        var second = NumbersByDistAngle[i, 1];
+                        var third = NumbersByXY[i, 0];
+                        var fourth = NumbersByXY[i, 1];
+                        string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
+                        w.WriteLine(line);
+                        w.Flush();
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using DASYS.Recolector.BLL;
 using System;
 using System.Diagnostics;
+using System.Security.Principal;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -55,6 +56,13 @@ namespace VideoRecolector
                     MessageBox.Show("Ya se está ejecutando.");
                 }
             }
+        }
+
+        private static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

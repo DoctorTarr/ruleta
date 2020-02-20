@@ -105,6 +105,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrmActivador.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="JuegoRuleta.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -114,6 +117,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FrmActivador.resx">
+      <DependentUpon>FrmActivador.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -167,6 +173,7 @@
     <Content Include="DASYS.NAPSA.Recolector4.config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\foldericon.jpg" />
     <Content Include="Resources\NAPSALogo.ico" />
   </ItemGroup>
   <ItemGroup>
