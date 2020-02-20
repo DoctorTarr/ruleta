@@ -150,8 +150,8 @@ namespace DASYS.NAPSA.Display2.GUI
         if (!Seguridad.Activacion.VerificarLicencia(licencia, activacion, "Néstor Pastor"))
           return;
         this.txtActivacion.Text = activacion;
-        bool flag1 = Seguridad.Registry.EscribirRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "display2", "product", "licence", (object) licencia);
-        bool flag2 = Seguridad.Registry.EscribirRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "display2", "product", "activation", (object) activacion);
+        bool flag1 = Seguridad.Registry.EscribirRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "recolector4", "product", "licence", (object) licencia);
+        bool flag2 = Seguridad.Registry.EscribirRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "recolector4", "product", "activation", (object) activacion);
         if (!flag1 || !flag2)
         {
           int num1 = (int) MessageBox.Show("No fue posible guardar el registro.");

@@ -18,8 +18,8 @@ namespace DASYS.Recolector.BLL
       bool flag = false;
       try
       {
-        Producto.Licence = Utils.Datos.NullToString(Seguridad.Registry.LeerRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "display2", "product", "licence"));
-        Producto.Activation = Utils.Datos.NullToString(Seguridad.Registry.LeerRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "display2", "product", "activation"));
+        Producto.Licence = Utils.Datos.NullToString(Seguridad.Registry.LeerRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "recolector4", "product", "licence"));
+        Producto.Activation = Utils.Datos.NullToString(Seguridad.Registry.LeerRegistro(Seguridad.Registry.RegistryKeys.HKEY_LOCAL_MACHINE, "napsa", "recolector4", "product", "activation"));
         if (!string.IsNullOrEmpty(Producto.Licence))
         {
           if (!string.IsNullOrEmpty(Producto.Activation))
