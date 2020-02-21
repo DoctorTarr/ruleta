@@ -1,2 +1,2 @@
-Disable-NetAdapterQos -Name "*"
+Enable-NetAdapterQos -Name "*"
 pause
