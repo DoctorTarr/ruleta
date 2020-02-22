@@ -1,2 +1,0 @@
-Enable-NetAdapterQos -Name "*"
-pause

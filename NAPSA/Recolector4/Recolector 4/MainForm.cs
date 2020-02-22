@@ -150,14 +150,14 @@ namespace VideoRecolector
                 this.txtProtocolo.Text = "";
                 this.btnStartCamara.Text = "Iniciar Captura";
                 this.IsCameraOn = false;
-                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
                 this.bBallStateChanged = false;
                 this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             }
             else
             {
                 StartCamera();
-                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
                 this.bBallStateChanged = false;
                 this.IsCameraOn = true;
                 this.btnStartCamara.Text = "Detener Captura";
@@ -219,9 +219,9 @@ namespace VideoRecolector
                 videoSourcePlayer1.VideoSource.VideoSourceError += new VideoSourceErrorEventHandler(videoSourcePlayer1_VideoSourceError);
 
                 videoSourcePlayer1.Start();
-                tbVideoStatus.BackColor = Color.Red;
-                tbVideoStatus.Text = "ON";
-                this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
+                lblVideoStatus.BackColor = Color.Red;
+                lblVideoStatus.Text = "ON";
+                this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
                 this.bDebouncedBallFound = RawBallFound();
                 this.bBallStateChanged = true;
             }
@@ -242,12 +242,13 @@ namespace VideoRecolector
             {
                 videoSourcePlayer1.SignalToStop();
                 videoSourcePlayer1.WaitForStop();
-                tbVideoStatus.BackColor = Color.DarkRed;
-                tbVideoStatus.Text = "OFF";
+                lblVideoStatus.BackColor = Color.DarkRed;
+                lblVideoStatus.Text = "OFF";
 
                 pbZero.Image = null;
                 pbBall.Image = null;
-                txtWinner.Text = "";
+                lblDisplayWinner.Text = "";
+                lblDisplayWinner.ForeColor = Color.Black;
                 lblEstadoRuleta.Text = "";
                 tbBolaPosX.Text = "";
                 tbBolaPosY.Text = "";
@@ -278,17 +279,17 @@ namespace VideoRecolector
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
 
             Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
-            Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
+            Pen _penviolet = new Pen(Color.Black, ipenWidth);
             Pen _penred = new Pen(Color.Red, ipenWidth);
             Pen _penblue = new Pen(Color.Blue, ipenWidth);
 
             // Cilindro -incluye numeros - radius 204 color red
-            _g.DrawRectangle(_pengreen, _bowlArea);
+            _g.DrawEllipse(_pengreen, _bowlArea);
 
-            _g.DrawRectangle(_penyellow, _numbersArea);
+            _g.DrawEllipse(_penviolet, _numbersArea);
 
             // Casillas - radius 204 color blue
-            _g.DrawRectangle(_penred, _ballPocketsArea);
+            _g.DrawEllipse(_penred, _ballPocketsArea);
             _g.DrawRectangle(_penred, _centerPoint.X, _centerPoint.Y, 1, 1);
 
             _g.DrawRectangle(_penblue, _zeroNumberArea);
@@ -368,8 +369,8 @@ namespace VideoRecolector
         }
 
         const int CHECK_MSEC = 40; // Read hardware every 5 msec
-        const int PRESS_MSEC = 400; // Stable time before registering pressed
-        const int RELEASE_MSEC = 800; // Stable time before registering released
+        const int BALL_FOUND_MSEC = 400; // Stable time before registering pressed
+        const int BALL_NOT_FOUND_MSEC = 800; // Stable time before registering released
 
         // This function reads the key state from the hardware.
         bool RawBallFound()
@@ -387,8 +388,8 @@ namespace VideoRecolector
             if (RawState == this.bDebouncedBallFound)
             {
                 // Set the timer which allows a change from current state.
-                if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
-                else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
+                if (this.bDebouncedBallFound) this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
+                else this.iBallUnchangeCount = BALL_FOUND_MSEC / CHECK_MSEC;
             }
             else
             {
@@ -399,8 +400,8 @@ namespace VideoRecolector
                     this.bDebouncedBallFound = RawState;
                     this.bBallStateChanged = true;
                     // And reset the timer.
-                    if (this.bDebouncedBallFound) this.iBallUnchangeCount = RELEASE_MSEC / CHECK_MSEC;
-                    else this.iBallUnchangeCount = PRESS_MSEC / CHECK_MSEC;
+                    if (this.bDebouncedBallFound) this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
+                    else this.iBallUnchangeCount = BALL_FOUND_MSEC / CHECK_MSEC;
                 }
             }
         }

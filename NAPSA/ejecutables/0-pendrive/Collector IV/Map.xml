@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-02-20T12:24:40</timestamp>
+        <timestamp>2020-02-22T16:14:14</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -5675,6 +5675,16 @@
                 </methodlist>
                 <fieldlist>
                     <field>
+                        <signature>int32</signature>
+                        <name>BALL_FOUND_MSEC</name>
+                        <newname>a1</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>BALL_NOT_FOUND_MSEC</name>
+                        <newname>a2</newname>
+                    </field>
+                    <field>
                         <signature>System.Drawing.Point</signature>
                         <name>BallPos</name>
                         <newname>r</newname>
@@ -5703,16 +5713,6 @@
                         <signature>int32[0...,0...]</signature>
                         <name>NumbersByXY</name>
                         <newname>a5</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>PRESS_MSEC</name>
-                        <newname>a1</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>RELEASE_MSEC</name>
-                        <newname>a2</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
@@ -5892,7 +5892,7 @@
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnCalibrateNumber</name>
-                        <newname>b0</newname>
+                        <newname>bz</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
@@ -5902,7 +5902,7 @@
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnSetNumber</name>
-                        <newname>b3</newname>
+                        <newname>b2</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
@@ -5917,27 +5917,27 @@
                     <field>
                         <signature>System.Windows.Forms.CheckBox</signature>
                         <name>cbCalibrateNumbers</name>
-                        <newname>b5</newname>
+                        <newname>b3</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ToolStripMenuItem</signature>
                         <name>cerrarToolStripMenuItem</name>
-                        <newname>b7</newname>
+                        <newname>b5</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox</signature>
                         <name>chkbCSV</name>
-                        <newname>cx</newname>
+                        <newname>cv</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox[]</signature>
                         <name>chkbNumbers</name>
-                        <newname>ca</newname>
+                        <newname>b8</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ComboBox</signature>
                         <name>comboBox1</name>
-                        <newname>cb</newname>
+                        <newname>b9</newname>
                     </field>
                     <field>
                         <signature>System.ComponentModel.IContainer</signature>
@@ -6022,47 +6022,47 @@
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label11</name>
-                        <newname>bq</newname>
+                        <newname>bp</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label12</name>
-                        <newname>b2</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label13</name>
                         <newname>b1</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
+                        <name>label13</name>
+                        <newname>b0</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
                         <name>label14</name>
-                        <newname>bw</newname>
+                        <newname>bv</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label15</name>
-                        <newname>b9</newname>
+                        <newname>b7</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label16</name>
-                        <newname>cp</newname>
+                        <newname>cn</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label17</name>
-                        <newname>cs</newname>
+                        <newname>cq</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label18</name>
-                        <newname>cg</newname>
+                        <newname>ce</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label19</name>
-                        <newname>ch</newname>
+                        <newname>cf</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
@@ -6077,92 +6077,102 @@
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label4</name>
-                        <newname>cj</newname>
+                        <newname>ch</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label5</name>
-                        <newname>cl</newname>
+                        <newname>cj</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label6</name>
-                        <newname>ci</newname>
+                        <newname>cg</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label7</name>
-                        <newname>cu</newname>
+                        <newname>cs</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label8</name>
-                        <newname>bu</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label9</name>
-                        <newname>cw</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgAngle</name>
-                        <newname>cc</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgDist</name>
-                        <newname>cd</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgX</name>
-                        <newname>cf</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgY</name>
-                        <newname>ce</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblBallOn</name>
-                        <newname>bs</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblChkCount</name>
-                        <newname>cr</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblEstadoRuleta</name>
-                        <newname>co</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblFPS</name>
                         <newname>bt</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
+                        <name>label9</name>
+                        <newname>cu</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgAngle</name>
+                        <newname>ca</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgDist</name>
+                        <newname>cb</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgX</name>
+                        <newname>cd</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgY</name>
+                        <newname>cc</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBallOn</name>
+                        <newname>br</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblChkCount</name>
+                        <newname>cp</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblDisplayWinner</name>
+                        <newname>cw</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblEstadoRuleta</name>
+                        <newname>cm</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblFPS</name>
+                        <newname>bs</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
                         <name>lblTestCount</name>
-                        <newname>bz</newname>
+                        <newname>by</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblVideoStatus</name>
+                        <newname>cx</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>lblWinCount</name>
-                        <newname>ct</newname>
+                        <newname>cr</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>lblWinner</name>
-                        <newname>b8</newname>
+                        <newname>b6</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ContextMenuStrip</signature>
                         <name>mnuSystemTray</name>
-                        <newname>b6</newname>
+                        <newname>b4</newname>
                     </field>
                     <field>
                         <signature>float32</signature>
@@ -6172,7 +6182,7 @@
                     <field>
                         <signature>System.Windows.Forms.NotifyIcon</signature>
                         <name>notifyIcon1</name>
-                        <newname>bv</newname>
+                        <newname>bu</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
@@ -6187,7 +6197,7 @@
                     <field>
                         <signature>System.Windows.Forms.PictureBox</signature>
                         <name>pbBall</name>
-                        <newname>cn</newname>
+                        <newname>cl</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.PictureBox</signature>
@@ -6197,7 +6207,7 @@
                     <field>
                         <signature>System.Windows.Forms.GroupBox</signature>
                         <name>pnlCalibration</name>
-                        <newname>by</newname>
+                        <newname>bx</newname>
                     </field>
                     <field>
                         <signature>float64</signature>
@@ -6217,22 +6227,17 @@
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
                         <name>tbBolaPosX</name>
-                        <newname>cm</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.TextBox</signature>
-                        <name>tbBolaPosY</name>
                         <newname>ck</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
-                        <name>tbVideoStatus</name>
-                        <newname>bp</newname>
+                        <name>tbBolaPosY</name>
+                        <newname>ci</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
                         <name>tbZeroPosAngle</name>
-                        <newname>bx</newname>
+                        <newname>bw</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
@@ -6257,7 +6262,7 @@
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
                         <name>txtDistZeroBall</name>
-                        <newname>cv</newname>
+                        <newname>ct</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
@@ -6266,18 +6271,13 @@
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
-                        <name>txtWinner</name>
-                        <newname>b4</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.TextBox</signature>
                         <name>txtbDisplayStatus</name>
-                        <newname>cq</newname>
+                        <newname>co</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
                         <name>txtbGameStatus</name>
-                        <newname>br</newname>
+                        <newname>bq</newname>
                     </field>
                     <field>
                         <signature>Accord.Controls.VideoSourcePlayer</signature>
