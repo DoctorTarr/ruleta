@@ -305,29 +305,28 @@ namespace VideoRecolector
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtDistZeroBall = new System.Windows.Forms.TextBox();
+            this.lblDistZeroBall = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.lblBolaPosY = new System.Windows.Forms.Label();
+            this.lblBolaPosX = new System.Windows.Forms.Label();
+            this.lblZeroPosAngle = new System.Windows.Forms.Label();
+            this.lblZeroPosY = new System.Windows.Forms.Label();
+            this.lblZeroPosX = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.tbBolaPosY = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.tbBolaPosX = new System.Windows.Forms.TextBox();
             this.pbBall = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
-            this.tbZeroPosAngle = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.tbZeroPosY = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tbZeroPosX = new System.Windows.Forms.TextBox();
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblVideoStatus = new System.Windows.Forms.Label();
             this.lblDisplayWinner = new System.Windows.Forms.Label();
             this.chkbCSV = new System.Windows.Forms.CheckBox();
             this.lblWinCount = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.txtbDisplayStatus = new System.Windows.Forms.TextBox();
             this.lblEstadoRuleta = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.lblWinner = new System.Windows.Forms.Label();
@@ -363,7 +362,8 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.lblVideoStatus = new System.Windows.Forms.Label();
+            this.lblZeroBlobDetectionTime = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -374,21 +374,21 @@ namespace VideoRecolector
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.txtDistZeroBall);
+            this.groupBox1.Controls.Add(this.lblDistZeroBall);
+            this.groupBox1.Controls.Add(this.label20);
+            this.groupBox1.Controls.Add(this.lblBolaPosY);
+            this.groupBox1.Controls.Add(this.lblBolaPosX);
+            this.groupBox1.Controls.Add(this.lblZeroPosAngle);
+            this.groupBox1.Controls.Add(this.lblZeroPosY);
+            this.groupBox1.Controls.Add(this.lblZeroPosX);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.tbBolaPosY);
             this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.tbBolaPosX);
             this.groupBox1.Controls.Add(this.pbBall);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label14);
-            this.groupBox1.Controls.Add(this.tbZeroPosAngle);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.tbZeroPosY);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.tbZeroPosX);
             this.groupBox1.Controls.Add(this.pbZero);
             this.groupBox1.Location = new System.Drawing.Point(8, 501);
             this.groupBox1.Name = "groupBox1";
@@ -396,24 +396,81 @@ namespace VideoRecolector
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
-            // label7
+            // lblDistZeroBall
             // 
-            this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label7.Location = new System.Drawing.Point(518, 21);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(30, 13);
-            this.label7.TabIndex = 44;
-            this.label7.Text = "D/A:";
+            this.lblDistZeroBall.AutoSize = true;
+            this.lblDistZeroBall.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDistZeroBall.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblDistZeroBall.Location = new System.Drawing.Point(557, 17);
+            this.lblDistZeroBall.Name = "lblDistZeroBall";
+            this.lblDistZeroBall.Size = new System.Drawing.Size(22, 15);
+            this.lblDistZeroBall.TabIndex = 51;
+            this.lblDistZeroBall.Text = "---";
             // 
-            // txtDistZeroBall
+            // label20
             // 
-            this.txtDistZeroBall.Enabled = false;
-            this.txtDistZeroBall.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDistZeroBall.Location = new System.Drawing.Point(554, 15);
-            this.txtDistZeroBall.Name = "txtDistZeroBall";
-            this.txtDistZeroBall.Size = new System.Drawing.Size(103, 22);
-            this.txtDistZeroBall.TabIndex = 43;
+            this.label20.AutoSize = true;
+            this.label20.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label20.Location = new System.Drawing.Point(484, 19);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(67, 13);
+            this.label20.TabIndex = 50;
+            this.label20.Text = "Dist. al Cero:";
+            // 
+            // lblBolaPosY
+            // 
+            this.lblBolaPosY.AutoSize = true;
+            this.lblBolaPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBolaPosY.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblBolaPosY.Location = new System.Drawing.Point(419, 17);
+            this.lblBolaPosY.Name = "lblBolaPosY";
+            this.lblBolaPosY.Size = new System.Drawing.Size(22, 15);
+            this.lblBolaPosY.TabIndex = 49;
+            this.lblBolaPosY.Text = "---";
+            // 
+            // lblBolaPosX
+            // 
+            this.lblBolaPosX.AutoSize = true;
+            this.lblBolaPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblBolaPosX.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblBolaPosX.Location = new System.Drawing.Point(364, 17);
+            this.lblBolaPosX.Name = "lblBolaPosX";
+            this.lblBolaPosX.Size = new System.Drawing.Size(17, 15);
+            this.lblBolaPosX.TabIndex = 48;
+            this.lblBolaPosX.Text = "--";
+            // 
+            // lblZeroPosAngle
+            // 
+            this.lblZeroPosAngle.AutoSize = true;
+            this.lblZeroPosAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZeroPosAngle.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblZeroPosAngle.Location = new System.Drawing.Point(286, 17);
+            this.lblZeroPosAngle.Name = "lblZeroPosAngle";
+            this.lblZeroPosAngle.Size = new System.Drawing.Size(22, 15);
+            this.lblZeroPosAngle.TabIndex = 47;
+            this.lblZeroPosAngle.Text = "---";
+            // 
+            // lblZeroPosY
+            // 
+            this.lblZeroPosY.AutoSize = true;
+            this.lblZeroPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZeroPosY.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblZeroPosY.Location = new System.Drawing.Point(86, 17);
+            this.lblZeroPosY.Name = "lblZeroPosY";
+            this.lblZeroPosY.Size = new System.Drawing.Size(22, 15);
+            this.lblZeroPosY.TabIndex = 46;
+            this.lblZeroPosY.Text = "---";
+            // 
+            // lblZeroPosX
+            // 
+            this.lblZeroPosX.AutoSize = true;
+            this.lblZeroPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZeroPosX.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblZeroPosX.Location = new System.Drawing.Point(31, 17);
+            this.lblZeroPosX.Name = "lblZeroPosX";
+            this.lblZeroPosX.Size = new System.Drawing.Size(22, 15);
+            this.lblZeroPosX.TabIndex = 45;
+            this.lblZeroPosX.Text = "---";
             // 
             // label6
             // 
@@ -429,39 +486,21 @@ namespace VideoRecolector
             // 
             this.label4.AutoSize = true;
             this.label4.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label4.Location = new System.Drawing.Point(424, 19);
+            this.label4.Location = new System.Drawing.Point(401, 19);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 13);
             this.label4.TabIndex = 39;
             this.label4.Text = "Y:";
             // 
-            // tbBolaPosY
-            // 
-            this.tbBolaPosY.Enabled = false;
-            this.tbBolaPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBolaPosY.Location = new System.Drawing.Point(447, 15);
-            this.tbBolaPosY.Name = "tbBolaPosY";
-            this.tbBolaPosY.Size = new System.Drawing.Size(57, 22);
-            this.tbBolaPosY.TabIndex = 38;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label5.Location = new System.Drawing.Point(341, 20);
+            this.label5.Location = new System.Drawing.Point(341, 19);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 13);
             this.label5.TabIndex = 37;
             this.label5.Text = "X:";
-            // 
-            // tbBolaPosX
-            // 
-            this.tbBolaPosX.Enabled = false;
-            this.tbBolaPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbBolaPosX.Location = new System.Drawing.Point(361, 15);
-            this.tbBolaPosX.Name = "tbBolaPosX";
-            this.tbBolaPosX.Size = new System.Drawing.Size(57, 22);
-            this.tbBolaPosX.TabIndex = 36;
             // 
             // pbBall
             // 
@@ -487,39 +526,21 @@ namespace VideoRecolector
             // 
             this.label14.AutoSize = true;
             this.label14.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label14.Location = new System.Drawing.Point(212, 19);
+            this.label14.Location = new System.Drawing.Point(192, 19);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(43, 13);
+            this.label14.Size = new System.Drawing.Size(88, 13);
             this.label14.TabIndex = 30;
-            this.label14.Text = "Angulo:";
-            // 
-            // tbZeroPosAngle
-            // 
-            this.tbZeroPosAngle.Enabled = false;
-            this.tbZeroPosAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosAngle.Location = new System.Drawing.Point(260, 14);
-            this.tbZeroPosAngle.Name = "tbZeroPosAngle";
-            this.tbZeroPosAngle.Size = new System.Drawing.Size(65, 22);
-            this.tbZeroPosAngle.TabIndex = 29;
+            this.label14.Text = "Angulo al Centro:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label2.Location = new System.Drawing.Point(100, 19);
+            this.label2.Location = new System.Drawing.Point(66, 19);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(17, 13);
             this.label2.TabIndex = 28;
             this.label2.Text = "Y:";
-            // 
-            // tbZeroPosY
-            // 
-            this.tbZeroPosY.Enabled = false;
-            this.tbZeroPosY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosY.Location = new System.Drawing.Point(123, 14);
-            this.tbZeroPosY.Name = "tbZeroPosY";
-            this.tbZeroPosY.Size = new System.Drawing.Size(65, 22);
-            this.tbZeroPosY.TabIndex = 27;
             // 
             // label1
             // 
@@ -530,15 +551,6 @@ namespace VideoRecolector
             this.label1.Size = new System.Drawing.Size(17, 13);
             this.label1.TabIndex = 26;
             this.label1.Text = "X:";
-            // 
-            // tbZeroPosX
-            // 
-            this.tbZeroPosX.Enabled = false;
-            this.tbZeroPosX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbZeroPosX.Location = new System.Drawing.Point(29, 14);
-            this.tbZeroPosX.Name = "tbZeroPosX";
-            this.tbZeroPosX.Size = new System.Drawing.Size(65, 22);
-            this.tbZeroPosX.TabIndex = 25;
             // 
             // pbZero
             // 
@@ -561,12 +573,12 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label16);
+            this.groupBox3.Controls.Add(this.lblZeroBlobDetectionTime);
             this.groupBox3.Controls.Add(this.lblVideoStatus);
             this.groupBox3.Controls.Add(this.lblDisplayWinner);
             this.groupBox3.Controls.Add(this.chkbCSV);
             this.groupBox3.Controls.Add(this.lblWinCount);
-            this.groupBox3.Controls.Add(this.label16);
-            this.groupBox3.Controls.Add(this.txtbDisplayStatus);
             this.groupBox3.Controls.Add(this.lblEstadoRuleta);
             this.groupBox3.Controls.Add(this.label15);
             this.groupBox3.Controls.Add(this.lblWinner);
@@ -587,6 +599,18 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // lblVideoStatus
+            // 
+            this.lblVideoStatus.AutoSize = true;
+            this.lblVideoStatus.BackColor = System.Drawing.Color.DarkRed;
+            this.lblVideoStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVideoStatus.ForeColor = System.Drawing.Color.White;
+            this.lblVideoStatus.Location = new System.Drawing.Point(114, 423);
+            this.lblVideoStatus.Name = "lblVideoStatus";
+            this.lblVideoStatus.Size = new System.Drawing.Size(37, 16);
+            this.lblVideoStatus.TabIndex = 130;
+            this.lblVideoStatus.Text = "OFF";
             // 
             // lblDisplayWinner
             // 
@@ -620,27 +644,6 @@ namespace VideoRecolector
             this.lblWinCount.Size = new System.Drawing.Size(13, 13);
             this.lblWinCount.TabIndex = 67;
             this.lblWinCount.Text = "0";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label16.Location = new System.Drawing.Point(508, 445);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(80, 13);
-            this.label16.TabIndex = 66;
-            this.label16.Text = "Estado Display:";
-            this.label16.Visible = false;
-            // 
-            // txtbDisplayStatus
-            // 
-            this.txtbDisplayStatus.Enabled = false;
-            this.txtbDisplayStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtbDisplayStatus.Location = new System.Drawing.Point(511, 464);
-            this.txtbDisplayStatus.Name = "txtbDisplayStatus";
-            this.txtbDisplayStatus.Size = new System.Drawing.Size(138, 22);
-            this.txtbDisplayStatus.TabIndex = 65;
-            this.txtbDisplayStatus.Visible = false;
             // 
             // lblEstadoRuleta
             // 
@@ -1016,17 +1019,26 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
-            // lblVideoStatus
+            // lblZeroBlobDetectionTime
             // 
-            this.lblVideoStatus.AutoSize = true;
-            this.lblVideoStatus.BackColor = System.Drawing.Color.DarkRed;
-            this.lblVideoStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVideoStatus.ForeColor = System.Drawing.Color.White;
-            this.lblVideoStatus.Location = new System.Drawing.Point(114, 423);
-            this.lblVideoStatus.Name = "lblVideoStatus";
-            this.lblVideoStatus.Size = new System.Drawing.Size(37, 16);
-            this.lblVideoStatus.TabIndex = 130;
-            this.lblVideoStatus.Text = "OFF";
+            this.lblZeroBlobDetectionTime.AutoSize = true;
+            this.lblZeroBlobDetectionTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblZeroBlobDetectionTime.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblZeroBlobDetectionTime.Location = new System.Drawing.Point(588, 440);
+            this.lblZeroBlobDetectionTime.Name = "lblZeroBlobDetectionTime";
+            this.lblZeroBlobDetectionTime.Size = new System.Drawing.Size(22, 15);
+            this.lblZeroBlobDetectionTime.TabIndex = 131;
+            this.lblZeroBlobDetectionTime.Text = "---";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label16.Location = new System.Drawing.Point(508, 442);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(66, 13);
+            this.label16.TabIndex = 132;
+            this.label16.Text = "Zero Blob T:";
             // 
             // MainForm
             // 
@@ -1068,9 +1080,7 @@ namespace VideoRecolector
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox tbZeroPosY;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbZeroPosX;
         private System.Windows.Forms.Button btnStartCamara;
         private System.Windows.Forms.CheckBox cbCalibrateCamera;
         private System.Windows.Forms.Label label10;
@@ -1085,7 +1095,6 @@ namespace VideoRecolector
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private Label label14;
-        private TextBox tbZeroPosAngle;
         private GroupBox pnlCalibration;
         private Label lblTestCount;
         private Button btnCalibrateNumber;
@@ -1107,22 +1116,25 @@ namespace VideoRecolector
         private Label label19;
         private Label label6;
         private Label label4;
-        private TextBox tbBolaPosY;
         private Label label5;
-        private TextBox tbBolaPosX;
         private PictureBox pbBall;
         private Label lblEstadoRuleta;
-        private Label label16;
-        private TextBox txtbDisplayStatus;
         private Label lblChkCount;
         private Label label17;
         private Label lblWinCount;
-        private Label label7;
-        private TextBox txtDistZeroBall;
         private Label label9;
         private CheckBox chkbCSV;
         private Label lblDisplayWinner;
         private Label lblVideoStatus;
+        private Label lblZeroPosX;
+        private Label lblZeroPosY;
+        private Label lblZeroPosAngle;
+        private Label lblBolaPosX;
+        private Label lblBolaPosY;
+        private Label label20;
+        private Label lblDistZeroBall;
+        private Label label16;
+        private Label lblZeroBlobDetectionTime;
     }
 }
 

@@ -118,7 +118,7 @@ namespace VideoRecolector
         private int countCalibrationSamples = 0;
         private bool isCalibrating = false;
 
-
+        private bool bShowText = false;
         public MainForm()
         {
             InitializeComponent();
@@ -250,10 +250,10 @@ namespace VideoRecolector
                 lblDisplayWinner.Text = "";
                 lblDisplayWinner.ForeColor = Color.Black;
                 lblEstadoRuleta.Text = "";
-                tbBolaPosX.Text = "";
-                tbBolaPosY.Text = "";
-                tbZeroPosX.Text = "";
-                tbZeroPosY.Text = "";
+                lblBolaPosX.Text = "";
+                lblBolaPosY.Text = "";
+                lblZeroPosX.Text = "";
+                lblZeroPosY.Text = "";
                 lblBallOn.Text = "";
                 this.bDebouncedBallFound = false;
                 this.bBallStateChanged = true;
@@ -336,6 +336,8 @@ namespace VideoRecolector
             _ballBlobCounter.ObjectsOrder = ObjectsOrder.Size;
             _ballBlobCounter.MinWidth = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
             _ballBlobCounter.MaxWidth = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
+
+            bShowText = bool.Parse(ConfigurationManager.AppSettings["ShowText"].ToString());
 
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
 
@@ -437,6 +439,9 @@ namespace VideoRecolector
                 bool bBallFound = false;
                 bool bZeroFoundAt12 = false;
 
+                //Stopwatch stopWatch = new Stopwatch();
+                //stopWatch.Start();
+
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
@@ -458,6 +463,13 @@ namespace VideoRecolector
                 {
                     bZeroFoundAt12 = _zeroNumberArea.Contains(ZeroPos);
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+                    if (bShowText)
+                    {
+                        lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                        lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                        lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+                    }
+
                     if (bZeroFoundAt12)
                     {
                         if (this._rpmCounter > 0)
@@ -468,9 +480,6 @@ namespace VideoRecolector
                             this._rpmCounter = 0;
                         }
 
-                        tbZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                        tbZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-                        tbZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
                     }
                     else
                     {
@@ -493,27 +502,25 @@ namespace VideoRecolector
                 //241, 246        381,246
                 //      314, 314
                 DebounceSwitch1();
-                lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
+                if (bShowText)
+                {
+                    lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
+                    lblBolaPosX.Text = BallPosToCenter.X.ToString();
+                    lblBolaPosY.Text = BallPosToCenter.Y.ToString();
+                    lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+                }
+
                 if (bZeroFoundAt12)
                 {
                     if (this.bDebouncedBallFound)
                     {
                         _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                        tbBolaPosX.Text = BallPosToCenter.X.ToString();
-                        tbBolaPosY.Text = BallPosToCenter.Y.ToString();
-                        txtDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+                        if (bShowText)
+                            lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
 
                         if (this.isCalibrating)
                             AcumulateCalibration();
-                        //winner = (this._rpm < 40) ? FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter) :
-                        //                            FindNumberByXY();
 
-                        // Find numbers opposite to zero by XY
-                        //winner = ((_BallAngleToCenter <= -74 && _BallAngleToCenter >= -93) ||
-                        //          (_BallAngleToCenter <= -53 && _BallAngleToCenter >= -64) ||
-                        //          (_BallAngleToCenter <= -35 && _BallAngleToCenter >= -44) ) ?
-                        //                            FindNumberByXY() :
-                        //                            FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
                         winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
                         if (winnerXY != -1)
                         {
@@ -553,6 +560,8 @@ namespace VideoRecolector
                 }
 
                 args.Frame = _BsourceFrame;
+                //stopWatch.Stop();
+                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
 
             }
         }
@@ -613,79 +622,14 @@ namespace VideoRecolector
         #endregion
 
         #region Finding Winner Number
-        // Atan2 aproximation1 2x times faster thatn Math.Atan2
-        double atan2_approximation1(double y, double x)
-        {
-            //http://pubs.opengroup.org/onlinepubs/009695399/functions/atan2.html
-            //https://gist.github.com/volkansalma/2972237
-            //Volkan SALMA
-
-            const double ONEQTR_PI = (Math.PI / 4.0);
-            const double THRQTR_PI = (3.0 * Math.PI / 4.0);
-            double r, angle;
-            double abs_y = Math.Abs(y) + 1e-10f;      // kludge to prevent 0/0 condition
-            if (x < 0.0f)
-            {
-                r = (x + abs_y) / (abs_y - x);
-                angle = THRQTR_PI;
-            }
-            else
-            {
-                r = (x - abs_y) / (x + abs_y);
-                angle = ONEQTR_PI;
-            }
-            angle += (0.1963f * r * r - 0.9817f) * r;
-            if (y < 0.0f)
-                return (-angle);     // negate if in quad III or IV
-            else
-                return (angle);
-        }
-
-        /**
-        * Determines the angle of a straight line drawn between point one and two. The number returned, which is a float in degrees, tells us how much we have to rotate a horizontal line clockwise for it to match the line between the two points.
-        * If you prefer to deal with angles using radians instead of degrees, just change the last line to: "return Math.Atan2(yDiff, xDiff);"
-        */
-        private int GetAngleOfLineBetweenTwoPoints(System.Drawing.Point p1, System.Drawing.Point p2)
-        {
-            double xDiff = p2.X - p1.X;
-            double yDiff = p1.Y - p2.Y;
-            return (int)Math.Round(atan2_approximation1(yDiff, xDiff) * this.radian);
-        }
-
         /**
         * Determines the angle of a point against the coordinates center
         */
         private int GetAngleOfPointToZero(System.Drawing.Point p)
         {
-            return (int)Math.Round(atan2_approximation1(p.Y, p.X) * this.radian);
+            return (int)Math.Round(Math.Atan2(p.Y, p.X) * radian);
         }
 
-        /**
-         * Work out the angle from the x horizontal winding anti-clockwise 
-         * in screen space. 
-         * 
-         * The value returned from the following should be 315. 
-         * <pre>
-         * x,y -------------
-         *     |  1,1
-         *     |    \
-         *     |     \
-         *     |     2,2
-         * </pre>
-         * @param p1
-         * @param p2
-         * @return - a double from 0 to 360
-         */
-        private int angleOf(System.Drawing.Point p1, System.Drawing.Point p2)
-        {
-            // NOTE: Remember that most math has the Y axis as positive above the X.
-            // However, for screens we have Y as positive below. For this reason, 
-            // the Y values are inverted to get the expected results.
-            double deltaY = (p1.Y - p2.Y);
-            double deltaX = (p2.X - p1.X);
-            double result = Math.Atan2(deltaY, deltaX) * this.radian;
-            return (int)((result < 0) ? (360d + result) : result);
-        }
 
         // Finds the integer square root of a positive number  
         private int Isqrt(int num)
