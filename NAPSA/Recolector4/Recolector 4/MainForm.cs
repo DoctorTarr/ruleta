@@ -439,6 +439,7 @@ namespace VideoRecolector
                 bool bBallFound = false;
                 bool bZeroFoundAt12 = false;
 
+
                 //Stopwatch stopWatch = new Stopwatch();
                 //stopWatch.Start();
 
@@ -955,12 +956,12 @@ namespace VideoRecolector
                 lblChkCount.Text = this.numCalibrated.ToString();
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
-                this.chkbCSV.Visible = true;
+                this.btnSaveCSV.Visible = true;
             }
             else
             {
                 this.pnlCalibration.Visible = false;
-                this.chkbCSV.Visible = false;
+                this.btnSaveCSV.Visible = false;
             }
         }
 
@@ -986,6 +987,11 @@ namespace VideoRecolector
             txtProtocolo.AppendText(Environment.NewLine);
         }
         #endregion
+
+        private void btnSaveCSV_Click(object sender, EventArgs e)
+        {
+            SaveCSV();
+        }
 
         private void Cerrar()
         {
@@ -1033,24 +1039,25 @@ namespace VideoRecolector
                 stream.Flush();
             }
 
-            // Save csv data
-            if (chkbCSV.Checked)
-            {
-                using (var w = new StreamWriter(@"./dataDA.csv", append: false))
-                {
-                    for (int i = 0; i < 37; i++)
-                    {
-                        var first = NumbersByDistAngle[i, 0];
-                        var second = NumbersByDistAngle[i, 1];
-                        var third = NumbersByXY[i, 0];
-                        var fourth = NumbersByXY[i, 1];
-                        string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
-                        w.WriteLine(line);
-                        w.Flush();
-                    }
-                }
-            }
         }
 
+        void SaveCSV()
+        {
+            using (var w = new StreamWriter(@"./dataDA.csv", append: false))
+            {
+                for (int i = 0; i < 37; i++)
+                {
+                    var first = NumbersByDistAngle[i, 0];
+                    var second = NumbersByDistAngle[i, 1];
+                    var third = NumbersByXY[i, 0];
+                    var fourth = NumbersByXY[i, 1];
+                    string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
+                    w.WriteLine(line);
+                }
+                w.Flush();
+                MessageBox.Show("Archivo CSV generado");
+            }
+
+        }
     }
 }

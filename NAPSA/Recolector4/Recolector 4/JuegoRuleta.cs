@@ -121,14 +121,11 @@ namespace VideoRecolector
         public void CheckBeforeGameState()
         {
             this.contadorEstadoActual++;
-            if (this._isMoving)
+            // After 2 secs (4 * 500 msecs) with cylinder movement, go to PLACE_YOUR_BETS
+            if (this.contadorEstadoActual > 4)
             {
-                // After 2 secs (4 * 500 msecs) with cylinder movement, go to PLACE_YOUR_BETS
-                if (this.contadorEstadoActual > 4)
-                {
-                    currentState = ESTADO_JUEGO.PLACE_YOUR_BETS;
-                    this.contadorEstadoActual = 0;
-                }
+                currentState = ESTADO_JUEGO.PLACE_YOUR_BETS;
+                this.contadorEstadoActual = 0;
             }
             else
             {
