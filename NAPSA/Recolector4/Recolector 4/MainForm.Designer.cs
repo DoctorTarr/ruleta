@@ -277,7 +277,7 @@ namespace VideoRecolector
                 if (xPos > 6)
                 {
                     // Two checkbox per row
-                    yPos = yPos + chkbNumbers[n].Height + 2;
+                    yPos = yPos + chkbNumbers[n].Height + 1;
                     xPos = 6;
                 }
                 else
@@ -323,6 +323,8 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.lblGameStatus = new System.Windows.Forms.Label();
             this.btnSaveCSV = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.lblZeroBlobDetectionTime = new System.Windows.Forms.Label();
@@ -336,11 +338,11 @@ namespace VideoRecolector
             this.lblFPS = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblBallOn = new System.Windows.Forms.Label();
+            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
             this.btnStartCamara = new System.Windows.Forms.Button();
-            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
@@ -348,6 +350,14 @@ namespace VideoRecolector
             this.mnuSystemTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlCalibration = new System.Windows.Forms.GroupBox();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.numUpDownBlue = new System.Windows.Forms.NumericUpDown();
+            this.numUpDownGreen = new System.Windows.Forms.NumericUpDown();
+            this.numUpDownRed = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.lblChkCount = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -363,14 +373,15 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.lblGameStatus = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.mnuSystemTray.SuspendLayout();
             this.pnlCalibration.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownBlue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownGreen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownRed)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -589,6 +600,7 @@ namespace VideoRecolector
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.lblBallOn);
+            this.groupBox3.Controls.Add(this.btnIniciarDemo);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.cbCalibrateCamera);
@@ -601,6 +613,27 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label7.Location = new System.Drawing.Point(338, 452);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(28, 13);
+            this.label7.TabIndex = 135;
+            this.label7.Text = "Hits:";
+            // 
+            // lblGameStatus
+            // 
+            this.lblGameStatus.AutoSize = true;
+            this.lblGameStatus.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGameStatus.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblGameStatus.Location = new System.Drawing.Point(87, 463);
+            this.lblGameStatus.Name = "lblGameStatus";
+            this.lblGameStatus.Size = new System.Drawing.Size(26, 23);
+            this.lblGameStatus.TabIndex = 134;
+            this.lblGameStatus.Text = "--";
             // 
             // btnSaveCSV
             // 
@@ -617,7 +650,7 @@ namespace VideoRecolector
             // 
             this.label16.AutoSize = true;
             this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label16.Location = new System.Drawing.Point(508, 442);
+            this.label16.Location = new System.Drawing.Point(535, 464);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(66, 13);
             this.label16.TabIndex = 132;
@@ -628,7 +661,7 @@ namespace VideoRecolector
             this.lblZeroBlobDetectionTime.AutoSize = true;
             this.lblZeroBlobDetectionTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblZeroBlobDetectionTime.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblZeroBlobDetectionTime.Location = new System.Drawing.Point(588, 440);
+            this.lblZeroBlobDetectionTime.Location = new System.Drawing.Point(615, 462);
             this.lblZeroBlobDetectionTime.Name = "lblZeroBlobDetectionTime";
             this.lblZeroBlobDetectionTime.Size = new System.Drawing.Size(22, 15);
             this.lblZeroBlobDetectionTime.TabIndex = 131;
@@ -741,6 +774,21 @@ namespace VideoRecolector
             this.lblBallOn.TabIndex = 54;
             this.lblBallOn.Text = "NB";
             // 
+            // btnIniciarDemo
+            // 
+            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnIniciarDemo.Enabled = false;
+            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
+            this.btnIniciarDemo.Location = new System.Drawing.Point(587, 438);
+            this.btnIniciarDemo.Name = "btnIniciarDemo";
+            this.btnIniciarDemo.Size = new System.Drawing.Size(64, 21);
+            this.btnIniciarDemo.TabIndex = 51;
+            this.btnIniciarDemo.Text = "Demo";
+            this.btnIniciarDemo.UseVisualStyleBackColor = true;
+            this.btnIniciarDemo.Visible = false;
+            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -783,21 +831,6 @@ namespace VideoRecolector
             this.btnStartCamara.Text = "Iniciar Captura";
             this.btnStartCamara.UseVisualStyleBackColor = true;
             this.btnStartCamara.Click += new System.EventHandler(this.btnStartCamara_Click);
-            // 
-            // btnIniciarDemo
-            // 
-            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnIniciarDemo.Enabled = false;
-            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(6, 644);
-            this.btnIniciarDemo.Name = "btnIniciarDemo";
-            this.btnIniciarDemo.Size = new System.Drawing.Size(64, 23);
-            this.btnIniciarDemo.TabIndex = 51;
-            this.btnIniciarDemo.Text = "Demo";
-            this.btnIniciarDemo.UseVisualStyleBackColor = true;
-            this.btnIniciarDemo.Visible = false;
-            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
             // 
             // tmrDemo
             // 
@@ -846,6 +879,14 @@ namespace VideoRecolector
             // 
             // pnlCalibration
             // 
+            this.pnlCalibration.Controls.Add(this.radioButton2);
+            this.pnlCalibration.Controls.Add(this.radioButton1);
+            this.pnlCalibration.Controls.Add(this.label23);
+            this.pnlCalibration.Controls.Add(this.label22);
+            this.pnlCalibration.Controls.Add(this.label21);
+            this.pnlCalibration.Controls.Add(this.numUpDownBlue);
+            this.pnlCalibration.Controls.Add(this.numUpDownGreen);
+            this.pnlCalibration.Controls.Add(this.numUpDownRed);
             this.pnlCalibration.Controls.Add(this.label9);
             this.pnlCalibration.Controls.Add(this.lblChkCount);
             this.pnlCalibration.Controls.Add(this.label17);
@@ -855,19 +896,109 @@ namespace VideoRecolector
             this.pnlCalibration.Controls.Add(this.label19);
             this.pnlCalibration.Controls.Add(this.lblAvgAngle);
             this.pnlCalibration.Controls.Add(this.lblAvgDist);
-            this.pnlCalibration.Controls.Add(this.btnIniciarDemo);
             this.pnlCalibration.Controls.Add(this.comboBox1);
             this.pnlCalibration.Controls.Add(this.btnCalibrateNumber);
             this.pnlCalibration.Controls.Add(this.lblTestCount);
             this.pnlCalibration.Controls.Add(this.label13);
             this.pnlCalibration.Controls.Add(this.label12);
             this.pnlCalibration.Controls.Add(this.btnSetNumber);
-            this.pnlCalibration.Location = new System.Drawing.Point(676, 75);
+            this.pnlCalibration.Location = new System.Drawing.Point(676, 65);
             this.pnlCalibration.Name = "pnlCalibration";
             this.pnlCalibration.Size = new System.Drawing.Size(85, 677);
             this.pnlCalibration.TabIndex = 62;
             this.pnlCalibration.TabStop = false;
             this.pnlCalibration.Visible = false;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(6, 583);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(73, 17);
+            this.radioButton2.TabIndex = 134;
+            this.radioButton2.Text = "Color Bola";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(6, 564);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(74, 17);
+            this.radioButton1.TabIndex = 133;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Color Cero";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label23.Location = new System.Drawing.Point(3, 653);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(17, 13);
+            this.label23.TabIndex = 132;
+            this.label23.Text = "B:";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label22.Location = new System.Drawing.Point(3, 628);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(18, 13);
+            this.label22.TabIndex = 131;
+            this.label22.Text = "G:";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label21.Location = new System.Drawing.Point(3, 605);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(18, 13);
+            this.label21.TabIndex = 52;
+            this.label21.Text = "R:";
+            // 
+            // numUpDownBlue
+            // 
+            this.numUpDownBlue.Location = new System.Drawing.Point(28, 651);
+            this.numUpDownBlue.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numUpDownBlue.Name = "numUpDownBlue";
+            this.numUpDownBlue.Size = new System.Drawing.Size(48, 20);
+            this.numUpDownBlue.TabIndex = 130;
+            // 
+            // numUpDownGreen
+            // 
+            this.numUpDownGreen.Location = new System.Drawing.Point(28, 626);
+            this.numUpDownGreen.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numUpDownGreen.Name = "numUpDownGreen";
+            this.numUpDownGreen.Size = new System.Drawing.Size(48, 20);
+            this.numUpDownGreen.TabIndex = 129;
+            // 
+            // numUpDownRed
+            // 
+            this.numUpDownRed.Location = new System.Drawing.Point(28, 603);
+            this.numUpDownRed.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.numUpDownRed.Name = "numUpDownRed";
+            this.numUpDownRed.Size = new System.Drawing.Size(48, 20);
+            this.numUpDownRed.TabIndex = 128;
+            this.numUpDownRed.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label9
             // 
@@ -1032,27 +1163,6 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
-            // lblGameStatus
-            // 
-            this.lblGameStatus.AutoSize = true;
-            this.lblGameStatus.Font = new System.Drawing.Font("Microsoft Tai Le", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGameStatus.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblGameStatus.Location = new System.Drawing.Point(87, 463);
-            this.lblGameStatus.Name = "lblGameStatus";
-            this.lblGameStatus.Size = new System.Drawing.Size(26, 23);
-            this.lblGameStatus.TabIndex = 134;
-            this.lblGameStatus.Text = "--";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label7.Location = new System.Drawing.Point(338, 452);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(28, 13);
-            this.label7.TabIndex = 135;
-            this.label7.Text = "Hits:";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1080,6 +1190,9 @@ namespace VideoRecolector
             this.mnuSystemTray.ResumeLayout(false);
             this.pnlCalibration.ResumeLayout(false);
             this.pnlCalibration.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownBlue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownGreen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDownRed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1149,6 +1262,14 @@ namespace VideoRecolector
         private Button btnSaveCSV;
         private Label lblGameStatus;
         private Label label7;
+        private NumericUpDown numUpDownBlue;
+        private NumericUpDown numUpDownGreen;
+        private NumericUpDown numUpDownRed;
+        private Label label23;
+        private Label label22;
+        private Label label21;
+        private RadioButton radioButton2;
+        private RadioButton radioButton1;
     }
 }
 

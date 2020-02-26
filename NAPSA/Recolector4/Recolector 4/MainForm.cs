@@ -957,11 +957,29 @@ namespace VideoRecolector
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
                 this.btnSaveCSV.Visible = true;
+                radioButton1.Checked = true;
+                //radioButton2.Checked = false;
             }
             else
             {
                 this.pnlCalibration.Visible = false;
                 this.btnSaveCSV.Visible = false;
+            }
+        }
+
+        void UpdateRGBUpDown()
+        {
+            if (radioButton1.Checked)
+            {
+                numUpDownRed.Value = this._zeroColorFilter.CenterColor.Red;
+                numUpDownGreen.Value = this._zeroColorFilter.CenterColor.Green;
+                numUpDownBlue.Value = this._zeroColorFilter.CenterColor.Blue;
+            }
+            else
+            {
+                numUpDownRed.Value = this._ballColorFilter.CenterColor.Red;
+                numUpDownGreen.Value = this._ballColorFilter.CenterColor.Green;
+                numUpDownBlue.Value = this._ballColorFilter.CenterColor.Blue;
             }
         }
 
@@ -991,6 +1009,21 @@ namespace VideoRecolector
         private void btnSaveCSV_Click(object sender, EventArgs e)
         {
             SaveCSV();
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateRGBUpDown();
+        }
+
+        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateRGBUpDown();
         }
 
         private void Cerrar()
