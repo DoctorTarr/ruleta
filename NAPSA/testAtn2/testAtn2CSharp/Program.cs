@@ -66,60 +66,83 @@ namespace testAtn2CSharp
             return atan;
         }
 
+        private static double radian = 180.0 / Math.PI;
+
+        /**
+        * Determines the angle of a point against the coordinates center
+        */
+        private static int GetAngleOfPointToZero(int x, int y)
+        {
+            return (int)Math.Round(Math.Atan2(y, x) * radian);
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Testing atan2 atan2_aprox1 and atan2_aprox2 in C#\n");
-            float x = 1;
-            float y = 0;
-            float angle = 0.0f;
             Stopwatch lStopwatch = new Stopwatch();
 
 
+            //float x = 1;
+            //float y = 0;
+            //float angle = 0.0f;
             //Console.WriteLine("Start Math.Atn2() test\n");
             lStopwatch.Start();
-            for (y = 0; y < 2 * Math.PI; y += 0.1f)
+            //for (y = 0; y < 2 * Math.PI; y += 0.1f)
+            //{
+            //    for (x = 0; x < 2 * Math.PI; x += 0.1f)
+            //    {
+            //        angle = (float)Math.Atan2(y, x);
+            //    }
+            //}
+            //lStopwatch.Stop();
+            ////Console.WriteLine("Stop Math.Atn2() test\n");
+            //long elapsedTime = lStopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
+            //Console.WriteLine("RunTime Math.Atn2() " + elapsedTime);
+
+            ////Console.WriteLine("\n\nStart atan2_approximation1() test\n");
+            //lStopwatch.Restart();
+
+            //for (y = 0; y < 2 * Math.PI; y += 0.1f)
+            //{
+            //    for (x = 0; x < 2 * Math.PI; x += 0.1f)
+            //    {
+            //        angle = atan2_approximation1(y, x);
+            //    }
+            //}
+            //lStopwatch.Stop();
+            ////Console.WriteLine("Stop atan2_approximation1() test\n");
+            //elapsedTime = lStopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
+
+            //Console.WriteLine("RunTime atn2_aprox1() " + elapsedTime);
+
+            ////Console.WriteLine("\n\nStart atan2_approximation1() test\n");
+            //lStopwatch.Restart();
+
+            //for (y = 0; y < 2 * Math.PI; y += 0.1f)
+            //{
+            //    for (x = 0; x < 2 * Math.PI; x += 0.1f)
+            //    {
+            //        angle = atan2_approximation2(y, x);
+            //    }
+            //}
+
+            int n = 89;
+            int x, y;
+            int iAngle;
+ 
+            for (y = -n - 1; y <= n; y++)
             {
-                for (x = 0; x < 2 * Math.PI; x += 0.1f)
+                for (x = -n - 1; x <= n; x++)
                 {
-                    angle = (float)Math.Atan2(y, x);
+                    iAngle = GetAngleOfPointToZero(y, x);
+                    Console.WriteLine($"x: {x} y: {y} = {iAngle}");
                 }
             }
             lStopwatch.Stop();
-            //Console.WriteLine("Stop Math.Atn2() test\n");
+
             long elapsedTime = lStopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
-            Console.WriteLine("RunTime Math.Atn2() " + elapsedTime);
 
-            //Console.WriteLine("\n\nStart atan2_approximation1() test\n");
-            lStopwatch.Restart();
-
-            for (y = 0; y < 2 * Math.PI; y += 0.1f)
-            {
-                for (x = 0; x < 2 * Math.PI; x += 0.1f)
-                {
-                    angle = atan2_approximation1(y, x);
-                }
-            }
-            lStopwatch.Stop();
-            //Console.WriteLine("Stop atan2_approximation1() test\n");
-            elapsedTime = lStopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
-
-            Console.WriteLine("RunTime atn2_aprox1() " + elapsedTime);
-
-            //Console.WriteLine("\n\nStart atan2_approximation1() test\n");
-            lStopwatch.Restart();
-
-            for (y = 0; y < 2 * Math.PI; y += 0.1f)
-            {
-                for (x = 0; x < 2 * Math.PI; x += 0.1f)
-                {
-                    angle = atan2_approximation2(y, x);
-                }
-            }
-            lStopwatch.Stop();
-            //Console.WriteLine("Stop atan2_approximation1() test\n");
-            elapsedTime = lStopwatch.ElapsedTicks / (Stopwatch.Frequency / (1000L * 1000L));
-
-            Console.WriteLine("RunTime atn2_aprox2() " + elapsedTime);
+            Console.WriteLine("RunTime GetAngleOfPointToZero() " + elapsedTime);
 
             Console.ReadKey();
         }

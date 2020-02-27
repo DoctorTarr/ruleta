@@ -91,6 +91,7 @@ namespace VideoRecolector
 
             lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
             lblGameStatus.Text = estadoMesa.ToString();
+            lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
 
             //txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
 
@@ -135,7 +136,7 @@ namespace VideoRecolector
             lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
             lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
 
-            if (this._calibrateFlag || this.cbCalibrateNumbers.Checked)
+            if (this._IsCalibratingNumbers || this.cbCalibrateNumbers.Checked)
             {
                 IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 
@@ -323,11 +324,12 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnUpdateRGB = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.lblGameStatus = new System.Windows.Forms.Label();
             this.btnSaveCSV = new System.Windows.Forms.Button();
-            this.label16 = new System.Windows.Forms.Label();
-            this.lblZeroBlobDetectionTime = new System.Windows.Forms.Label();
+            this.lblTiming = new System.Windows.Forms.Label();
+            this.lblTimingValue = new System.Windows.Forms.Label();
             this.lblVideoStatus = new System.Windows.Forms.Label();
             this.lblDisplayWinner = new System.Windows.Forms.Label();
             this.lblWinCount = new System.Windows.Forms.Label();
@@ -338,7 +340,6 @@ namespace VideoRecolector
             this.lblFPS = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.lblBallOn = new System.Windows.Forms.Label();
-            this.btnIniciarDemo = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
@@ -373,6 +374,7 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
+            this.chkbGuardarLog = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -585,11 +587,13 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.chkbGuardarLog);
+            this.groupBox3.Controls.Add(this.btnUpdateRGB);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.lblGameStatus);
             this.groupBox3.Controls.Add(this.btnSaveCSV);
-            this.groupBox3.Controls.Add(this.label16);
-            this.groupBox3.Controls.Add(this.lblZeroBlobDetectionTime);
+            this.groupBox3.Controls.Add(this.lblTiming);
+            this.groupBox3.Controls.Add(this.lblTimingValue);
             this.groupBox3.Controls.Add(this.lblVideoStatus);
             this.groupBox3.Controls.Add(this.lblDisplayWinner);
             this.groupBox3.Controls.Add(this.lblWinCount);
@@ -600,7 +604,6 @@ namespace VideoRecolector
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
             this.groupBox3.Controls.Add(this.lblBallOn);
-            this.groupBox3.Controls.Add(this.btnIniciarDemo);
             this.groupBox3.Controls.Add(this.label11);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.cbCalibrateCamera);
@@ -613,6 +616,21 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // btnUpdateRGB
+            // 
+            this.btnUpdateRGB.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnUpdateRGB.Enabled = false;
+            this.btnUpdateRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdateRGB.ForeColor = System.Drawing.Color.Black;
+            this.btnUpdateRGB.Location = new System.Drawing.Point(555, 460);
+            this.btnUpdateRGB.Name = "btnUpdateRGB";
+            this.btnUpdateRGB.Size = new System.Drawing.Size(92, 23);
+            this.btnUpdateRGB.TabIndex = 136;
+            this.btnUpdateRGB.Text = "Update RGB";
+            this.btnUpdateRGB.UseVisualStyleBackColor = true;
+            this.btnUpdateRGB.Visible = false;
+            this.btnUpdateRGB.Click += new System.EventHandler(this.btnUpdateRGB_Click);
             // 
             // label7
             // 
@@ -637,7 +655,7 @@ namespace VideoRecolector
             // 
             // btnSaveCSV
             // 
-            this.btnSaveCSV.Location = new System.Drawing.Point(383, 459);
+            this.btnSaveCSV.Location = new System.Drawing.Point(383, 460);
             this.btnSaveCSV.Name = "btnSaveCSV";
             this.btnSaveCSV.Size = new System.Drawing.Size(100, 23);
             this.btnSaveCSV.TabIndex = 133;
@@ -646,26 +664,28 @@ namespace VideoRecolector
             this.btnSaveCSV.Visible = false;
             this.btnSaveCSV.Click += new System.EventHandler(this.btnSaveCSV_Click);
             // 
-            // label16
+            // lblTiming
             // 
-            this.label16.AutoSize = true;
-            this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label16.Location = new System.Drawing.Point(535, 464);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(66, 13);
-            this.label16.TabIndex = 132;
-            this.label16.Text = "Zero Blob T:";
+            this.lblTiming.AutoSize = true;
+            this.lblTiming.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblTiming.Location = new System.Drawing.Point(545, 442);
+            this.lblTiming.Name = "lblTiming";
+            this.lblTiming.Size = new System.Drawing.Size(66, 13);
+            this.lblTiming.TabIndex = 132;
+            this.lblTiming.Text = "Zero Blob T:";
+            this.lblTiming.Visible = false;
             // 
-            // lblZeroBlobDetectionTime
+            // lblTimingValue
             // 
-            this.lblZeroBlobDetectionTime.AutoSize = true;
-            this.lblZeroBlobDetectionTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblZeroBlobDetectionTime.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblZeroBlobDetectionTime.Location = new System.Drawing.Point(615, 462);
-            this.lblZeroBlobDetectionTime.Name = "lblZeroBlobDetectionTime";
-            this.lblZeroBlobDetectionTime.Size = new System.Drawing.Size(22, 15);
-            this.lblZeroBlobDetectionTime.TabIndex = 131;
-            this.lblZeroBlobDetectionTime.Text = "---";
+            this.lblTimingValue.AutoSize = true;
+            this.lblTimingValue.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTimingValue.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblTimingValue.Location = new System.Drawing.Point(625, 440);
+            this.lblTimingValue.Name = "lblTimingValue";
+            this.lblTimingValue.Size = new System.Drawing.Size(22, 15);
+            this.lblTimingValue.TabIndex = 131;
+            this.lblTimingValue.Text = "---";
+            this.lblTimingValue.Visible = false;
             // 
             // lblVideoStatus
             // 
@@ -747,7 +767,7 @@ namespace VideoRecolector
             // 
             this.lblFPS.AutoSize = true;
             this.lblFPS.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblFPS.Location = new System.Drawing.Point(508, 464);
+            this.lblFPS.Location = new System.Drawing.Point(518, 442);
             this.lblFPS.Name = "lblFPS";
             this.lblFPS.Size = new System.Drawing.Size(21, 13);
             this.lblFPS.TabIndex = 58;
@@ -773,21 +793,6 @@ namespace VideoRecolector
             this.lblBallOn.Size = new System.Drawing.Size(22, 13);
             this.lblBallOn.TabIndex = 54;
             this.lblBallOn.Text = "NB";
-            // 
-            // btnIniciarDemo
-            // 
-            this.btnIniciarDemo.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnIniciarDemo.Enabled = false;
-            this.btnIniciarDemo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnIniciarDemo.ForeColor = System.Drawing.Color.Black;
-            this.btnIniciarDemo.Location = new System.Drawing.Point(587, 438);
-            this.btnIniciarDemo.Name = "btnIniciarDemo";
-            this.btnIniciarDemo.Size = new System.Drawing.Size(64, 21);
-            this.btnIniciarDemo.TabIndex = 51;
-            this.btnIniciarDemo.Text = "Demo";
-            this.btnIniciarDemo.UseVisualStyleBackColor = true;
-            this.btnIniciarDemo.Visible = false;
-            this.btnIniciarDemo.Click += new System.EventHandler(this.btnIniciarDemo_Click);
             // 
             // label11
             // 
@@ -974,6 +979,7 @@ namespace VideoRecolector
             this.numUpDownBlue.Name = "numUpDownBlue";
             this.numUpDownBlue.Size = new System.Drawing.Size(48, 20);
             this.numUpDownBlue.TabIndex = 130;
+            this.numUpDownBlue.ValueChanged += new System.EventHandler(this.numUpDownBlue_ValueChanged);
             // 
             // numUpDownGreen
             // 
@@ -986,6 +992,7 @@ namespace VideoRecolector
             this.numUpDownGreen.Name = "numUpDownGreen";
             this.numUpDownGreen.Size = new System.Drawing.Size(48, 20);
             this.numUpDownGreen.TabIndex = 129;
+            this.numUpDownGreen.ValueChanged += new System.EventHandler(this.numUpDownGreen_ValueChanged);
             // 
             // numUpDownRed
             // 
@@ -998,7 +1005,7 @@ namespace VideoRecolector
             this.numUpDownRed.Name = "numUpDownRed";
             this.numUpDownRed.Size = new System.Drawing.Size(48, 20);
             this.numUpDownRed.TabIndex = 128;
-            this.numUpDownRed.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.numUpDownRed.ValueChanged += new System.EventHandler(this.numUpDownRed_ValueChanged);
             // 
             // label9
             // 
@@ -1163,11 +1170,22 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
+            // chkbGuardarLog
+            // 
+            this.chkbGuardarLog.AutoSize = true;
+            this.chkbGuardarLog.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.chkbGuardarLog.Location = new System.Drawing.Point(212, 442);
+            this.chkbGuardarLog.Name = "chkbGuardarLog";
+            this.chkbGuardarLog.Size = new System.Drawing.Size(85, 17);
+            this.chkbGuardarLog.TabIndex = 52;
+            this.chkbGuardarLog.Text = "Guardar Log";
+            this.chkbGuardarLog.UseVisualStyleBackColor = true;
+            this.chkbGuardarLog.CheckedChanged += new System.EventHandler(this.chkbGuardarLog_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.btnIniciarDemo;
             this.ClientSize = new System.Drawing.Size(768, 749);
             this.Controls.Add(this.pnlCalibration);
             this.Controls.Add(this.txtProtocolo);
@@ -1211,7 +1229,6 @@ namespace VideoRecolector
         private System.Windows.Forms.CheckBox cbCalibrateCamera;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Timer tmrDemo;
-        private System.Windows.Forms.Button btnIniciarDemo;
         private System.Windows.Forms.TextBox txtProtocolo;
         private System.Windows.Forms.Timer tmrMain;
         private System.Windows.Forms.Label label11;
@@ -1257,8 +1274,8 @@ namespace VideoRecolector
         private Label lblBolaPosY;
         private Label label20;
         private Label lblDistZeroBall;
-        private Label label16;
-        private Label lblZeroBlobDetectionTime;
+        private Label lblTiming;
+        private Label lblTimingValue;
         private Button btnSaveCSV;
         private Label lblGameStatus;
         private Label label7;
@@ -1270,6 +1287,8 @@ namespace VideoRecolector
         private Label label21;
         private RadioButton radioButton2;
         private RadioButton radioButton1;
+        private Button btnUpdateRGB;
+        private CheckBox chkbGuardarLog;
     }
 }
 

@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-02-24T23:47:25</timestamp>
+        <timestamp>2020-02-27T04:16:59</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -5451,32 +5451,32 @@
                     <method>
                         <signature>void()</signature>
                         <name>AcumulateCalibration</name>
-                        <newname>g</newname>
+                        <newname>m</newname>
                     </method>
                     <method>
                         <signature>System.Drawing.Bitmap(System.Drawing.Bitmap)</signature>
                         <name>BallBlobDetection</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void(System.Drawing.Bitmap)</signature>
                         <name>CalibrateCamera</name>
-                        <newname>d</newname>
+                        <newname>f</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>Cerrar</name>
-                        <newname>f</newname>
+                        <newname>i</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>ClickCheckBox</name>
-                        <newname>n</newname>
+                        <newname>x</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>DebounceSwitch1</name>
-                        <newname>i</newname>
+                        <newname>o</newname>
                     </method>
                     <method>
                         <signature>void(bool)</signature>
@@ -5485,189 +5485,279 @@
                     <method>
                         <signature>int32(System.Drawing.Point, System.Drawing.Point)</signature>
                         <name>FindDistance</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>int32(int32, int32)</signature>
                         <name>FindNumberByAngle</name>
-                        <newname>c</newname>
+                        <newname>e</newname>
                     </method>
                     <method>
                         <signature>int32(int32, int32)</signature>
                         <name>FindNumberByXY</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>int32(System.Drawing.Point)</signature>
                         <name>GetAngleOfPointToZero</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
+                    </method>
+                    <method>
+                        <signature>string(string)</signature>
+                        <name>GetSetting</name>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void(int32, int32, int32, int32)</signature>
                         <name>GuardarEstado</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void(int32)</signature>
                         <name>GuardarNumeroGanador</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>InitializeComponent</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>int32(int32)</signature>
                         <name>Isqrt</name>
-                        <newname>c</newname>
+                        <newname>e</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>LeerUltimoNumero</name>
-                        <newname>h</newname>
+                        <newname>n</newname>
                     </method>
                     <method>
                         <signature>void(object, System.Windows.Forms.FormClosingEventArgs)</signature>
                         <name>MainForm_FormClosing</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>MainForm_Load</name>
-                        <newname>f</newname>
+                        <newname>h</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>MainForm_Resize</name>
-                        <newname>e</newname>
+                        <newname>g</newname>
                     </method>
                     <method>
                         <signature>bool()</signature>
                         <name>RawBallFound</name>
-                        <newname>j</newname>
+                        <newname>p</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>ReadNumbersTable</name>
-                        <newname>e</newname>
+                        <newname>h</newname>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>SaveCSV</name>
+                        <newname>f</newname>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>SaveRGBToConfig</name>
+                        <newname>j</newname>
+                    </method>
+                    <method>
+                        <signature>void(string, string)</signature>
+                        <name>SetSetting</name>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>ShowNumbersCheckBox</name>
-                        <newname>c</newname>
+                        <newname>e</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>StartCamera</name>
-                        <newname>m</newname>
+                        <newname>s</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>StopCamera</name>
+                        <newname>r</newname>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>UpdateColorFilter</name>
+                        <newname>k</newname>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>UpdateRGBUpDown</name>
                         <newname>l</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
                         <name>WriteNumbersTable</name>
-                        <newname>d</newname>
+                        <newname>g</newname>
                     </method>
                     <method>
                         <signature>System.Drawing.Bitmap(System.Drawing.Bitmap)</signature>
                         <name>ZeroBlobDetection</name>
-                        <newname>c</newname>
+                        <newname>e</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnCalibrateNumber_Click</name>
-                        <newname>j</newname>
+                        <newname>t</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnIniciarDemo_Click</name>
-                        <newname>k</newname>
+                        <newname>u</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>btnSaveCSV_Click</name>
+                        <newname>p</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnSetNumber_Click</name>
-                        <newname>i</newname>
+                        <newname>s</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnStartCamara_Click</name>
-                        <newname>m</newname>
+                        <newname>w</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>btnUpdateRGB_Click</name>
+                        <newname>j</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>cbCalibrateCamera_CheckedChanged</name>
-                        <newname>l</newname>
+                        <newname>v</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>cbCalibrateNumbers_CheckedChanged</name>
-                        <newname>h</newname>
+                        <newname>r</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>cerrarToolStripMenuItem_Click</name>
-                        <newname>d</newname>
+                        <newname>f</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>chkbGuardarLog_CheckedChanged</name>
+                        <newname>i</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>comboBox1_SelectedIndexChanged</name>
-                        <newname>g</newname>
-                    </method>
-                    <method>
-                        <signature>bool()</signature>
-                        <name>get_CalibrateFlag</name>
-                        <newname>n</newname>
+                        <newname>q</newname>
                     </method>
                     <method>
                         <signature>void(object, Accord.Video.NewFrameEventArgs)</signature>
                         <name>get_Frame</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
+                    </method>
+                    <method>
+                        <signature>bool()</signature>
+                        <name>get_IsCalibratingCamera</name>
+                        <newname>u</newname>
+                    </method>
+                    <method>
+                        <signature>bool()</signature>
+                        <name>get_IsCalibratingNumbers</name>
+                        <newname>t</newname>
+                    </method>
+                    <method>
+                        <signature>bool()</signature>
+                        <name>get_LogDetectedNumbers</name>
+                        <newname>v</newname>
                     </method>
                     <method>
                         <signature>void(object, System.Windows.Forms.MouseEventArgs)</signature>
                         <name>notifyIcon1_MouseDoubleClick</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
-                        <signature>void(bool)</signature>
-                        <name>set_CalibrateFlag</name>
-                        <newname>b</newname>
-                    </method>
-                    <method>
-                        <signature>void()</signature>
-                        <name>setupDetectionVariables</name>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>numUpDownBlue_ValueChanged</name>
                         <newname>k</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
+                        <name>numUpDownGreen_ValueChanged</name>
+                        <newname>l</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>numUpDownRed_ValueChanged</name>
+                        <newname>m</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>radioButton1_CheckedChanged</name>
+                        <newname>o</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>radioButton2_CheckedChanged</name>
+                        <newname>n</newname>
+                    </method>
+                    <method>
+                        <signature>void(bool)</signature>
+                        <name>set_IsCalibratingCamera</name>
+                        <newname>e</newname>
+                    </method>
+                    <method>
+                        <signature>void(bool)</signature>
+                        <name>set_IsCalibratingNumbers</name>
+                        <newname>d</newname>
+                    </method>
+                    <method>
+                        <signature>void(bool)</signature>
+                        <name>set_LogDetectedNumbers</name>
+                        <newname>f</newname>
+                    </method>
+                    <method>
+                        <signature>void()</signature>
+                        <name>setupDetectionVariables</name>
+                        <newname>q</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
                         <name>tmrDemo_Tick</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>tmrMain_Tick</name>
-                        <newname>c</newname>
+                        <newname>e</newname>
                     </method>
                     <method>
                         <signature>void(object, Accord.Video.VideoSourceErrorEventArgs)</signature>
                         <name>videoSourcePlayer1_VideoSourceError</name>
-                        <newname>b</newname>
+                        <newname>d</newname>
                     </method>
                 </methodlist>
                 <fieldlist>
                     <field>
                         <signature>int32</signature>
                         <name>BALL_FOUND_MSEC</name>
-                        <newname>a2</newname>
+                        <newname>a3</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>BALL_NOT_FOUND_MSEC</name>
-                        <newname>a3</newname>
+                        <newname>a4</newname>
                     </field>
                     <field>
                         <signature>System.Drawing.Point</signature>
@@ -5682,7 +5772,27 @@
                     <field>
                         <signature>int32</signature>
                         <name>CHECK_MSEC</name>
+                        <newname>a2</newname>
+                    </field>
+                    <field>
+                        <signature>bool</signature>
+                        <name>CalibrationInProgress</name>
                         <newname>a1</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>DIFF_ANGLE</name>
+                        <newname>ba</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>DIFF_DIST</name>
+                        <newname>a9</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>DIFF_XY</name>
+                        <newname>bb</newname>
                     </field>
                     <field>
                         <signature>bool</signature>
@@ -5692,17 +5802,17 @@
                     <field>
                         <signature>int32[0...,0...]</signature>
                         <name>NumbersByDistAngle</name>
-                        <newname>a5</newname>
-                    </field>
-                    <field>
-                        <signature>int32[0...,0...]</signature>
-                        <name>NumbersByXY</name>
                         <newname>a6</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
+                        <name>NumbersByXY</name>
+                        <newname>a7</newname>
+                    </field>
+                    <field>
+                        <signature>int32[0...,0...]</signature>
                         <name>RouletteNumbers</name>
-                        <newname>a4</newname>
+                        <newname>a5</newname>
                     </field>
                     <field>
                         <signature>System.Drawing.Point</signature>
@@ -5723,6 +5833,21 @@
                         <signature>int32</signature>
                         <name>_DistanceZeroBall</name>
                         <newname>u</newname>
+                    </field>
+                    <field>
+                        <signature>bool</signature>
+                        <name>_IsCalibratingCamera</name>
+                        <newname>aa</newname>
+                    </field>
+                    <field>
+                        <signature>bool</signature>
+                        <name>_IsCalibratingNumbers</name>
+                        <newname>ab</newname>
+                    </field>
+                    <field>
+                        <signature>bool</signature>
+                        <name>_LogDetectedNumbers</name>
+                        <newname>ac</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
@@ -5755,11 +5880,6 @@
                         <newname>j</newname>
                     </field>
                     <field>
-                        <signature>bool</signature>
-                        <name>_calibrateFlag</name>
-                        <newname>aa</newname>
-                    </field>
-                    <field>
                         <signature>System.Drawing.Rectangle</signature>
                         <name>_centerArea</name>
                         <newname>m</newname>
@@ -5782,7 +5902,7 @@
                     <field>
                         <signature>bool</signature>
                         <name>_isMoving</name>
-                        <newname>ac</newname>
+                        <newname>ae</newname>
                     </field>
                     <field>
                         <signature>System.Drawing.Rectangle</signature>
@@ -5797,12 +5917,12 @@
                     <field>
                         <signature>int32</signature>
                         <name>_rpm</name>
-                        <newname>ad</newname>
+                        <newname>af</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>_rpmCounter</name>
-                        <newname>ae</newname>
+                        <newname>ag</newname>
                     </field>
                     <field>
                         <signature>Accord.Imaging.BlobCounter</signature>
@@ -5822,47 +5942,47 @@
                     <field>
                         <signature>int32</signature>
                         <name>acumAngle</name>
-                        <newname>ap</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>acumDist</name>
-                        <newname>am</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>acumX</name>
-                        <newname>as</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>acumY</name>
-                        <newname>av</newname>
-                    </field>
-                    <field>
-                        <signature>int32</signature>
-                        <name>averageAngle</name>
                         <newname>ar</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
-                        <name>averageDist</name>
+                        <name>acumDist</name>
                         <newname>ao</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
-                        <name>averageX</name>
+                        <name>acumX</name>
                         <newname>au</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
-                        <name>averageY</name>
+                        <name>acumY</name>
                         <newname>ax</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>averageAngle</name>
+                        <newname>at</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>averageDist</name>
+                        <newname>aq</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>averageX</name>
+                        <newname>aw</newname>
+                    </field>
+                    <field>
+                        <signature>int32</signature>
+                        <name>averageY</name>
+                        <newname>az</newname>
                     </field>
                     <field>
                         <signature>System.Random</signature>
                         <name>azarNumero</name>
-                        <newname>ai</newname>
+                        <newname>ak</newname>
                     </field>
                     <field>
                         <signature>bool</signature>
@@ -5875,114 +5995,114 @@
                         <newname>w</newname>
                     </field>
                     <field>
-                        <signature>bool</signature>
-                        <name>bShowText</name>
-                        <newname>a0</newname>
-                    </field>
-                    <field>
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnCalibrateNumber</name>
-                        <newname>bx</newname>
+                        <newname>bz</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
-                        <name>btnIniciarDemo</name>
-                        <newname>bl</newname>
+                        <name>btnSaveCSV</name>
+                        <newname>c0</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnSetNumber</name>
-                        <newname>b0</newname>
+                        <newname>b2</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnStartCamara</name>
-                        <newname>bh</newname>
+                        <newname>bl</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Button</signature>
+                        <name>btnUpdateRGB</name>
+                        <newname>db</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox</signature>
                         <name>cbCalibrateCamera</name>
-                        <newname>bi</newname>
+                        <newname>bm</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox</signature>
                         <name>cbCalibrateNumbers</name>
-                        <newname>b1</newname>
+                        <newname>b3</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ToolStripMenuItem</signature>
                         <name>cerrarToolStripMenuItem</name>
-                        <newname>b3</newname>
+                        <newname>b5</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox</signature>
-                        <name>chkbCSV</name>
-                        <newname>cn</newname>
+                        <name>chkbGuardarLog</name>
+                        <newname>dc</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.CheckBox[]</signature>
                         <name>chkbNumbers</name>
-                        <newname>b6</newname>
+                        <newname>b8</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ComboBox</signature>
                         <name>comboBox1</name>
-                        <newname>b7</newname>
+                        <newname>b9</newname>
                     </field>
                     <field>
                         <signature>System.ComponentModel.IContainer</signature>
                         <name>components</name>
-                        <newname>a8</newname>
+                        <newname>bc</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>countAngle</name>
-                        <newname>aq</newname>
+                        <newname>as</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>countCalibrationSamples</name>
-                        <newname>ay</newname>
+                        <newname>a0</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>countDistance</name>
-                        <newname>an</newname>
+                        <newname>ap</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>countX</name>
-                        <newname>at</newname>
+                        <newname>av</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>countY</name>
-                        <newname>aw</newname>
+                        <newname>ay</newname>
                     </field>
                     <field>
                         <signature>Accord.Vision.Motion.MotionDetector</signature>
                         <name>detector</name>
-                        <newname>ab</newname>
+                        <newname>ad</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>estadoDemo</name>
-                        <newname>ag</newname>
+                        <newname>ai</newname>
                     </field>
                     <field>
                         <signature>VideoRecolector.JuegoRuleta/ESTADO_JUEGO</signature>
                         <name>estadoMesa</name>
-                        <newname>aj</newname>
+                        <newname>al</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.GroupBox</signature>
                         <name>groupBox1</name>
-                        <newname>ba</newname>
+                        <newname>be</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.GroupBox</signature>
                         <name>groupBox3</name>
-                        <newname>be</newname>
+                        <newname>bi</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
@@ -5990,259 +6110,304 @@
                         <newname>y</newname>
                     </field>
                     <field>
-                        <signature>bool</signature>
-                        <name>isCalibrating</name>
-                        <newname>az</newname>
-                    </field>
-                    <field>
                         <signature>VideoRecolector.JuegoRuleta</signature>
                         <name>juego</name>
-                        <newname>ak</newname>
+                        <newname>am</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label1</name>
-                        <newname>bg</newname>
+                        <newname>bk</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label10</name>
-                        <newname>bj</newname>
+                        <newname>bn</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
                         <name>label11</name>
-                        <newname>bo</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label12</name>
-                        <newname>bz</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label13</name>
-                        <newname>by</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label14</name>
-                        <newname>bu</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label15</name>
-                        <newname>b5</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label16</name>
-                        <newname>cx</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label17</name>
-                        <newname>ck</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label18</name>
-                        <newname>cc</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label19</name>
-                        <newname>cd</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label2</name>
-                        <newname>bf</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label20</name>
-                        <newname>cv</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label3</name>
-                        <newname>bd</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label4</name>
-                        <newname>cf</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label5</name>
-                        <newname>cg</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label6</name>
-                        <newname>ce</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label8</name>
-                        <newname>bs</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>label9</name>
-                        <newname>cm</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgAngle</name>
-                        <newname>b8</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgDist</name>
-                        <newname>b9</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgX</name>
-                        <newname>cb</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblAvgY</name>
-                        <newname>ca</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblBallOn</name>
-                        <newname>bq</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblBolaPosX</name>
-                        <newname>ct</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblBolaPosY</name>
-                        <newname>cu</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblChkCount</name>
-                        <newname>cj</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblDisplayWinner</name>
-                        <newname>co</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblDistZeroBall</name>
-                        <newname>cw</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblEstadoRuleta</name>
-                        <newname>ci</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.Label</signature>
-                        <name>lblFPS</name>
                         <newname>br</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblTestCount</name>
+                        <name>label12</name>
+                        <newname>b1</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label13</name>
+                        <newname>b0</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label14</name>
                         <newname>bw</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblVideoStatus</name>
-                        <newname>cp</newname>
+                        <name>label15</name>
+                        <newname>b7</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblWinCount</name>
+                        <name>label17</name>
+                        <newname>cm</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label18</name>
+                        <newname>ce</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label19</name>
+                        <newname>cf</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label2</name>
+                        <newname>bj</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label20</name>
+                        <newname>cw</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label21</name>
+                        <newname>c8</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label22</name>
+                        <newname>c7</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label23</name>
+                        <newname>c6</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label3</name>
+                        <newname>bh</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label4</name>
+                        <newname>ch</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label5</name>
+                        <newname>ci</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label6</name>
+                        <newname>cg</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label7</name>
+                        <newname>c2</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label8</name>
+                        <newname>bu</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label9</name>
+                        <newname>co</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgAngle</name>
+                        <newname>ca</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgDist</name>
+                        <newname>cb</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgX</name>
+                        <newname>cd</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblAvgY</name>
+                        <newname>cc</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBallOn</name>
+                        <newname>bs</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBolaPosX</name>
+                        <newname>cu</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBolaPosY</name>
+                        <newname>cv</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblChkCount</name>
                         <newname>cl</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblWinner</name>
-                        <newname>b4</newname>
+                        <name>lblDisplayWinner</name>
+                        <newname>cp</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblZeroBlobDetectionTime</name>
+                        <name>lblDistZeroBall</name>
+                        <newname>cx</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblEstadoRuleta</name>
+                        <newname>ck</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblFPS</name>
+                        <newname>bt</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblGameStatus</name>
+                        <newname>c1</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblTestCount</name>
+                        <newname>by</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblTiming</name>
                         <newname>cy</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblZeroPosAngle</name>
-                        <newname>cs</newname>
+                        <name>lblTimingValue</name>
+                        <newname>cz</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblZeroPosX</name>
+                        <name>lblVideoStatus</name>
                         <newname>cq</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
-                        <name>lblZeroPosY</name>
+                        <name>lblWinCount</name>
+                        <newname>cn</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblWinner</name>
+                        <newname>b6</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblZeroPosAngle</name>
+                        <newname>ct</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblZeroPosX</name>
                         <newname>cr</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblZeroPosY</name>
+                        <newname>cs</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.ContextMenuStrip</signature>
                         <name>mnuSystemTray</name>
-                        <newname>b2</newname>
+                        <newname>b4</newname>
                     </field>
                     <field>
                         <signature>float32</signature>
                         <name>movePercentage</name>
-                        <newname>af</newname>
+                        <newname>ah</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.NotifyIcon</signature>
                         <name>notifyIcon1</name>
-                        <newname>bt</newname>
+                        <newname>bv</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>numCalibrated</name>
-                        <newname>al</newname>
+                        <newname>an</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.NumericUpDown</signature>
+                        <name>numUpDownBlue</name>
+                        <newname>c3</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.NumericUpDown</signature>
+                        <name>numUpDownGreen</name>
+                        <newname>c4</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.NumericUpDown</signature>
+                        <name>numUpDownRed</name>
+                        <newname>c5</newname>
                     </field>
                     <field>
                         <signature>unsigned int8</signature>
                         <name>numeroDemo</name>
-                        <newname>ah</newname>
+                        <newname>aj</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.PictureBox</signature>
                         <name>pbBall</name>
-                        <newname>ch</newname>
+                        <newname>cj</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.PictureBox</signature>
                         <name>pbZero</name>
-                        <newname>bc</newname>
+                        <newname>bg</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.GroupBox</signature>
                         <name>pnlCalibration</name>
-                        <newname>bv</newname>
+                        <newname>bx</newname>
                     </field>
                     <field>
                         <signature>float64</signature>
                         <name>radian</name>
-                        <newname>a7</newname>
+                        <newname>a8</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.RadioButton</signature>
+                        <name>radioButton1</name>
+                        <newname>da</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.RadioButton</signature>
+                        <name>radioButton2</name>
+                        <newname>c9</newname>
                     </field>
                     <field>
                         <signature>System.Diagnostics.Stopwatch</signature>
                         <name>stopWatch</name>
-                        <newname>a9</newname>
+                        <newname>bd</newname>
                     </field>
                     <field>
                         <signature>System.Drawing.Bitmap</signature>
@@ -6252,27 +6417,22 @@
                     <field>
                         <signature>System.Windows.Forms.Timer</signature>
                         <name>tmrDemo</name>
-                        <newname>bk</newname>
+                        <newname>bo</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Timer</signature>
                         <name>tmrMain</name>
-                        <newname>bn</newname>
+                        <newname>bq</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.TextBox</signature>
                         <name>txtProtocolo</name>
-                        <newname>bm</newname>
-                    </field>
-                    <field>
-                        <signature>System.Windows.Forms.TextBox</signature>
-                        <name>txtbGameStatus</name>
                         <newname>bp</newname>
                     </field>
                     <field>
                         <signature>Accord.Controls.VideoSourcePlayer</signature>
                         <name>videoSourcePlayer1</name>
-                        <newname>bb</newname>
+                        <newname>bf</newname>
                     </field>
                 </fieldlist>
                 <propertylist />
@@ -6394,11 +6554,11 @@
         </statisticline>
         <statisticline>
             <description>Total Methods</description>
-            <statistic>677</statistic>
+            <statistic>695</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields</description>
-            <statistic>450</statistic>
+            <statistic>464</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties</description>
@@ -6415,13 +6575,13 @@
         </statisticline>
         <statisticline>
             <description>Total Methods Renamed</description>
-            <statistic>130</statistic>
-            <statistic>19.20 %</statistic>
+            <statistic>148</statistic>
+            <statistic>21.29 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields Renamed</description>
-            <statistic>293</statistic>
-            <statistic>65.11 %</statistic>
+            <statistic>307</statistic>
+            <statistic>66.16 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties Renamed</description>
@@ -6436,37 +6596,37 @@
         <statisticline>
             <description>Methods Renamed to 'a'</description>
             <statistic>42</statistic>
-            <statistic>6.20 %</statistic>
-        </statisticline>
-        <statisticline>
-            <description>Methods Renamed to 'b'</description>
-            <statistic>32</statistic>
-            <statistic>4.73 %</statistic>
-        </statisticline>
-        <statisticline>
-            <description>Methods Renamed to 'c'</description>
-            <statistic>12</statistic>
-            <statistic>1.77 %</statistic>
+            <statistic>6.04 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'd'</description>
-            <statistic>9</statistic>
-            <statistic>1.33 %</statistic>
+            <statistic>21</statistic>
+            <statistic>3.02 %</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'b'</description>
+            <statistic>19</statistic>
+            <statistic>2.73 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'e'</description>
-            <statistic>6</statistic>
-            <statistic>0.89 %</statistic>
+            <statistic>10</statistic>
+            <statistic>1.44 %</statistic>
+        </statisticline>
+        <statisticline>
+            <description>Methods Renamed to 'c'</description>
+            <statistic>7</statistic>
+            <statistic>1.01 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'f'</description>
-            <statistic>5</statistic>
-            <statistic>0.74 %</statistic>
+            <statistic>7</statistic>
+            <statistic>1.01 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'g'</description>
             <statistic>5</statistic>
-            <statistic>0.74 %</statistic>
+            <statistic>0.72 %</statistic>
         </statisticline>
     </statistics>
 </dotfuscatorMap>

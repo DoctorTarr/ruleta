@@ -74,7 +74,10 @@ namespace VideoRecolector
         //private int _DetectionMethod = 0; // 0 == Distance/Angle
                                           // 1 = X/Y
 
-        private bool _calibrateFlag = false;
+        private bool _IsCalibratingCamera = false;
+        private bool _IsCalibratingNumbers = false;
+        private bool _LogDetectedNumbers = false;
+
 
         // motion detection and processing algorithm
         MotionDetector detector = new MotionDetector(new TwoFramesDifferenceDetector()); 
@@ -116,9 +119,8 @@ namespace VideoRecolector
         private int averageY = 0;
 
         private int countCalibrationSamples = 0;
-        private bool isCalibrating = false;
+        private bool CalibrationInProgress = false;
 
-        private bool bShowText = false;
         public MainForm()
         {
             InitializeComponent();
@@ -130,6 +132,7 @@ namespace VideoRecolector
                 Form2.ShowDialog();
                 System.Environment.Exit(0);
             }
+            this.bBallStateChanged = false;
             CheckForIllegalCrossThreadCalls = false;
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
             ReadNumbersTable();
@@ -169,12 +172,12 @@ namespace VideoRecolector
         {
             if (cbCalibrateCamera.Checked)
             {
-                this._calibrateFlag = true;
+                IsCalibratingCamera = true;
                 this.lblFPS.Visible = true;
             }
             else
             {
-                this._calibrateFlag = false;
+                IsCalibratingCamera = false;
                 this.pnlCalibration.Visible = false;
                 this.lblFPS.Visible = false;
             }
@@ -187,7 +190,7 @@ namespace VideoRecolector
             {
                 this.tmrDemo.Stop();
                 this.txtProtocolo.Text = "";
-                this.btnIniciarDemo.Text = "Iniciar Demo";
+                //this.btnIniciarDemo.Text = "Iniciar Demo";
                 btnStartCamara.Enabled = true;
             }
             else
@@ -197,7 +200,7 @@ namespace VideoRecolector
                     btnStartCamara.PerformClick();
                     btnStartCamara.Enabled = false;
                 }
-                this.btnIniciarDemo.Text = "Detener Demo";
+                //this.btnIniciarDemo.Text = "Detener Demo";
                 this.estadoDemo = 0;
                 //this.cantZerosFound = 0; // Reset spin counter
                 this.tmrDemo.Interval = 1000;
@@ -295,17 +298,34 @@ namespace VideoRecolector
             _g.DrawRectangle(_penblue, _zeroNumberArea);
         }
 
+        #region app config access
+        private static string GetSetting(string key)
+        {
+            return ConfigurationManager.AppSettings[key];
+        }
+
+        private static void SetSetting(string key, string value)
+        {
+            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            configuration.AppSettings.Settings[key].Value = value;
+            configuration.Save(ConfigurationSaveMode.Full, true);
+            ConfigurationManager.RefreshSection("appSettings");
+        }
+
+        #endregion
 
         #region Blob Detection
+
+
         // All the filters etc are configured here
         private void setupDetectionVariables()
         {
             // Configure Zero Color Filter
-            RGB zeroColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["ZeroRed"].ToString()),
-                                            Byte.Parse(ConfigurationManager.AppSettings["ZeroGreen"].ToString()),
-                                            Byte.Parse(ConfigurationManager.AppSettings["ZeroBlue"].ToString()));
+            RGB zeroColor = new RGB(Byte.Parse(GetSetting("ZeroRed")),
+                                    Byte.Parse(GetSetting("ZeroGreen")),
+                                    Byte.Parse(GetSetting("ZeroBlue")));
             _zeroColorFilter.CenterColor = zeroColor;
-            _zeroColorFilter.Radius = short.Parse(ConfigurationManager.AppSettings["ZeroRadius"].ToString());
+            _zeroColorFilter.Radius = short.Parse(GetSetting("ZeroRadius"));
 
             // Configure Zero number blob detection parameters
 
@@ -317,27 +337,25 @@ namespace VideoRecolector
             // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
             _zeroBlobCounter.FilterBlobs = false;
             _zeroBlobCounter.ObjectsOrder = ObjectsOrder.Size;
-            _zeroBlobCounter.MinWidth = int.Parse(ConfigurationManager.AppSettings["ZeroMinSize"].ToString());
-            _zeroBlobCounter.MaxWidth = int.Parse(ConfigurationManager.AppSettings["ZeroMaxSize"].ToString());
+            _zeroBlobCounter.MinWidth = int.Parse(GetSetting("ZeroMinSize"));
+            _zeroBlobCounter.MaxWidth = int.Parse(GetSetting("ZeroMaxSize"));
 
             // Drawing pen for zero
             Pen zeroPen = new Pen(Color.FromArgb(zeroColor.Red, zeroColor.Green, zeroColor.Blue), 5);
 
             // Configure Ball Color Filter
-            RGB ballColor = new RGB(Byte.Parse(ConfigurationManager.AppSettings["BallRed"].ToString()),
-                                            Byte.Parse(ConfigurationManager.AppSettings["BallGreen"].ToString()),
-                                            Byte.Parse(ConfigurationManager.AppSettings["BallBlue"].ToString()));
+            RGB ballColor = new RGB(Byte.Parse(GetSetting("BallRed")),
+                                    Byte.Parse(GetSetting("BallGreen")),
+                                    Byte.Parse(GetSetting("BallBlue")));
 
             _ballColorFilter.CenterColor = ballColor;
-            _ballColorFilter.Radius = short.Parse(ConfigurationManager.AppSettings["BallRadius"].ToString());
+            _ballColorFilter.Radius = short.Parse(GetSetting("BallRadius"));
 
             // Ball blob detection parameters
             _ballBlobCounter.FilterBlobs = false;
             _ballBlobCounter.ObjectsOrder = ObjectsOrder.Size;
-            _ballBlobCounter.MinWidth = int.Parse(ConfigurationManager.AppSettings["BallMinSize"].ToString());
-            _ballBlobCounter.MaxWidth = int.Parse(ConfigurationManager.AppSettings["BallMaxSize"].ToString());
-
-            bShowText = bool.Parse(ConfigurationManager.AppSettings["ShowText"].ToString());
+            _ballBlobCounter.MinWidth = int.Parse(GetSetting("BallMinSize"));
+            _ballBlobCounter.MaxWidth = int.Parse(GetSetting("BallMaxSize"));
 
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
 
@@ -438,6 +456,7 @@ namespace VideoRecolector
                 bool bZeroFound = false;
                 bool bBallFound = false;
                 bool bZeroFoundAt12 = false;
+                bool bShowText = (this.IsCalibratingCamera || this.IsCalibratingNumbers);
 
 
                 //Stopwatch stopWatch = new Stopwatch();
@@ -462,8 +481,11 @@ namespace VideoRecolector
                 bZeroFound = ZeroPos.X != -640;
                 if (bZeroFound)
                 {
-                    bZeroFoundAt12 = _zeroNumberArea.Contains(ZeroPos);
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+                    bZeroFoundAt12 = (_ZeroAngleToCenter >= 88 && _ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
+
+                    //Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter}]", true);
+
                     if (bShowText)
                     {
                         lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
@@ -496,6 +518,7 @@ namespace VideoRecolector
                 if (bBallFound)
                 {
                     _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
+                    //Common.Logger.Escribir($"Ball [X: {BallPosToCenter.X} Y: {BallPosToCenter.Y} A: {_ZeroAngleToCenter}]", true);
                 }
 
                 //    Roulette slots
@@ -505,11 +528,11 @@ namespace VideoRecolector
                 DebounceSwitch1();
                 if (bShowText)
                 {
-                    lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
                     lblBolaPosX.Text = BallPosToCenter.X.ToString();
                     lblBolaPosY.Text = BallPosToCenter.Y.ToString();
                     lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
                 }
+
 
                 if (bZeroFoundAt12)
                 {
@@ -519,7 +542,7 @@ namespace VideoRecolector
                         if (bShowText)
                             lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
 
-                        if (this.isCalibrating)
+                        if (this.CalibrationInProgress)
                             AcumulateCalibration();
 
                         winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
@@ -530,20 +553,28 @@ namespace VideoRecolector
                             {
                                 winner = winnerDA;
                             }
-                        //    else
-                        //    {
-                        //        if (this._rpm > 0)
-                        //            Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
-                        //    }
+                            else
+                            {
+                                if ((LogDetectedNumbers) && (this._rpm > 0))
+                                {
+                                    Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} - A: {_ZeroAngleToCenter} ]", true);
+                                    Common.Logger.Escribir($"-->FoundXY: {winnerXY} - TableXY: [X: {NumbersByXY[winnerXY, 0]} - Y: {NumbersByXY[winnerXY, 1]}] = Found [X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y} ]", true);
+                                    Common.Logger.Escribir($"-->FoundDA: {winnerDA} - TableDA: [D: {this.NumbersByDistAngle[winnerXY, 0]} - A: {this.NumbersByDistAngle[winnerXY, 1]}] = Found [D: {this._DistanceZeroBall} - A : {this._BallAngleToCenter} ]", true);
+                                }
+                            }
                         }
-
-                        if (winner > -1)
+                        
+                        if (winner != -1)
                         {
                             _WinnerNumber = winner;
                             juego.SetNewWinnerNumber(_WinnerNumber);
                             lblWinner.Text = string.Format("{0}", _WinnerNumber);
-                            //if (this._rpm > 0)
-                            //    Common.Logger.Escribir($"WinnerXY: {winnerXY} - WinnerDA: {winnerDA} - Z X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter} - Table D:{this.NumbersByDistAngle[winnerXY, 0]} - A:{this.NumbersByDistAngle[winnerXY, 1]} = Found D:{this._DistanceZeroBall} - A:{this._BallAngleToCenter}", true);
+                            if ((LogDetectedNumbers) && (this._rpm > 0))
+                            {
+                                Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} - A: {_ZeroAngleToCenter} ]", true);
+                                Common.Logger.Escribir($"-->WinnerXY: {winnerXY} - TableXY: [X: {NumbersByXY[winnerXY, 0]} - Y: {NumbersByXY[winnerXY, 1]}] = Found [X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y} ]", true);
+                                Common.Logger.Escribir($"-->WinnerDA: {winnerDA} - TableDA: [D: {this.NumbersByDistAngle[winnerXY, 0]} - A: {this.NumbersByDistAngle[winnerXY, 1]}] = Found [D: {this._DistanceZeroBall} - A : {this._BallAngleToCenter} ]", true);
+                            }
                         }
                     }
                 }
@@ -555,7 +586,7 @@ namespace VideoRecolector
 
 
 
-                if (_calibrateFlag)
+                if (IsCalibratingCamera)
                 {
                     CalibrateCamera(_BsourceFrame);
                 }
@@ -583,10 +614,13 @@ namespace VideoRecolector
 
             if (rects.Length > 0)
             {
-                Rectangle objectRect = rects[0];
-                ZeroPos = objectRect.Center();
-                ZeroPosToCenter.X = ZeroPos.X - _centerPoint.X;
-                ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
+                if (rects[0].Width >= 4)
+                {
+                    Rectangle objectRect = rects[0];
+                    ZeroPos = objectRect.Center();
+                    ZeroPosToCenter.X = ZeroPos.X - _centerPoint.X;
+                    ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
+                }
             }
             return _colorFilterImage;
         }
@@ -628,7 +662,7 @@ namespace VideoRecolector
         */
         private int GetAngleOfPointToZero(System.Drawing.Point p)
         {
-            return (int)Math.Round(Math.Atan2(p.Y, p.X) * radian);
+            return (int)(Math.Round(Math.Atan2(p.Y, p.X) * radian) + 360) % 360;
         }
 
 
@@ -715,27 +749,41 @@ namespace VideoRecolector
         // Numbers by Coordinates XY
         private int[,] NumbersByXY;
 
-        private readonly double radian = 180.0F / (float)Math.PI;
+        private readonly double radian = 180.0 / Math.PI;
 
-        public bool CalibrateFlag { get => _calibrateFlag; set => _calibrateFlag = value; }
+        public bool IsCalibratingNumbers { get => _IsCalibratingNumbers; set => _IsCalibratingNumbers = value; }
+        public bool IsCalibratingCamera { get => _IsCalibratingCamera; set => _IsCalibratingCamera = value; }
+        public bool LogDetectedNumbers { get => _LogDetectedNumbers; set => _LogDetectedNumbers = value; }
+
+        const int DIFF_DIST = 2;
+        const int DIFF_ANGLE = 1;
 
         private int FindNumberByAngle(int distance, int angle)
         {
 
             int winner = -1;
 
-            for (int i = 0; i < 37; i++)
+            // For some reason, Atan2() is 0 when it shouldn't probably
+            if (angle != 0)
             {
-                if ((Math.Abs(NumbersByDistAngle[i, 1] - angle) < 2) &&
-                    (Math.Abs(NumbersByDistAngle[i, 0] - distance) < 4))
+                for (int i = 0; i < 37; i++)
                 {
-                    winner = i;
-                    break;
+                    if (((NumbersByDistAngle[i, 1] >= angle - DIFF_ANGLE) &&
+                            (NumbersByDistAngle[i, 1] <= angle + DIFF_ANGLE)) &&
+                        ((NumbersByDistAngle[i, 0] >= distance - DIFF_DIST) &&
+                            (NumbersByDistAngle[i, 0] <= distance + DIFF_DIST)))
+                    {
+                        winner = i;
+                        break;
+                    }
                 }
             }
 
             return winner;
         }
+
+        // Delta x, y accepted range
+        const int DIFF_XY = 3;
 
         private int FindNumberByXY(int x, int y)
         {
@@ -743,10 +791,10 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                if ((Math.Abs(NumbersByXY[i, 0] - x) < 3) &&
-                    (Math.Abs(NumbersByXY[i, 1] - y) < 3))
+                if ((NumbersByXY[i, 0] >= x - DIFF_XY && NumbersByXY[i, 0] <= x + DIFF_XY) &&
+                    (NumbersByXY[i, 1] >= y - DIFF_XY && NumbersByXY[i, 1] <= y + DIFF_XY))
                 {
-                    winner = i;
+                        winner = i;
                     break;
                 }
             }
@@ -796,7 +844,7 @@ namespace VideoRecolector
 
             
             this.countCalibrationSamples = 0;
-            this.isCalibrating = true;
+            this.CalibrationInProgress = true;
 
         }
 
@@ -808,7 +856,7 @@ namespace VideoRecolector
             countDistance++;
             acumDist += this._DistanceZeroBall;
 
-            if (this._BallAngleToCenter != 720)
+            if ((this._BallAngleToCenter != 720) && (this._BallAngleToCenter != 0))
             {
                 acumAngle += this._BallAngleToCenter;
                 countAngle++;
@@ -835,7 +883,7 @@ namespace VideoRecolector
                 this.averageY = this.acumY / this.countY;
                 this.lblAvgY.Text = this.averageY.ToString();
 
-                this.isCalibrating = false;
+                this.CalibrationInProgress = false;
             }
         }
 
@@ -946,7 +994,9 @@ namespace VideoRecolector
 
         private void cbCalibrateNumbers_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbCalibrateNumbers.Checked)
+            this.IsCalibratingNumbers = cbCalibrateNumbers.Checked;
+
+            if (this.IsCalibratingNumbers)
             {
                 juego.SetCurrentState(JuegoRuleta.ESTADO_JUEGO.TABLE_CLOSED);
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
@@ -957,13 +1007,20 @@ namespace VideoRecolector
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
                 this.btnSaveCSV.Visible = true;
-                radioButton1.Checked = true;
-                //radioButton2.Checked = false;
+                radioButton1.PerformClick();
+                btnUpdateRGB.Visible = true;
+                btnUpdateRGB.Enabled = true;
+                lblTiming.Visible = true;
+                lblTimingValue.Visible = true;
             }
             else
             {
                 this.pnlCalibration.Visible = false;
                 this.btnSaveCSV.Visible = false;
+                btnUpdateRGB.Visible = false;
+                btnUpdateRGB.Enabled = false;
+                lblTiming.Visible = false;
+                lblTimingValue.Visible = false;
             }
         }
 
@@ -1011,11 +1068,6 @@ namespace VideoRecolector
             SaveCSV();
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             UpdateRGBUpDown();
@@ -1024,6 +1076,66 @@ namespace VideoRecolector
         private void radioButton2_CheckedChanged(object sender, EventArgs e)
         {
             UpdateRGBUpDown();
+        }
+
+        private void UpdateColorFilter()
+        {
+            RGB newColor = new RGB((byte)numUpDownRed.Value,
+                            (byte)numUpDownGreen.Value,
+                            (byte)numUpDownBlue.Value);
+
+            if (radioButton1.Checked)
+            {
+                this._zeroColorFilter.CenterColor = newColor;
+            }
+            else
+            {
+                this._ballColorFilter.CenterColor = newColor;
+            }
+        }
+
+        private void SaveRGBToConfig()
+        {
+
+            if (radioButton1.Checked)
+            {
+                SetSetting("ZeroRed", this._zeroColorFilter.CenterColor.Red.ToString());
+                SetSetting("ZeroGreen", this._zeroColorFilter.CenterColor.Green.ToString());
+                SetSetting("ZeroBlue", this._zeroColorFilter.CenterColor.Blue.ToString());
+            }
+            else
+            {
+                SetSetting("BallRed", this._ballColorFilter.CenterColor.Red.ToString());
+                SetSetting("BallGreen", this._ballColorFilter.CenterColor.Green.ToString());
+                SetSetting("BallBlue", this._ballColorFilter.CenterColor.Blue.ToString());
+            }
+
+        }
+
+        private void numUpDownRed_ValueChanged(object sender, EventArgs e)
+        {
+            //UpdateColorFilter();
+        }
+
+        private void numUpDownGreen_ValueChanged(object sender, EventArgs e)
+        {
+            //UpdateColorFilter();
+        }
+
+        private void numUpDownBlue_ValueChanged(object sender, EventArgs e)
+        {
+            //UpdateColorFilter();
+        }
+
+        private void btnUpdateRGB_Click(object sender, EventArgs e)
+        {
+            UpdateColorFilter();
+            SaveRGBToConfig();
+        }
+
+        private void chkbGuardarLog_CheckedChanged(object sender, EventArgs e)
+        {
+            this.LogDetectedNumbers = chkbGuardarLog.Checked;
         }
 
         private void Cerrar()
