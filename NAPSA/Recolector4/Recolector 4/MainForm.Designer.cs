@@ -34,6 +34,11 @@ namespace VideoRecolector
             this.WindowState = FormWindowState.Normal;
         }
 
+        private int lastDisplayedWinner = -2;
+        private bool lastBallFound = false;
+        private int lastrpm = -5;
+        private string lastEstadoMesa = "";
+
         #region Form_Load, Closing
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -53,7 +58,13 @@ namespace VideoRecolector
                 Pase.UltimoPase = new Pase();
             this.estadoMesa = JuegoRuleta.ESTADO_JUEGO.STATE_0;
             this.IsCameraOn = false;
+            // Initialize display variables
             this._rpm = 0;
+            this.lastDisplayedWinner = -2;
+            this.lastBallFound = !this.bDebouncedBallFound;
+            this.lastrpm = -5;
+            this.lastEstadoMesa = "";
+
             this.btnStartCamara.PerformClick();
             this.Hide();
         }
@@ -86,101 +97,130 @@ namespace VideoRecolector
         }
 
         #region Main Timer
-        private void tmrMain_Tick(object sender, EventArgs e)
+        private void DisplayFPS()
         {
+            IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 
-            lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
-            lblGameStatus.Text = estadoMesa.ToString();
-            lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-
-            //txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
-
-
-            if (this.IsCalibratingNumbers)
+            if (videoSource != null)
             {
-                IVideoSource videoSource = videoSourcePlayer1.VideoSource;
+                // get number of frames since the last timer tick
+                int framesReceived = videoSource.FramesReceived;
 
-                if (videoSource != null)
+                if (stopWatch == null)
                 {
-                    // get number of frames since the last timer tick
-                    int framesReceived = videoSource.FramesReceived;
+                    stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                }
+                else
+                {
+                    stopWatch.Stop();
 
-                    if (stopWatch == null)
+                    float fps = (float)tmrMain.Interval * 2.0f * framesReceived / stopWatch.ElapsedMilliseconds;
+                    lblFPS.Text = fps.ToString("F2") + " fps";
+
+                    stopWatch.Reset();
+                    stopWatch.Reset();
+                    stopWatch.Start();
+                }
+            }
+        }
+
+
+        private void DisplayWinnerNumber(int winner)
+        {
+            if (winner != lastDisplayedWinner)
+            {
+                if (winner != -1)
+                {
+                    lblDisplayWinner.Text = winner.ToString();
+                    for (int i = 0; i < 37; i++)
                     {
-                        stopWatch = new Stopwatch();
-                        stopWatch.Start();
-                    }
-                    else
-                    {
-                        stopWatch.Stop();
-
-                        float fps = (float)tmrMain.Interval * 2.0f * framesReceived / stopWatch.ElapsedMilliseconds;
-                        lblFPS.Text = fps.ToString("F2") + " fps";
-
-                        stopWatch.Reset();
-                        stopWatch.Reset();
-                        stopWatch.Start();
+                        if (this.RouletteNumbers[i, 0] == winner)
+                        {
+                            switch (this.RouletteNumbers[i, 1])
+                            {
+                                case 0:
+                                    lblDisplayWinner.BackColor = Color.Black;
+                                    lblDisplayWinner.ForeColor = Color.White;
+                                    break;
+                                case 1:
+                                    lblDisplayWinner.BackColor = Color.Red;
+                                    lblDisplayWinner.ForeColor = Color.White;
+                                    break;
+                                case 2:
+                                    lblDisplayWinner.BackColor = Color.Green;
+                                    lblDisplayWinner.ForeColor = Color.White;
+                                    break;
+                                default:
+                                    lblDisplayWinner.BackColor = Color.White;
+                                    lblDisplayWinner.ForeColor = Color.Black;
+                                    break;
+                            }
+                            break;
+                        }
                     }
                 }
+                else
+                {
+                    lblDisplayWinner.Text = "--";
+                    lblDisplayWinner.BackColor = Color.White;
+                    lblDisplayWinner.ForeColor = Color.Black;
+                    //                    lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
+                    lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
 
+                }
+                lastDisplayedWinner = winner;
             }
-            else
+        }
+
+
+        private void DisplayStatuses()
+        {
+            if (this._rpm != this.lastrpm)
             {
-                int winner = juego.GetCurrentWinnerNumber();
+                lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
+                this.lastrpm = this._rpm;
+            }
+            if (this.lastBallFound != this.bDebouncedBallFound)
+            {
+                lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
+                this.lastBallFound = this.bDebouncedBallFound;
+            }
+            if (this.lastEstadoMesa != estadoMesa.ToString())
+            {
+                lblGameStatus.Text = estadoMesa.ToString();
+                this.lastEstadoMesa = estadoMesa.ToString();
+            }
+        }
+
+        private void tmrMain_Tick(object sender, EventArgs e)
+        {
+            DebounceBallInSlot();
+            if (!this.IsCalibratingNumbers)
+            {
+                int winner = -1;
 
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
                 if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
                 {
+                    winner = juego.GetCurrentWinnerNumber();
                     if (juego.GetCurrentWinnerNumberCmd() == JuegoRuleta.WINNER_CMD_TYPE.WINNER_NUMBER_CMD)
-                        this.GuardarNumeroGanador(juego.GetCurrentWinnerNumber());
+                        this.GuardarNumeroGanador(winner);
                     else
-                        this.GuardarEstado((int)estadoMesa, juego.GetCurrentWinnerNumber(), this._rpm, 0);
-
-                    
-                    if (winner != -1)
-                    {
-                        lblDisplayWinner.Text = winner.ToString();
-                        for (int i = 0; i < 37; i++)
-                        {
-                            if (this.RouletteNumbers[i, 0] == winner)
-                            {
-                                switch (this.RouletteNumbers[i, 1])
-                                {
-                                    case 0:
-                                        lblDisplayWinner.BackColor = Color.Black;
-                                        lblDisplayWinner.ForeColor = Color.White;
-                                        break;
-                                    case 1:
-                                        lblDisplayWinner.BackColor = Color.Red;
-                                        lblDisplayWinner.ForeColor = Color.White;
-                                        break;
-                                    case 2:
-                                        lblDisplayWinner.BackColor = Color.Green;
-                                        lblDisplayWinner.ForeColor = Color.White;
-                                        break;
-                                    default:
-                                        lblDisplayWinner.BackColor = Color.White;
-                                        lblDisplayWinner.ForeColor = Color.Black;
-                                        break;
-                                }
-                                break;
-                            }
-                        }
-
-                    }
-
+                        this.GuardarEstado((int)estadoMesa, winner, this._rpm, 0);
                 }
                 else
                 {
                     this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
-
-                    lblDisplayWinner.Text = "--";
-                    lblDisplayWinner.BackColor = Color.White;
-                    lblDisplayWinner.ForeColor = Color.Black;
-//                    lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
-                    lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
                 }
+                DisplayWinnerNumber(winner);
             }
+            else
+            {
+                DisplayFPS();
+            }
+
+            DisplayStatuses();
         }
         #endregion
 

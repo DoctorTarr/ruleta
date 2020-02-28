@@ -183,7 +183,7 @@ namespace VideoRecolector
                 else
                 {
                     this.contadorNumeroGanador++;
-                    if (this.contadorNumeroGanador > 1)
+                    if (this.contadorNumeroGanador > 2)
                     {
                         this._haveNewWinner = true;
                         this._WinnerNumber = _NewWinnerNumber;
