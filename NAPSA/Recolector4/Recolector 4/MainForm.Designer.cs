@@ -95,48 +95,8 @@ namespace VideoRecolector
 
             //txtbDisplayStatus.Text = Pase.ObtenerUltimoEstado().ToString();
 
-            int winner = juego.GetCurrentWinnerNumber();
-            if (winner != -1)
-            {
-                lblDisplayWinner.Text = winner.ToString();
-                for (int i = 0; i < 37; i++)
-                {
-                    if (this.RouletteNumbers[i, 0] == winner)
-                    {
-                        switch (this.RouletteNumbers[i, 1])
-                        {
-                            case 0:
-                                lblDisplayWinner.BackColor = Color.Black;
-                                lblDisplayWinner.ForeColor = Color.White;
-                                break;
-                            case 1:
-                                lblDisplayWinner.BackColor = Color.Red;
-                                lblDisplayWinner.ForeColor = Color.White;
-                                break;
-                            case 2:
-                                lblDisplayWinner.BackColor = Color.Green;
-                                lblDisplayWinner.ForeColor = Color.White;
-                                break;
-                            default:
-                                lblDisplayWinner.BackColor = Color.White;
-                                lblDisplayWinner.ForeColor = Color.Black;
-                                break;
-                        }
-                        break;
-                    }
-                }
 
-            }
-            else
-            {
-                lblDisplayWinner.Text = "--";
-                lblDisplayWinner.BackColor = Color.White;
-                lblDisplayWinner.ForeColor = Color.Black;
-            }
-            lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
-            lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
-
-            if (this._IsCalibratingNumbers || this.cbCalibrateNumbers.Checked)
+            if (this.IsCalibratingNumbers)
             {
                 IVideoSource videoSource = videoSourcePlayer1.VideoSource;
 
@@ -166,6 +126,8 @@ namespace VideoRecolector
             }
             else
             {
+                int winner = juego.GetCurrentWinnerNumber();
+
                 this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
                 if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
                 {
@@ -173,10 +135,50 @@ namespace VideoRecolector
                         this.GuardarNumeroGanador(juego.GetCurrentWinnerNumber());
                     else
                         this.GuardarEstado((int)estadoMesa, juego.GetCurrentWinnerNumber(), this._rpm, 0);
+
+                    
+                    if (winner != -1)
+                    {
+                        lblDisplayWinner.Text = winner.ToString();
+                        for (int i = 0; i < 37; i++)
+                        {
+                            if (this.RouletteNumbers[i, 0] == winner)
+                            {
+                                switch (this.RouletteNumbers[i, 1])
+                                {
+                                    case 0:
+                                        lblDisplayWinner.BackColor = Color.Black;
+                                        lblDisplayWinner.ForeColor = Color.White;
+                                        break;
+                                    case 1:
+                                        lblDisplayWinner.BackColor = Color.Red;
+                                        lblDisplayWinner.ForeColor = Color.White;
+                                        break;
+                                    case 2:
+                                        lblDisplayWinner.BackColor = Color.Green;
+                                        lblDisplayWinner.ForeColor = Color.White;
+                                        break;
+                                    default:
+                                        lblDisplayWinner.BackColor = Color.White;
+                                        lblDisplayWinner.ForeColor = Color.Black;
+                                        break;
+                                }
+                                break;
+                            }
+                        }
+
+                    }
+
                 }
                 else
                 {
                     this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
+
+                    lblDisplayWinner.Text = "--";
+                    lblDisplayWinner.BackColor = Color.White;
+                    lblDisplayWinner.ForeColor = Color.Black;
+//                    lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
+                    lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
                 }
             }
         }
@@ -324,6 +326,7 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.chkbGuardarLog = new System.Windows.Forms.CheckBox();
             this.btnUpdateRGB = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.lblGameStatus = new System.Windows.Forms.Label();
@@ -335,7 +338,7 @@ namespace VideoRecolector
             this.lblWinCount = new System.Windows.Forms.Label();
             this.lblEstadoRuleta = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.lblWinner = new System.Windows.Forms.Label();
+            this.lblFound = new System.Windows.Forms.Label();
             this.cbCalibrateNumbers = new System.Windows.Forms.CheckBox();
             this.lblFPS = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -374,7 +377,6 @@ namespace VideoRecolector
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.btnSetNumber = new System.Windows.Forms.Button();
-            this.chkbGuardarLog = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbBall)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbZero)).BeginInit();
@@ -599,7 +601,7 @@ namespace VideoRecolector
             this.groupBox3.Controls.Add(this.lblWinCount);
             this.groupBox3.Controls.Add(this.lblEstadoRuleta);
             this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Controls.Add(this.lblWinner);
+            this.groupBox3.Controls.Add(this.lblFound);
             this.groupBox3.Controls.Add(this.cbCalibrateNumbers);
             this.groupBox3.Controls.Add(this.lblFPS);
             this.groupBox3.Controls.Add(this.label8);
@@ -616,6 +618,18 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // chkbGuardarLog
+            // 
+            this.chkbGuardarLog.AutoSize = true;
+            this.chkbGuardarLog.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.chkbGuardarLog.Location = new System.Drawing.Point(212, 442);
+            this.chkbGuardarLog.Name = "chkbGuardarLog";
+            this.chkbGuardarLog.Size = new System.Drawing.Size(85, 17);
+            this.chkbGuardarLog.TabIndex = 52;
+            this.chkbGuardarLog.Text = "Guardar Log";
+            this.chkbGuardarLog.UseVisualStyleBackColor = true;
+            this.chkbGuardarLog.CheckedChanged += new System.EventHandler(this.chkbGuardarLog_CheckedChanged);
             // 
             // btnUpdateRGB
             // 
@@ -740,16 +754,16 @@ namespace VideoRecolector
             this.label15.TabIndex = 63;
             this.label15.Text = "Leido:";
             // 
-            // lblWinner
+            // lblFound
             // 
-            this.lblWinner.AutoSize = true;
-            this.lblWinner.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWinner.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblWinner.Location = new System.Drawing.Point(307, 467);
-            this.lblWinner.Name = "lblWinner";
-            this.lblWinner.Size = new System.Drawing.Size(18, 16);
-            this.lblWinner.TabIndex = 62;
-            this.lblWinner.Text = "--";
+            this.lblFound.AutoSize = true;
+            this.lblFound.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFound.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblFound.Location = new System.Drawing.Point(307, 467);
+            this.lblFound.Name = "lblFound";
+            this.lblFound.Size = new System.Drawing.Size(18, 16);
+            this.lblFound.TabIndex = 62;
+            this.lblFound.Text = "--";
             // 
             // cbCalibrateNumbers
             // 
@@ -1170,18 +1184,6 @@ namespace VideoRecolector
             this.btnSetNumber.UseVisualStyleBackColor = true;
             this.btnSetNumber.Click += new System.EventHandler(this.btnSetNumber_Click);
             // 
-            // chkbGuardarLog
-            // 
-            this.chkbGuardarLog.AutoSize = true;
-            this.chkbGuardarLog.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.chkbGuardarLog.Location = new System.Drawing.Point(212, 442);
-            this.chkbGuardarLog.Name = "chkbGuardarLog";
-            this.chkbGuardarLog.Size = new System.Drawing.Size(85, 17);
-            this.chkbGuardarLog.TabIndex = 52;
-            this.chkbGuardarLog.Text = "Guardar Log";
-            this.chkbGuardarLog.UseVisualStyleBackColor = true;
-            this.chkbGuardarLog.CheckedChanged += new System.EventHandler(this.chkbGuardarLog_CheckedChanged);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1246,7 +1248,7 @@ namespace VideoRecolector
         private CheckBox cbCalibrateNumbers;
         private ContextMenuStrip mnuSystemTray;
         private ToolStripMenuItem cerrarToolStripMenuItem;
-        private Label lblWinner;
+        private Label lblFound;
         private Label label15;
         private CheckBox[] chkbNumbers; // Declaring array of Button
         private ComboBox comboBox1;
