@@ -268,8 +268,8 @@ label_17:
           try
           {
             dbDataReader = command.ExecuteReader(CommandBehavior.CloseConnection);
-            if (this.transaccion == null)
-              this.CerrarConexión();
+            //if (this.transaccion == null)
+            //  this.CerrarConexión();
           }
           catch (DbException ex)
           {
@@ -330,8 +330,8 @@ label_17:
 //          try
           //{
             obj = command.ExecuteScalar();
-            if (this.transaccion == null)
-              this.CerrarConexión();
+            //if (this.transaccion == null)
+            //  this.CerrarConexión();
           //}
           //catch (DbException ex)
           //{
@@ -394,8 +394,8 @@ label_15:
           {
             
             num = (int)command.ExecuteNonQuery();
-            if (this.transaccion == null)
-              this.CerrarConexión();
+            //if (this.transaccion == null)
+            //  this.CerrarConexión();
           }
           catch (DbException ex)
           {
@@ -486,8 +486,8 @@ label_15:
           try
           {
             num = command.ExecuteNonQuery();
-            if (this.transaccion == null)
-              this.CerrarConexión();
+            //if (this.transaccion == null)
+            //  this.CerrarConexión();
           }
           catch (DbException ex)
           {

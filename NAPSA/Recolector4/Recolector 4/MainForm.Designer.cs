@@ -51,6 +51,7 @@ namespace VideoRecolector
                 // Initialize one variable
                 chkbNumbers[i] = new System.Windows.Forms.CheckBox();
             }
+            PopulateNumbersColors();
 
             this.azarNumero = new Random((int)DateTime.Now.Ticks);
             this.LeerUltimoNumero();
@@ -125,6 +126,18 @@ namespace VideoRecolector
             }
         }
 
+        private int[] RouletteNumbersColors;
+
+        private void PopulateNumbersColors()
+        {
+
+            this.RouletteNumbersColors = new int[37];
+
+            for (int i = 0; i < 37; i++)
+            {
+                this.RouletteNumbersColors[this.RouletteNumbers[i, 0]] = this.RouletteNumbers[i, 1];
+            }
+        }
 
         private void DisplayWinnerNumber(int winner)
         {
@@ -133,31 +146,24 @@ namespace VideoRecolector
                 if (winner != -1)
                 {
                     lblDisplayWinner.Text = winner.ToString();
-                    for (int i = 0; i < 37; i++)
+                    switch (RouletteNumbersColors[winner])
                     {
-                        if (this.RouletteNumbers[i, 0] == winner)
-                        {
-                            switch (this.RouletteNumbers[i, 1])
-                            {
-                                case 0:
-                                    lblDisplayWinner.BackColor = Color.Black;
-                                    lblDisplayWinner.ForeColor = Color.White;
-                                    break;
-                                case 1:
-                                    lblDisplayWinner.BackColor = Color.Red;
-                                    lblDisplayWinner.ForeColor = Color.White;
-                                    break;
-                                case 2:
-                                    lblDisplayWinner.BackColor = Color.Green;
-                                    lblDisplayWinner.ForeColor = Color.White;
-                                    break;
-                                default:
-                                    lblDisplayWinner.BackColor = Color.White;
-                                    lblDisplayWinner.ForeColor = Color.Black;
-                                    break;
-                            }
+                        case 0:
+                            lblDisplayWinner.BackColor = Color.Black;
+                            lblDisplayWinner.ForeColor = Color.White;
                             break;
-                        }
+                        case 1:
+                            lblDisplayWinner.BackColor = Color.Red;
+                            lblDisplayWinner.ForeColor = Color.White;
+                            break;
+                        case 2:
+                            lblDisplayWinner.BackColor = Color.Green;
+                            lblDisplayWinner.ForeColor = Color.White;
+                            break;
+                        default:
+                            lblDisplayWinner.BackColor = Color.White;
+                            lblDisplayWinner.ForeColor = Color.Black;
+                            break;
                     }
                 }
                 else
@@ -167,7 +173,6 @@ namespace VideoRecolector
                     lblDisplayWinner.ForeColor = Color.Black;
                     //                    lblDisplayWinner.Text = (winner == -1) ? "--" : winner.ToString();
                     lblWinCount.Text = juego.GetContadorNumeroGanador().ToString();
-
                 }
                 lastDisplayedWinner = winner;
             }
@@ -181,10 +186,10 @@ namespace VideoRecolector
                 lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
                 this.lastrpm = this._rpm;
             }
-            if (this.lastBallFound != this.bDebouncedBallFound)
+            //if (this.lastBallFound != this.bDebouncedBallFound)
             {
                 lblBallOn.Text = this.bDebouncedBallFound ? "B " : "NB";
-                this.lastBallFound = this.bDebouncedBallFound;
+                //this.lastBallFound = this.bDebouncedBallFound;
             }
             if (this.lastEstadoMesa != estadoMesa.ToString())
             {
@@ -195,31 +200,22 @@ namespace VideoRecolector
 
         private void tmrMain_Tick(object sender, EventArgs e)
         {
-            DebounceBallInSlot();
-            if (!this.IsCalibratingNumbers)
-            {
-                int winner = -1;
+            int winner = -1;
 
-                this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
-                if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
-                {
-                    winner = juego.GetCurrentWinnerNumber();
-                    if (juego.GetCurrentWinnerNumberCmd() == JuegoRuleta.WINNER_CMD_TYPE.WINNER_NUMBER_CMD)
-                        this.GuardarNumeroGanador(winner);
-                    else
-                        this.GuardarEstado((int)estadoMesa, winner, this._rpm, 0);
-                }
+            this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
+            if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
+            {
+                winner = juego.GetCurrentWinnerNumber();
+                if (juego.GetCurrentWinnerNumberCmd() == JuegoRuleta.WINNER_CMD_TYPE.WINNER_NUMBER_CMD)
+                    this.GuardarNumeroGanador(winner);
                 else
-                {
-                    this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
-                }
-                DisplayWinnerNumber(winner);
+                    this.GuardarEstado(estadoMesa, winner, this._rpm, 0);
             }
             else
             {
-                DisplayFPS();
+                this.GuardarEstado(estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
             }
-
+            DisplayWinnerNumber(winner);
             DisplayStatuses();
         }
         #endregion
@@ -227,48 +223,48 @@ namespace VideoRecolector
         #region Demo Timer
         private void tmrDemo_Tick(object sender, EventArgs e)
         {
-            try
-            {
-                string cadena = string.Empty;
-                ++this.estadoDemo;
-                if (this.estadoDemo > 5)
-                    this.estadoDemo = 1;
+            //try
+            //{
+            //    string cadena = string.Empty;
+            //    ++this.estadoDemo;
+            //    if (this.estadoDemo > 5)
+            //        this.estadoDemo = 1;
 
-                switch (this.estadoDemo)
-                {
-                    case 1:
-                        //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
-                        this.tmrDemo.Interval = 100;
-                        break;
-                    case 2:
-                        //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
-                        this.tmrDemo.Interval = 6000;
-                        break;
-                    case 3:
-                        //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
-                        this.tmrDemo.Interval = 6000;
-                        break;
-                    case 4:
-                        //cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
-                        this.tmrDemo.Interval = 10000;
-                        break;
-                    case 5:
-                        //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
-                        this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
-                        GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
-                        GuardarNumeroGanador(this.numeroDemo);
-                        this.tmrDemo.Interval = 1000;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                int num = 0 + 1;
-            }
+            //    switch (this.estadoDemo)
+            //    {
+            //        case 1:
+            //            //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+            //            GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
+            //            this.tmrDemo.Interval = 100;
+            //            break;
+            //        case 2:
+            //            //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+            //            GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
+            //            this.tmrDemo.Interval = 6000;
+            //            break;
+            //        case 3:
+            //            //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+            //            GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
+            //            this.tmrDemo.Interval = 6000;
+            //            break;
+            //        case 4:
+            //            //cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
+            //            GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
+            //            this.tmrDemo.Interval = 10000;
+            //            break;
+            //        case 5:
+            //            //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
+            //            this.numeroDemo = (byte)this.azarNumero.Next(0, 37);
+            //            GuardarEstado(this.estadoDemo, this.numeroDemo, this._rpm, this.azarNumero.Next(0, 2));
+            //            GuardarNumeroGanador(this.numeroDemo);
+            //            this.tmrDemo.Interval = 1000;
+            //            break;
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    int num = 0 + 1;
+            //}
         }
         #endregion
 

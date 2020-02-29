@@ -139,7 +139,7 @@ namespace VideoRecolector
                 System.Environment.Exit(0);
             }
             this.bBallStateChanged = false;
-            CheckForIllegalCrossThreadCalls = true;
+            CheckForIllegalCrossThreadCalls = false; // TO-DO avoid illegal cross thread calls
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
             ReadNumbersTable();
             juego = new JuegoRuleta();
@@ -177,14 +177,22 @@ namespace VideoRecolector
         {
             if (cbCalibrateCamera.Checked)
             {
+                this._rpm = 0;
+                this._rpmCounter = 0;
+                juego.SetCurrentState(JuegoRuleta.ESTADO_JUEGO.TABLE_CLOSED);
+                this.GuardarEstado(estadoMesa, juego.GetLastWinnerNumber(), 0, 0);
                 IsCalibratingCamera = true;
                 this.lblFPS.Visible = true;
+                StopCamera();
+                StartCameraCalibration();
             }
             else
             {
                 IsCalibratingCamera = false;
                 this.pnlCalibration.Visible = false;
                 this.lblFPS.Visible = false;
+                StopCameraCalibration();
+                StartCamera();
             }
         }
 
@@ -216,17 +224,40 @@ namespace VideoRecolector
             }
         }
 
-        private void videoSourcePlayer1_VideoSourceError(object sender, VideoSourceErrorEventArgs eventArgs)
+        private void StartCameraCalibration()
         {
-            //Common.Logger.Escribir("*** Error en Cerrar() ***" + eventArgs.Exception.ToString(), true);
+            try
+            {
+                StopCamera();
+                // IP Camera
+                //MJPEGStream videoSource = new MJPEGStream("http://192.168.0.205:8080/video");
+                MJPEGStream videoSource = new MJPEGStream("http://192.168.1.64/Streaming/Channels/1/preview");
+                videoSource.Login = "admin";
+                videoSource.Password = "Qwer1234";
+                videoSourcePlayer1.VideoSource = videoSource;
+                videoSourcePlayer1.NewFrameReceived += new Accord.Video.NewFrameEventHandler(get_Frame_Calibration);
+                videoSourcePlayer1.VideoSource.VideoSourceError += new VideoSourceErrorEventHandler(videoSourcePlayer1_VideoSourceError);
+
+                videoSourcePlayer1.Start();
+                lblVideoStatus.BackColor = Color.Red;
+                lblVideoStatus.Text = "ON";
+                this.iBallUnchangeCount = BALL_NOT_FOUND_MSEC / CHECK_MSEC;
+                this.bDebouncedBallFound = RawBallFound();
+                this.bBallStateChanged = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
-        private void StopCamera()
+        private void StopCameraCalibration()
         {
             try
             {
                 videoSourcePlayer1.SignalToStop();
                 videoSourcePlayer1.WaitForStop();
+                videoSourcePlayer1.NewFrameReceived -= new Accord.Video.NewFrameEventHandler(get_Frame_Calibration);
                 lblVideoStatus.BackColor = Color.DarkRed;
                 lblVideoStatus.Text = "OFF";
 
@@ -248,8 +279,46 @@ namespace VideoRecolector
                 // reset motion detector
                 if (detector != null)
                     detector.Reset();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+        }
 
+        private void videoSourcePlayer1_VideoSourceError(object sender, VideoSourceErrorEventArgs eventArgs)
+        {
+            //Common.Logger.Escribir("*** Error en Cerrar() ***" + eventArgs.Exception.ToString(), true);
+        }
 
+        private void StopCamera()
+        {
+            try
+            {
+                videoSourcePlayer1.SignalToStop();
+                videoSourcePlayer1.WaitForStop();
+                videoSourcePlayer1.NewFrameReceived -= new Accord.Video.NewFrameEventHandler(get_Frame);   
+                lblVideoStatus.BackColor = Color.DarkRed;
+                lblVideoStatus.Text = "OFF";
+
+                pbZero.Image = null;
+                pbBall.Image = null;
+                lblDisplayWinner.Text = "";
+                lblDisplayWinner.ForeColor = Color.Black;
+                lblEstadoRuleta.Text = "";
+                lblBolaPosX.Text = "";
+                lblBolaPosY.Text = "";
+                lblZeroPosX.Text = "";
+                lblZeroPosY.Text = "";
+                lblBallOn.Text = "";
+                this.bDebouncedBallFound = false;
+                this.bBallStateChanged = true;
+                this._rpm = 0;
+                _isMoving = false;
+                this._WinnerNumber = -1;
+                // reset motion detector
+                if (detector != null)
+                    detector.Reset();
             }
             catch (Exception)
             {
@@ -318,6 +387,7 @@ namespace VideoRecolector
             // implemented by user. Otherwise blobs are filtered according to dimensions
             // specified in MinWidth, MinHeight, MaxWidth and MaxHeight properties.
             _zeroBlobCounter.FilterBlobs = false;
+            _zeroBlobCounter.CoupledSizeFiltering = false;
             _zeroBlobCounter.ObjectsOrder = ObjectsOrder.Size;
             _zeroBlobCounter.MinWidth = int.Parse(GetSetting("ZeroMinSize"));
             _zeroBlobCounter.MaxWidth = int.Parse(GetSetting("ZeroMaxSize"));
@@ -335,6 +405,7 @@ namespace VideoRecolector
 
             // Ball blob detection parameters
             _ballBlobCounter.FilterBlobs = false;
+            _ballBlobCounter.CoupledSizeFiltering = false;
             _ballBlobCounter.ObjectsOrder = ObjectsOrder.Size;
             _ballBlobCounter.MinWidth = int.Parse(GetSetting("BallMinSize"));
             _ballBlobCounter.MaxWidth = int.Parse(GetSetting("BallMaxSize"));
@@ -370,14 +441,14 @@ namespace VideoRecolector
 
         }
 
-        const int CHECK_MSEC = 500; // Read hardware every 5 msec
-        const int BALL_FOUND_MSEC = 5000; // Stable time before registering pressed
-        const int BALL_NOT_FOUND_MSEC = 5000; // Stable time before registering released
+        const int CHECK_MSEC = 40; // Read hardware every 5 msec
+        const int BALL_FOUND_MSEC = 1 * 25 *CHECK_MSEC; // Stable time before registering pressed
+        const int BALL_NOT_FOUND_MSEC = 2 * 25 * CHECK_MSEC; // Stable time before registering released
 
         // This function reads the key state from the hardware.
         bool RawBallFound()
         {
-            return (_ballPocketsArea.Contains(BallPos) && (BallPos.X != 0));
+            return (_ballPocketsArea.Contains(BallPos));
         }
 
 
@@ -408,71 +479,65 @@ namespace VideoRecolector
             }
         }
 
+        private void FindWinnerNumber(ref int winner)
+        {
+            int winnerDA = -1;
+            int winnerXY = -1;
+
+            winnerXY = FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
+
+            this._DistanceZeroBall = FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
+            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+
+            if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
+            {
+                winner = winnerDA;
+            }
+        }
+
         private void FindWinnerNumber()
         {
             int winnerDA = -1;
             int winnerXY = -1;
             int winner = -1;
 
-            if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
+            winnerXY = FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
+            if (winnerXY != -1)
             {
-                winnerXY = FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
-                if (winnerXY != -1)
-                {
-                    juego.SetNewWinnerNumber(winnerXY);
-                }
-                this._DistanceZeroBall = FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
-                this._BallAngleToCenter = GetAngleOfPointToZero(this.BallPosToCenter);
-                winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
-                if (winnerDA != -1)
-                {
-                    juego.SetNewWinnerNumber(winnerDA);
-                }
-                if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
-                {
-                    winner = winnerDA;
-                    juego.SetNewWinnerNumber(winner);
-                    //lblFound.Text = string.Format("{0}", winner);
-                }
+                juego.SetNewWinnerNumber(winnerXY);
+            }
+
+            this._DistanceZeroBall = FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
+            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+            if (winnerDA != -1)
+            {
+                juego.SetNewWinnerNumber(winnerDA);
+            }
+
+            if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
+            {
+                winner = winnerDA;
+                juego.SetNewWinnerNumber(winner);
             }
         }
+
 
         private void get_Frame(object sender, NewFrameEventArgs args)
         {
             lock (this)
             {
-
                 //Stopwatch stopWatch = new Stopwatch();
                 //stopWatch.Start();
 
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
+                this.movePercentage = detector.ProcessFrame(_BsourceFrame);
+                _isMoving = (this.movePercentage > 0.01f);
+
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-                //this.ZeroPos = System.Drawing.Point.Empty;
-                this.ZeroPosToCenter = System.Drawing.Point.Empty;
-                this._ZeroAngleToCenter = 720;
-                this.bZeroFoundAt12 = false;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-
-                //this.BallPos = System.Drawing.Point.Empty;
-                this.BallPosToCenter = System.Drawing.Point.Empty;
-                this._BallAngleToCenter = 720;
-
-                pbBall.Image = BallBlobDetection(_BsourceFrame);
-
-                this.movePercentage = detector.ProcessFrame(_BsourceFrame);
-                _isMoving = (this.movePercentage > 0.01f);
-
-
-                //    Roulette slots
-                // 		314, 175
-                //241, 246        381,246
-                //      314, 314
-                //DebounceBallInSlot(); to 500msc
-                FindWinnerNumber();
-
                 if (this._isMoving)
                 {
                     if (bZeroFoundAt12)
@@ -488,7 +553,7 @@ namespace VideoRecolector
                     }
                     else
                     {
-                       this._rpmCounter++;
+                        this._rpmCounter++;
                     }
                 }
                 else
@@ -497,66 +562,64 @@ namespace VideoRecolector
                     this._rpm = 0;
                 }
 
+                pbBall.Image = BallBlobDetection(_BsourceFrame);
+                DebounceBallInSlot();
+                if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
+                {
+                    FindWinnerNumber();
+                }
+
+                args.Frame = _BsourceFrame;
                 //stopWatch.Stop();
 
                 //if (stopWatch.ElapsedMilliseconds > 40)
                 //{
                 //    MessageBox.Show($"Exceeded: {stopWatch.ElapsedMilliseconds.ToString()}");
                 //}
-                ////                lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
-                args.Frame = _BsourceFrame;
+                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
             }
         }
 
+        private void DisplayValues()
+        {
+            int winner = -1;
+            FindWinnerNumber(ref winner);
+            lblFound.Text = winner != -1 ? winner.ToString() : "---";
 
+            this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
+            this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+            this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+            this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
+            this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
+            this.lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+            this.lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+            this.lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
+        }
 
         private void get_Frame_Calibration(object sender, NewFrameEventArgs args)
         {
             lock (this)
             {
-                int winnerDA = -1;
-                int winnerXY = -1;
-                int winner = -1;
-                bool bZeroFound = false;
-                bool bBallFound = false;
-                bool bZeroFoundAt12 = false;
                 bool bShowText = (this.IsCalibratingCamera || this.IsCalibratingNumbers);
-
 
                 //Stopwatch stopWatch = new Stopwatch();
                 //stopWatch.Start();
 
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
+                this.movePercentage = detector.ProcessFrame(_BsourceFrame);
+                _isMoving = (this.movePercentage > 0.01f);
+
+                if (bShowText)
+                    _isMoving = false;
+
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
 
-                this.movePercentage = detector.ProcessFrame(_BsourceFrame);
-                _isMoving = (this.movePercentage > 0.01f);
-                if (!this._isMoving)
-                {
-                    this._rpmCounter = 0;
-                    this._rpm = 0;
-                }
 
-                ZeroPos.X = -640;
-                _ZeroAngleToCenter = 720;
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-                bZeroFound = ZeroPos.X != -640;
-                if (bZeroFound)
+                if (this._isMoving)
                 {
-                    _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
-                    bZeroFoundAt12 = (_ZeroAngleToCenter >= 88 && _ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
-
-                    //Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} Y: {ZeroPosToCenter.Y} A: {_ZeroAngleToCenter}]", true);
-
-                    if (bShowText)
-                    {
-                        lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                        lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-                        lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
-                    }
-
                     if (bZeroFoundAt12)
                     {
                         if (this._rpmCounter > 0)
@@ -570,95 +633,43 @@ namespace VideoRecolector
                     }
                     else
                     {
-                        if (this._isMoving)
-                            this._rpmCounter++;
-                    }
-                }
-
-                BallPos.X = -640;
-                _BallAngleToCenter = 0;
-                pbBall.Image = BallBlobDetection(_BsourceFrame);
-                bBallFound = BallPos.X != -640;
-                if (bBallFound)
-                {
-                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
-                    //Common.Logger.Escribir($"Ball [X: {BallPosToCenter.X} Y: {BallPosToCenter.Y} A: {_ZeroAngleToCenter}]", true);
-                }
-
-                //    Roulette slots
-                // 		314, 175
-                //241, 246        381,246
-                //      314, 314
-                DebounceBallInSlot();
-                if (bShowText)
-                {
-                    lblBolaPosX.Text = BallPosToCenter.X.ToString();
-                    lblBolaPosY.Text = BallPosToCenter.Y.ToString();
-                    lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
-                }
-
-
-                if (bZeroFoundAt12)
-                {
-                    if (this.bDebouncedBallFound)
-                    {
-                        _DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-                        if (bShowText)
-                            lblDistZeroBall.Text = string.Format("{0}px - {1}°", _DistanceZeroBall, _BallAngleToCenter);
-
-                        if (this.CalibrationInProgress)
-                            AcumulateCalibration();
-
-                        winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
-                        if (winnerXY != -1)
-                        {
-                            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
-                            if ((winnerDA != -1) && (winnerXY == winnerDA))
-                            {
-                                winner = winnerDA;
-                            }
-                            else
-                            {
-                                if ((LogDetectedNumbers) && (this._rpm > 0))
-                                {
-                                    Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} - A: {_ZeroAngleToCenter} ]", true);
-                                    Common.Logger.Escribir($"-->FoundXY: {winnerXY} - TableXY: [X: {NumbersByXY[winnerXY, 0]} - Y: {NumbersByXY[winnerXY, 1]}] = Found [X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y} ]", true);
-                                    Common.Logger.Escribir($"-->FoundDA: {winnerDA} - TableDA: [D: {this.NumbersByDistAngle[winnerXY, 0]} - A: {this.NumbersByDistAngle[winnerXY, 1]}] = Found [D: {this._DistanceZeroBall} - A : {this._BallAngleToCenter} ]", true);
-                                }
-                            }
-                        }
-
-                        if (winner != -1)
-                        {
-                            _WinnerNumber = winner;
-                            juego.SetNewWinnerNumber(_WinnerNumber);
-                            lblFound.Text = string.Format("{0}", _WinnerNumber);
-                            if ((LogDetectedNumbers) && (this._rpm > 0))
-                            {
-                                Common.Logger.Escribir($"Zero [X: {ZeroPosToCenter.X} - Y: {ZeroPosToCenter.Y} - A: {_ZeroAngleToCenter} ]", true);
-                                Common.Logger.Escribir($"-->WinnerXY: {winnerXY} - TableXY: [X: {NumbersByXY[winnerXY, 0]} - Y: {NumbersByXY[winnerXY, 1]}] = Found [X: {BallPosToCenter.X} - Y: {BallPosToCenter.Y} ]", true);
-                                Common.Logger.Escribir($"-->WinnerDA: {winnerDA} - TableDA: [D: {this.NumbersByDistAngle[winnerXY, 0]} - A: {this.NumbersByDistAngle[winnerXY, 1]}] = Found [D: {this._DistanceZeroBall} - A : {this._BallAngleToCenter} ]", true);
-                            }
-                        }
+                        this._rpmCounter++;
                     }
                 }
                 else
                 {
-                    winner = -1;
-                    lblFound.Text = "--";
+                    this._rpmCounter = 0;
+                    this._rpm = 0;
                 }
 
+                pbBall.Image = BallBlobDetection(_BsourceFrame);
+                DebounceBallInSlot();
+                if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
+                {
+                    FindWinnerNumber();
+                }
 
+                if (this.CalibrationInProgress)
+                {
+                    AcumulateCalibration();
+                }
 
+                //stopWatch.Stop();
+
+                //if (stopWatch.ElapsedMilliseconds > 40)
+                //{
+                //    MessageBox.Show($"Exceeded: {stopWatch.ElapsedMilliseconds.ToString()}");
+                //}
+                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
                 if (IsCalibratingCamera)
                 {
                     CalibrateCamera(_BsourceFrame);
                 }
-
                 args.Frame = _BsourceFrame;
-                //stopWatch.Stop();
-                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
-
+                if (bShowText)
+                {
+                    DisplayValues();
+                }
             }
         }
 
@@ -699,7 +710,7 @@ namespace VideoRecolector
 
             if (rects.Length > 0)
             {
-                if (rects[0].Width >= 4)
+                if ((rects[0].Width >= _zeroBlobCounter.MinWidth) && _numbersArea.Contains(rects[0]))
                 {
                     Rectangle objectRect = rects[0];
                     ZeroPos = objectRect.Center();
@@ -707,10 +718,18 @@ namespace VideoRecolector
                     ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
                     this.bZeroFound = true;
                     _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
-                    this.bZeroFoundAt12 = (_ZeroAngleToCenter >= 88 && _ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
+                    //Graphics _g = Graphics.FromImage(_colorFilterImage);
+                    //Pen ballPen = new Pen(Color.FromArgb(_zeroColorFilter.CenterColor.Red, _zeroColorFilter.CenterColor.Green, _zeroColorFilter.CenterColor.Blue), 5);
+                    //_g.DrawRectangle(ballPen, rects[0]);
                 }
                 else
+                {
+                    ZeroPos = System.Drawing.Point.Empty;
                     _ZeroAngleToCenter = 720;
+
+                }
+
+                this.bZeroFoundAt12 = (_ZeroAngleToCenter >= 88 && _ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
             }
 
             return _colorFilterImage;
@@ -726,6 +745,8 @@ namespace VideoRecolector
             // Apply grayscale filter
             BitmapData objectsData = _colorFilterImage.LockBits(_frameArea, ImageLockMode.ReadOnly, _colorFilterImage.PixelFormat);
             UnmanagedImage grayImage = Grayscale.CommonAlgorithms.BT709.Apply(new UnmanagedImage(objectsData));
+            _ballBlobCounter.FilterBlobs = false;
+            _ballBlobCounter.CoupledSizeFiltering = true;
             _ballBlobCounter.ProcessImage(grayImage);
             _colorFilterImage.UnlockBits(objectsData);
 
@@ -734,15 +755,21 @@ namespace VideoRecolector
             if (rects.Length > 0)
             {
                 Rectangle objectRect = rects[0];
-                if (objectRect.Width >= 4)
+                if ((objectRect.Width >= _ballBlobCounter.MinWidth) && (objectRect.Width <= _ballBlobCounter.MaxWidth))
                 {
                     BallPos = objectRect.Center();
                     BallPosToCenter.X = BallPos.X - _centerPoint.X;
                     BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
+                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
+                    //Graphics _g = Graphics.FromImage(_colorFilterImage);
+                    //Pen ballPen = new Pen(Color.FromArgb(_ballColorFilter.CenterColor.Red, _ballColorFilter.CenterColor.Green, _ballColorFilter.CenterColor.Blue), 5);
+                    //_g.DrawRectangle(ballPen, rects[0]);
                 }
                 else
+                {
+                    BallPos = System.Drawing.Point.Empty;
                     _BallAngleToCenter = 720;
-
+                }
             }
 
             return _colorFilterImage;
@@ -856,19 +883,13 @@ namespace VideoRecolector
         {
 
             int winner = -1;
+            // Angle range at 0 is awkard
             if (angle != 0)
             {
                 int min_angle = ((angle - DIFF_ANGLE) + 360) % 360;
                 int max_angle = ((angle + DIFF_ANGLE) + 360) % 360;
-                //if (min_angle > max_angle)
-                //{
-                //    int tmp = min_angle;
-                //    min_angle = max_angle;
-                //    max_angle = tmp;
-                //}
 
                 // For some reason, Atan2() is 0 when it shouldn't probably
-
                 for (int i = 0; i < 37; i++)
                 {
 
@@ -1056,48 +1077,15 @@ namespace VideoRecolector
             }
         }
 
-        private void GuardarEstado(int estado, int numero, int rpm, int sentidoDeGiro)
+        private void GuardarEstado(JuegoRuleta.ESTADO_JUEGO estado, int numero, int rpm, int sentidoDeGiro)
         {
             string cadena = string.Empty;
-            switch (estado)
+            if (estado != JuegoRuleta.ESTADO_JUEGO.STATE_0)
             {
-                case 1:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "1" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            (int)JuegoRuleta.ESTADO_JUEGO.BEFORE_GAME,
-                                                             rpm, sentidoDeGiro, 0);
-                    break;
-                case 2:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "2" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            (int)JuegoRuleta.ESTADO_JUEGO.PLACE_YOUR_BETS,
-                                                            rpm, sentidoDeGiro, 0);
-                    break;
-                case 3:
-                    //cadena = "NS" + this.numeroDemo.ToString("00") + "3" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            (int)JuegoRuleta.ESTADO_JUEGO.FINISH_BETTING,
-                                                            rpm, sentidoDeGiro, 0);
-                    break;
-                case 4:
-                    //                        cadena = "NS" + this.numeroDemo.ToString("00") + "4" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0";
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            (int)JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS,
-                                                            this._rpm, sentidoDeGiro, 0);
-                    break;
-                case 5:
-                    //Persistencia.Guardar("NS" + this.numeroDemo.ToString("00") + "5" + this.azarNumero.Next(0, 100).ToString("00") + this.azarNumero.Next(0, 2).ToString() + "0");
-                    cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero,
-                                                            (int)JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER,
-                                                            this._rpm, sentidoDeGiro, 0);
-                    break;
-                case 6:
-                    cadena = ProtocoloNAPSA.FormatearCadenaMesaCerrada();
-                    break;
-            }
-            if (cadena != string.Empty)
-            {
+                cadena = ProtocoloNAPSA.FormatearCadenaEstado(numero, (int)estado, rpm, sentidoDeGiro, 0);
                 Persistencia.Guardar(cadena);
+                //if (txtProtocolo.Lines.Length > 5)
+                //    txtProtocolo.Text = "";
                 txtProtocolo.AppendText(cadena);
                 txtProtocolo.AppendText(Environment.NewLine);
             }
@@ -1109,9 +1097,11 @@ namespace VideoRecolector
 
             if (this.IsCalibratingNumbers)
             {
+                this._rpm = 0;
+                this._rpmCounter = 0;
                 juego.SetCurrentState(JuegoRuleta.ESTADO_JUEGO.TABLE_CLOSED);
-                this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
-                this.GuardarEstado((int)estadoMesa, juego.GetLastWinnerNumber(), this._rpm, 0);
+                this.GuardarEstado(estadoMesa, juego.GetLastWinnerNumber(), 0, 0);
+
                 this.comboBox1.SelectedIndex = 0;
                 this.numCalibrated = 0;
                 lblChkCount.Text = this.numCalibrated.ToString();
@@ -1123,6 +1113,8 @@ namespace VideoRecolector
                 btnUpdateRGB.Enabled = true;
                 lblTiming.Visible = true;
                 lblTimingValue.Visible = true;
+                StopCamera();
+                StartCameraCalibration();
             }
             else
             {
@@ -1132,6 +1124,8 @@ namespace VideoRecolector
                 btnUpdateRGB.Enabled = false;
                 lblTiming.Visible = false;
                 lblTimingValue.Visible = false;
+                StopCameraCalibration();
+                StartCamera();
             }
         }
 
