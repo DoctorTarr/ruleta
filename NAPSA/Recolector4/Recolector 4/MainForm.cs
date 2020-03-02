@@ -308,9 +308,11 @@ namespace VideoRecolector
                 lblEstadoRuleta.Text = "";
                 lblBolaPosX.Text = "";
                 lblBolaPosY.Text = "";
+                lblZeroPosAngle.Text = "---";
                 lblZeroPosX.Text = "";
                 lblZeroPosY.Text = "";
                 lblBallOn.Text = "";
+                lblDistZeroBall.Text = "---";
                 this.bDebouncedBallFound = false;
                 this.bBallStateChanged = true;
                 this._rpm = 0;
@@ -820,43 +822,11 @@ namespace VideoRecolector
         //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
         private int[,] RouletteNumbers =
         {
-           { 0, 2},
-           {32, 1},
-           {15, 0},
-           {19, 1},
-           { 4, 0},
-           {21, 1},
-           { 2, 0},
-           {25, 1},
-           {17, 0},
-           {34, 1},
-           { 6, 0},
-           {27, 1},
-           {13, 0},
-           {36, 1},
-           {11, 0},
-           {30, 1},
-           { 8, 0},
-           {23, 1},
-           {10, 0},
-           { 5, 1},
-           {24, 0},
-           {16, 1},
-           {33, 0},
-           { 1, 1},
-           {20, 0},
-           {14, 1},
-           {31, 0},
-           { 9, 1},
-           {22, 0},
-           {18, 1},
-           {29, 0},
-           { 7, 1},
-           {28, 0},
-           {12, 1},
-           {35, 0},
-           { 3, 1},
-           {26, 0},
+           { 0, 2}, 
+           {32, 1}, {15, 0}, {19, 1}, { 4, 0}, {21, 1}, { 2, 0}, {25, 1}, {17, 0}, {34, 1}, { 6, 0},
+           {27, 1}, {13, 0}, {36, 1}, {11, 0}, {30, 1}, { 8, 0}, {23, 1}, {10, 0}, { 5, 1}, {24, 0},
+           {16, 1}, {33, 0}, { 1, 1}, {20, 0}, {14, 1}, {31, 0}, { 9, 1}, {22, 0}, {18, 1}, {29, 0},
+           { 7, 1}, {28, 0}, {12, 1}, {35, 0}, { 3, 1}, {26, 0},
         };
 
         //Double-zero wheel 
@@ -1111,8 +1081,8 @@ namespace VideoRecolector
                 radioButton1.PerformClick();
                 btnUpdateRGB.Visible = true;
                 btnUpdateRGB.Enabled = true;
-                lblTiming.Visible = true;
-                lblTimingValue.Visible = true;
+                //lblTiming.Visible = true;
+                //lblTimingValue.Visible = true;
                 StopCamera();
                 StartCameraCalibration();
             }
@@ -1122,8 +1092,8 @@ namespace VideoRecolector
                 this.btnSaveCSV.Visible = false;
                 btnUpdateRGB.Visible = false;
                 btnUpdateRGB.Enabled = false;
-                lblTiming.Visible = false;
-                lblTimingValue.Visible = false;
+                //lblTiming.Visible = false;
+                //lblTimingValue.Visible = false;
                 StopCameraCalibration();
                 StartCamera();
             }

@@ -201,6 +201,8 @@ namespace VideoRecolector
         private void tmrMain_Tick(object sender, EventArgs e)
         {
             int winner = -1;
+            int framesReceived = videoSourcePlayer1.VideoSource.FramesReceived;
+            this.lblTimingValue.Text = framesReceived.ToString();
 
             this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
             if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
@@ -626,7 +628,6 @@ namespace VideoRecolector
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.chkbGuardarLog);
-            this.groupBox3.Controls.Add(this.btnUpdateRGB);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.lblGameStatus);
             this.groupBox3.Controls.Add(this.btnSaveCSV);
@@ -673,11 +674,11 @@ namespace VideoRecolector
             this.btnUpdateRGB.Enabled = false;
             this.btnUpdateRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnUpdateRGB.ForeColor = System.Drawing.Color.Black;
-            this.btnUpdateRGB.Location = new System.Drawing.Point(555, 460);
+            this.btnUpdateRGB.Location = new System.Drawing.Point(6, 662);
             this.btnUpdateRGB.Name = "btnUpdateRGB";
-            this.btnUpdateRGB.Size = new System.Drawing.Size(92, 23);
+            this.btnUpdateRGB.Size = new System.Drawing.Size(75, 23);
             this.btnUpdateRGB.TabIndex = 136;
-            this.btnUpdateRGB.Text = "Update RGB";
+            this.btnUpdateRGB.Text = "Grabar RGB";
             this.btnUpdateRGB.UseVisualStyleBackColor = true;
             this.btnUpdateRGB.Visible = false;
             this.btnUpdateRGB.Click += new System.EventHandler(this.btnUpdateRGB_Click);
@@ -720,10 +721,9 @@ namespace VideoRecolector
             this.lblTiming.ForeColor = System.Drawing.SystemColors.WindowText;
             this.lblTiming.Location = new System.Drawing.Point(545, 442);
             this.lblTiming.Name = "lblTiming";
-            this.lblTiming.Size = new System.Drawing.Size(66, 13);
+            this.lblTiming.Size = new System.Drawing.Size(74, 13);
             this.lblTiming.TabIndex = 132;
-            this.lblTiming.Text = "Zero Blob T:";
-            this.lblTiming.Visible = false;
+            this.lblTiming.Text = "Frames (12.5):";
             // 
             // lblTimingValue
             // 
@@ -735,7 +735,6 @@ namespace VideoRecolector
             this.lblTimingValue.Size = new System.Drawing.Size(22, 15);
             this.lblTimingValue.TabIndex = 131;
             this.lblTimingValue.Text = "---";
-            this.lblTimingValue.Visible = false;
             // 
             // lblVideoStatus
             // 
@@ -900,7 +899,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(676, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(85, 56);
+            this.txtProtocolo.Size = new System.Drawing.Size(85, 52);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -935,6 +934,7 @@ namespace VideoRecolector
             // pnlCalibration
             // 
             this.pnlCalibration.Controls.Add(this.radioButton2);
+            this.pnlCalibration.Controls.Add(this.btnUpdateRGB);
             this.pnlCalibration.Controls.Add(this.radioButton1);
             this.pnlCalibration.Controls.Add(this.label23);
             this.pnlCalibration.Controls.Add(this.label22);
@@ -957,9 +957,9 @@ namespace VideoRecolector
             this.pnlCalibration.Controls.Add(this.label13);
             this.pnlCalibration.Controls.Add(this.label12);
             this.pnlCalibration.Controls.Add(this.btnSetNumber);
-            this.pnlCalibration.Location = new System.Drawing.Point(676, 65);
+            this.pnlCalibration.Location = new System.Drawing.Point(676, 50);
             this.pnlCalibration.Name = "pnlCalibration";
-            this.pnlCalibration.Size = new System.Drawing.Size(85, 677);
+            this.pnlCalibration.Size = new System.Drawing.Size(85, 692);
             this.pnlCalibration.TabIndex = 62;
             this.pnlCalibration.TabStop = false;
             this.pnlCalibration.Visible = false;
@@ -967,11 +967,12 @@ namespace VideoRecolector
             // radioButton2
             // 
             this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 583);
+            this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton2.Location = new System.Drawing.Point(41, 565);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(73, 17);
+            this.radioButton2.Size = new System.Drawing.Size(41, 16);
             this.radioButton2.TabIndex = 134;
-            this.radioButton2.Text = "Color Bola";
+            this.radioButton2.Text = "Bola";
             this.radioButton2.UseVisualStyleBackColor = true;
             this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
             // 
@@ -979,12 +980,13 @@ namespace VideoRecolector
             // 
             this.radioButton1.AutoSize = true;
             this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 564);
+            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton1.Location = new System.Drawing.Point(10, 565);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(74, 17);
+            this.radioButton1.Size = new System.Drawing.Size(28, 16);
             this.radioButton1.TabIndex = 133;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Color Cero";
+            this.radioButton1.Text = "0";
             this.radioButton1.UseVisualStyleBackColor = true;
             this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
@@ -992,7 +994,7 @@ namespace VideoRecolector
             // 
             this.label23.AutoSize = true;
             this.label23.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label23.Location = new System.Drawing.Point(3, 653);
+            this.label23.Location = new System.Drawing.Point(7, 638);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(17, 13);
             this.label23.TabIndex = 132;
@@ -1002,7 +1004,7 @@ namespace VideoRecolector
             // 
             this.label22.AutoSize = true;
             this.label22.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label22.Location = new System.Drawing.Point(3, 628);
+            this.label22.Location = new System.Drawing.Point(7, 613);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(18, 13);
             this.label22.TabIndex = 131;
@@ -1012,7 +1014,7 @@ namespace VideoRecolector
             // 
             this.label21.AutoSize = true;
             this.label21.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label21.Location = new System.Drawing.Point(3, 605);
+            this.label21.Location = new System.Drawing.Point(7, 590);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(18, 13);
             this.label21.TabIndex = 52;
@@ -1020,7 +1022,7 @@ namespace VideoRecolector
             // 
             // numUpDownBlue
             // 
-            this.numUpDownBlue.Location = new System.Drawing.Point(28, 651);
+            this.numUpDownBlue.Location = new System.Drawing.Point(32, 636);
             this.numUpDownBlue.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1033,7 +1035,7 @@ namespace VideoRecolector
             // 
             // numUpDownGreen
             // 
-            this.numUpDownGreen.Location = new System.Drawing.Point(28, 626);
+            this.numUpDownGreen.Location = new System.Drawing.Point(32, 611);
             this.numUpDownGreen.Maximum = new decimal(new int[] {
             255,
             0,
@@ -1046,7 +1048,7 @@ namespace VideoRecolector
             // 
             // numUpDownRed
             // 
-            this.numUpDownRed.Location = new System.Drawing.Point(28, 603);
+            this.numUpDownRed.Location = new System.Drawing.Point(32, 588);
             this.numUpDownRed.Maximum = new decimal(new int[] {
             255,
             0,
