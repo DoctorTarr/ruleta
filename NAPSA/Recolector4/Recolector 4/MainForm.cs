@@ -91,6 +91,9 @@ namespace VideoRecolector
         //private float motionAlarmLevel = 0.003f;
         private int _rpm = 0;
         private int _rpmCounter = 0;
+        private int _callCounter = 0;
+        private int _zeroesCounter = 0;
+        private int _zeroAtNoonCounter = 0;
         private float movePercentage = 0.0f;
 
         // Demo variables
@@ -532,8 +535,18 @@ namespace VideoRecolector
                 //stopWatch.Start();
 
                 Bitmap _BsourceFrame = (Bitmap)args.Frame.Clone();
+
+                // Detect movement
                 this.movePercentage = detector.ProcessFrame(_BsourceFrame);
                 _isMoving = (this.movePercentage > 0.01f);
+                if (!_isMoving)
+                {
+                    this._rpmCounter = 0;
+                    this._rpm = 0;
+                }
+
+                // Count call
+                this._callCounter++;
 
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
@@ -542,26 +555,24 @@ namespace VideoRecolector
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
                 if (this._isMoving)
                 {
-                    if (bZeroFoundAt12)
+                    if (this.bZeroFound)
                     {
-                        if (this._rpmCounter > 0)
-                        {
-                            this._rpm = 1500 / this._rpmCounter;
-                            if (this._rpm > 60)
-                                this._rpm = 60;
-                            this._rpmCounter = 0;
-                        }
+                        this._zeroesCounter++;
 
+                        if (bZeroFoundAt12)
+                        {
+                            this._zeroAtNoonCounter++;
+                            if (this._rpmCounter > 0)
+                            {
+                                this._rpm = 1500 / this._rpmCounter;
+                                this._rpmCounter = 0;
+                            }
+                        }
+                        else
+                        {
+                            this._rpmCounter++;
+                        }
                     }
-                    else
-                    {
-                        this._rpmCounter++;
-                    }
-                }
-                else
-                {
-                    this._rpmCounter = 0;
-                    this._rpm = 0;
                 }
 
                 pbBall.Image = BallBlobDetection(_BsourceFrame);

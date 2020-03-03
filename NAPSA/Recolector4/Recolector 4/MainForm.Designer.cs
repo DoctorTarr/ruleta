@@ -203,6 +203,11 @@ namespace VideoRecolector
             int winner = -1;
             int framesReceived = videoSourcePlayer1.VideoSource.FramesReceived;
             this.lblTimingValue.Text = framesReceived.ToString();
+            this.lblEventCalls.Text = string.Format($"{this._callCounter}-{this._rpmCounter}-{this._zeroAtNoonCounter}");
+
+            this._callCounter = 0;
+            this._zeroesCounter = 0;
+            this._zeroAtNoonCounter = 0;
 
             this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
             if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
@@ -364,8 +369,9 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.lblEventCalls = new System.Windows.Forms.Label();
             this.chkbGuardarLog = new System.Windows.Forms.CheckBox();
-            this.btnUpdateRGB = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.lblGameStatus = new System.Windows.Forms.Label();
             this.btnSaveCSV = new System.Windows.Forms.Button();
@@ -385,6 +391,7 @@ namespace VideoRecolector
             this.label10 = new System.Windows.Forms.Label();
             this.cbCalibrateCamera = new System.Windows.Forms.CheckBox();
             this.btnStartCamara = new System.Windows.Forms.Button();
+            this.btnUpdateRGB = new System.Windows.Forms.Button();
             this.tmrDemo = new System.Windows.Forms.Timer(this.components);
             this.txtProtocolo = new System.Windows.Forms.TextBox();
             this.tmrMain = new System.Windows.Forms.Timer(this.components);
@@ -627,6 +634,8 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label16);
+            this.groupBox3.Controls.Add(this.lblEventCalls);
             this.groupBox3.Controls.Add(this.chkbGuardarLog);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.lblGameStatus);
@@ -656,6 +665,27 @@ namespace VideoRecolector
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label16.Location = new System.Drawing.Point(600, 461);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(53, 13);
+            this.label16.TabIndex = 137;
+            this.label16.Text = "C -  Z -  N";
+            // 
+            // lblEventCalls
+            // 
+            this.lblEventCalls.AutoSize = true;
+            this.lblEventCalls.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEventCalls.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblEventCalls.Location = new System.Drawing.Point(592, 474);
+            this.lblEventCalls.Name = "lblEventCalls";
+            this.lblEventCalls.Size = new System.Drawing.Size(65, 15);
+            this.lblEventCalls.TabIndex = 136;
+            this.lblEventCalls.Text = "00-00-00";
+            // 
             // chkbGuardarLog
             // 
             this.chkbGuardarLog.AutoSize = true;
@@ -667,21 +697,6 @@ namespace VideoRecolector
             this.chkbGuardarLog.Text = "Guardar Log";
             this.chkbGuardarLog.UseVisualStyleBackColor = true;
             this.chkbGuardarLog.CheckedChanged += new System.EventHandler(this.chkbGuardarLog_CheckedChanged);
-            // 
-            // btnUpdateRGB
-            // 
-            this.btnUpdateRGB.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnUpdateRGB.Enabled = false;
-            this.btnUpdateRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdateRGB.ForeColor = System.Drawing.Color.Black;
-            this.btnUpdateRGB.Location = new System.Drawing.Point(6, 662);
-            this.btnUpdateRGB.Name = "btnUpdateRGB";
-            this.btnUpdateRGB.Size = new System.Drawing.Size(75, 23);
-            this.btnUpdateRGB.TabIndex = 136;
-            this.btnUpdateRGB.Text = "Grabar RGB";
-            this.btnUpdateRGB.UseVisualStyleBackColor = true;
-            this.btnUpdateRGB.Visible = false;
-            this.btnUpdateRGB.Click += new System.EventHandler(this.btnUpdateRGB_Click);
             // 
             // label7
             // 
@@ -886,6 +901,21 @@ namespace VideoRecolector
             this.btnStartCamara.UseVisualStyleBackColor = true;
             this.btnStartCamara.Click += new System.EventHandler(this.btnStartCamara_Click);
             // 
+            // btnUpdateRGB
+            // 
+            this.btnUpdateRGB.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnUpdateRGB.Enabled = false;
+            this.btnUpdateRGB.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdateRGB.ForeColor = System.Drawing.Color.Black;
+            this.btnUpdateRGB.Location = new System.Drawing.Point(6, 662);
+            this.btnUpdateRGB.Name = "btnUpdateRGB";
+            this.btnUpdateRGB.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateRGB.TabIndex = 136;
+            this.btnUpdateRGB.Text = "Grabar RGB";
+            this.btnUpdateRGB.UseVisualStyleBackColor = true;
+            this.btnUpdateRGB.Visible = false;
+            this.btnUpdateRGB.Click += new System.EventHandler(this.btnUpdateRGB_Click);
+            // 
             // tmrDemo
             // 
             this.tmrDemo.Interval = 500;
@@ -899,7 +929,7 @@ namespace VideoRecolector
             this.txtProtocolo.Location = new System.Drawing.Point(676, 3);
             this.txtProtocolo.Multiline = true;
             this.txtProtocolo.Name = "txtProtocolo";
-            this.txtProtocolo.Size = new System.Drawing.Size(85, 52);
+            this.txtProtocolo.Size = new System.Drawing.Size(85, 41);
             this.txtProtocolo.TabIndex = 52;
             // 
             // tmrMain
@@ -1329,6 +1359,8 @@ namespace VideoRecolector
         private RadioButton radioButton1;
         private Button btnUpdateRGB;
         private CheckBox chkbGuardarLog;
+        private Label label16;
+        private Label lblEventCalls;
     }
 }
 
