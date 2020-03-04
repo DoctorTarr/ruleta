@@ -135,7 +135,7 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                this.RouletteNumbersColors[this.RouletteNumbers[i, 0]] = this.RouletteNumbers[i, 1];
+                this.RouletteNumbersColors[winfinder.RouletteNumbers[i, 0]] = winfinder.RouletteNumbers[i, 1];
             }
         }
 
@@ -181,7 +181,7 @@ namespace VideoRecolector
 
         private void DisplayStatuses()
         {
-            if (this._rpm != this.lastrpm)
+            //if (this._rpm != this.lastrpm)
             {
                 lblEstadoRuleta.Text = string.Format("{0}-{1}", (this._isMoving ? "M" : "S"), this._rpm);
                 this.lastrpm = this._rpm;
@@ -203,7 +203,7 @@ namespace VideoRecolector
             int winner = -1;
             int framesReceived = videoSourcePlayer1.VideoSource.FramesReceived;
             this.lblTimingValue.Text = framesReceived.ToString();
-            this.lblEventCalls.Text = string.Format($"{this._callCounter}-{this._rpmCounter}-{this._zeroAtNoonCounter}");
+            this.lblEventCalls.Text = string.Format($"{this._callCounter}-{this._zeroesCounter}-{this._zeroAtNoonCounter}");
 
             this._callCounter = 0;
             this._zeroesCounter = 0;
@@ -298,12 +298,12 @@ namespace VideoRecolector
             int n = 0;
             while (n < chkNum)
             {
-                chkbNumbers[n].Tag = this.RouletteNumbers[n,0];
+                chkbNumbers[n].Tag = winfinder.RouletteNumbers[n,0];
                 chkbNumbers[n].Width = 40;
                 chkbNumbers[n].Height = 18;
                 chkbNumbers[n].Font = new Font(chkbNumbers[n].Font, System.Drawing.FontStyle.Bold);
 
-                switch (this.RouletteNumbers[n, 1])
+                switch (winfinder.RouletteNumbers[n, 1])
                 {
                     case 0:
                         chkbNumbers[n].ForeColor = Color.Black;

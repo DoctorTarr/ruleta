@@ -97,8 +97,8 @@ namespace VideoRecolector
         private float movePercentage = 0.0f;
 
         // Demo variables
-        private int estadoDemo;
-        private byte numeroDemo;
+        //private int estadoDemo;
+        //private byte numeroDemo;
         private Random azarNumero;
 
         // Roulette Status variables
@@ -130,6 +130,8 @@ namespace VideoRecolector
         private int countCalibrationSamples = 0;
         private bool CalibrationInProgress = false;
 
+        private WinnerFinder winfinder;
+
         public MainForm()
         {
             InitializeComponent();
@@ -144,7 +146,6 @@ namespace VideoRecolector
             this.bBallStateChanged = false;
             CheckForIllegalCrossThreadCalls = false; // TO-DO avoid illegal cross thread calls
             setupDetectionVariables(); // Filter for blob detecting. Parameters setup in caller
-            ReadNumbersTable();
             juego = new JuegoRuleta();
             estadoMesa = juego.GetCurrentState();
             this.tmrMain.Interval = 500; // msec
@@ -376,6 +377,8 @@ namespace VideoRecolector
         // All the filters etc are configured here
         private void setupDetectionVariables()
         {
+            winfinder = new WinnerFinder();
+
             // Configure Zero Color Filter
             RGB zeroColor = new RGB(Byte.Parse(GetSetting("ZeroRed")),
                                     Byte.Parse(GetSetting("ZeroGreen")),
@@ -438,7 +441,7 @@ namespace VideoRecolector
 
             for (int i = 0; i < 37; i++)
             {
-                this.comboBox1.Items.Add(RouletteNumbers[i,0].ToString());
+                this.comboBox1.Items.Add(winfinder.RouletteNumbers[i,0].ToString());
             }
             this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
@@ -489,10 +492,10 @@ namespace VideoRecolector
             int winnerDA = -1;
             int winnerXY = -1;
 
-            winnerXY = FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
+            winnerXY = winfinder.FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
 
-            this._DistanceZeroBall = FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
-            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+            this._DistanceZeroBall = winfinder.FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
+            winnerDA = winfinder.FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
 
             if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
             {
@@ -506,14 +509,14 @@ namespace VideoRecolector
             int winnerXY = -1;
             int winner = -1;
 
-            winnerXY = FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
+            winnerXY = winfinder.FindNumberByXY(this.BallPosToCenter.X, this.BallPosToCenter.Y);
             if (winnerXY != -1)
             {
                 juego.SetNewWinnerNumber(winnerXY);
             }
 
-            this._DistanceZeroBall = FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
-            winnerDA = FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
+            this._DistanceZeroBall = winfinder.FindDistance(this.ZeroPosToCenter, this.BallPosToCenter);
+            winnerDA = winfinder.FindNumberByAngle(this._DistanceZeroBall, this._BallAngleToCenter);
             if (winnerDA != -1)
             {
                 juego.SetNewWinnerNumber(winnerDA);
@@ -730,7 +733,7 @@ namespace VideoRecolector
                     ZeroPosToCenter.X = ZeroPos.X - _centerPoint.X;
                     ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
                     this.bZeroFound = true;
-                    _ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+                    _ZeroAngleToCenter = winfinder.GetAngleOfPointToZero(ZeroPosToCenter);
                     //Graphics _g = Graphics.FromImage(_colorFilterImage);
                     //Pen ballPen = new Pen(Color.FromArgb(_zeroColorFilter.CenterColor.Red, _zeroColorFilter.CenterColor.Green, _zeroColorFilter.CenterColor.Blue), 5);
                     //_g.DrawRectangle(ballPen, rects[0]);
@@ -773,7 +776,7 @@ namespace VideoRecolector
                     BallPos = objectRect.Center();
                     BallPosToCenter.X = BallPos.X - _centerPoint.X;
                     BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
-                    _BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
+                    _BallAngleToCenter = winfinder.GetAngleOfPointToZero(BallPosToCenter);
                     //Graphics _g = Graphics.FromImage(_colorFilterImage);
                     //Pen ballPen = new Pen(Color.FromArgb(_ballColorFilter.CenterColor.Red, _ballColorFilter.CenterColor.Green, _ballColorFilter.CenterColor.Blue), 5);
                     //_g.DrawRectangle(ballPen, rects[0]);
@@ -791,129 +794,9 @@ namespace VideoRecolector
         #endregion
 
         #region Finding Winner Number
-        /**
-        * Determines the angle of a point against the coordinates center
-        */
-        private int GetAngleOfPointToZero(System.Drawing.Point p)
-        {
-            return (int)(Math.Round(Math.Atan2(p.Y, p.X) * radian) + 360) % 360;
-        }
-
-
-        // Finds the integer square root of a positive number  
-        private int Isqrt(int num)
-        {
-            if (0 == num) { return 0; }  // Avoid zero divide  
-            int n = (num / 2) + 1;       // Initial estimate, never low  
-            int n1 = (n + (num / n)) / 2;
-            while (n1 < n)
-            {
-                n = n1;
-                n1 = (n + (num / n)) / 2;
-            } // end while  
-            return n;
-        } // end Isqrt()  
-
-        // Find distance between zero and ball
-        private int FindDistance(System.Drawing.Point p1, System.Drawing.Point p2)
-        {
-            return Isqrt((p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y));
-        }
-
-
-
-        //Roulette wheel number sequence
-        //The pockets of the roulette wheel are numbered from 0 to 36.
-        //In number ranges from 1 to 10 and 19 to 28, odd numbers are red and even are black.
-        //In ranges from 11 to 18 and 29 to 36, odd numbers are black and even are red.
-        //There is a green pocket numbered 0 (zero). In American roulette, there is a second green pocket marked 00. 
-        //Pocket number order on the roulette wheel adheres to the following clockwise sequence in most casinos
-
-        //Single-zero wheel 
-        //0-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-        private int[,] RouletteNumbers =
-        {
-           { 0, 2}, 
-           {32, 1}, {15, 0}, {19, 1}, { 4, 0}, {21, 1}, { 2, 0}, {25, 1}, {17, 0}, {34, 1}, { 6, 0},
-           {27, 1}, {13, 0}, {36, 1}, {11, 0}, {30, 1}, { 8, 0}, {23, 1}, {10, 0}, { 5, 1}, {24, 0},
-           {16, 1}, {33, 0}, { 1, 1}, {20, 0}, {14, 1}, {31, 0}, { 9, 1}, {22, 0}, {18, 1}, {29, 0},
-           { 7, 1}, {28, 0}, {12, 1}, {35, 0}, { 3, 1}, {26, 0},
-        };
-
-        //Double-zero wheel 
-        //0-28-9-26-30-11-7-20-32-17-5-22-34-15-3-24-36-13-1-00-27-10-25-29-12-8-19-31-18-6-21-33-16-4-23-35-14-2
-        //Triple-zero wheel 
-        //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
-
-        // Numbers by Angle
-        private int[,] NumbersByDistAngle;
-
-        // Numbers by Coordinates XY
-        private int[,] NumbersByXY;
-
-        private readonly double radian = 180.0 / Math.PI;
-
         public bool IsCalibratingNumbers { get => _IsCalibratingNumbers; set => _IsCalibratingNumbers = value; }
         public bool IsCalibratingCamera { get => _IsCalibratingCamera; set => _IsCalibratingCamera = value; }
         public bool LogDetectedNumbers { get => _LogDetectedNumbers; set => _LogDetectedNumbers = value; }
-
-        const int DIFF_DIST = 2;
-        const int DIFF_ANGLE = 1;
-
-        private int FindNumberByAngle(int distance, int angle)
-        {
-
-            int winner = -1;
-            // Angle range at 0 is awkard
-            if (angle != 0)
-            {
-                int min_angle = ((angle - DIFF_ANGLE) + 360) % 360;
-                int max_angle = ((angle + DIFF_ANGLE) + 360) % 360;
-
-                // For some reason, Atan2() is 0 when it shouldn't probably
-                for (int i = 0; i < 37; i++)
-                {
-
-                    if ((NumbersByDistAngle[i, 0] >= (distance - DIFF_DIST)) &&
-                        (NumbersByDistAngle[i, 0] <= (distance + DIFF_DIST)))
-                    {
-                        if ((NumbersByDistAngle[i, 1] >= Math.Min(min_angle, max_angle)) &&
-                            (NumbersByDistAngle[i, 1] <= Math.Max(min_angle, max_angle)))
-                        {
-                            winner = i;
-                            break;
-                        }
-                    }
-                }
-
-            }
-
-            return winner;
-        }
-
-        // Delta x, y accepted range
-        const int DIFF_XY = 3;
-
-        private int FindNumberByXY(int x, int y)
-        {
-            int winner = -1;
-            int min_X = (x - DIFF_XY);
-            int max_X = (x + DIFF_XY);
-            int min_Y = (y - DIFF_XY);
-            int max_Y = (y + DIFF_XY);
-
-            for (int i = 0; i < 37; i++)
-            {
-                if ((NumbersByXY[i, 0] >= min_X && NumbersByXY[i, 0] <= max_X) &&
-                    (NumbersByXY[i, 1] >= min_Y && NumbersByXY[i, 1] <= max_Y))
-                {
-                    winner = i;
-                    break;
-                }
-            }
-
-            return winner;
-        }
 
         #endregion
 
@@ -1008,7 +891,7 @@ namespace VideoRecolector
                 int index = this.comboBox1.SelectedIndex;
 
                 // Check if distance and angle values are already assigned to another number
-                int winner = FindNumberByAngle(this.averageDist, this.averageAngle);
+                int winner = winfinder.FindNumberByAngle(this.averageDist, this.averageAngle);
                 if ((winner != -1) && (winner != num))
                 {
                     DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
@@ -1020,7 +903,7 @@ namespace VideoRecolector
                 }
 
                 // Check if X and Y values are already assigned to another number
-                winner = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
+                winner = winfinder.FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
                 if ((winner != -1) && (winner != num))
                 {
                     DialogResult dialogResult = MessageBox.Show("El numero " + winner.ToString() + " ya tiene estas coordenadas, actualiza?", "Distancia y Angulo asignados ya al numero " + winner.ToString(), MessageBoxButtons.YesNo);
@@ -1031,13 +914,9 @@ namespace VideoRecolector
                     }
                 }
 
-                NumbersByDistAngle[num, 0] = this.averageDist;
-                NumbersByDistAngle[num, 1] = this.averageAngle;
+                winfinder.SetNumberCoordinates(num, this.averageX, this.averageY, this.averageDist, this.averageAngle);
+                winfinder.WriteNumbersTable();
 
-                NumbersByXY[num, 0] = this.averageX;
-                NumbersByXY[num, 1] = this.averageY;
-
-                WriteNumbersTable();
                 if (chkbNumbers[index].CheckState != CheckState.Checked)
                 {
                     chkbNumbers[index].CheckState = CheckState.Checked;
@@ -1132,11 +1011,11 @@ namespace VideoRecolector
             {
                 int num = int.Parse(this.comboBox1.SelectedItem.ToString());
 
-                this.lblAvgDist.Text = NumbersByDistAngle[num, 0].ToString();
-                this.lblAvgAngle.Text = NumbersByDistAngle[num, 1].ToString();
+                this.lblAvgDist.Text = winfinder.GetDistance(num).ToString();
+                this.lblAvgAngle.Text = winfinder.GetAngle(num).ToString();
 
-                this.lblAvgX.Text = this.NumbersByXY[num, 0].ToString();
-                this.lblAvgY.Text = this.NumbersByXY[num, 1].ToString();
+                this.lblAvgX.Text = winfinder.GetNumberX(num).ToString();
+                this.lblAvgY.Text = winfinder.GetNumberY(num).ToString();
             }
         }
 
@@ -1151,7 +1030,7 @@ namespace VideoRecolector
 
         private void btnSaveCSV_Click(object sender, EventArgs e)
         {
-            SaveCSV();
+            winfinder.SaveCSV();
         }
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
@@ -1241,54 +1120,5 @@ namespace VideoRecolector
             }
         }
 
-        private void ReadNumbersTable()
-        {
-            // Read numbers data for distance and angle detection
-            using (var stream = new StreamReader(@"./dataDA.json"))
-            {
-                this.NumbersByDistAngle = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
-            }
-            // Read numbers' data for ball's X & Y detection
-            using (var stream = new StreamReader(@"./dataXY.json"))
-            {
-                this.NumbersByXY = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
-            }
-        }
-
-        private void WriteNumbersTable()
-        {
-            // write the data (overwrites) distance and angle detection data
-            using (var stream = new StreamWriter(@"./dataDA.json", append: false))
-            {
-                stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
-                stream.Flush();
-            }
-            // write the data (overwrites) X & Y detection data
-            using (var stream = new StreamWriter(@"./dataXY.json", append: false))
-            {
-                stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
-                stream.Flush();
-            }
-
-        }
-
-        void SaveCSV()
-        {
-            using (var w = new StreamWriter(@"./dataDA.csv", append: false))
-            {
-                for (int i = 0; i < 37; i++)
-                {
-                    var first = NumbersByDistAngle[i, 0];
-                    var second = NumbersByDistAngle[i, 1];
-                    var third = NumbersByXY[i, 0];
-                    var fourth = NumbersByXY[i, 1];
-                    string line = string.Format("{0},{1},{2},{3},{4}", first, second, third, fourth, i);
-                    w.WriteLine(line);
-                }
-                w.Flush();
-                MessageBox.Show("Archivo CSV generado");
-            }
-
-        }
     }
 }
