@@ -201,13 +201,24 @@ namespace VideoRecolector
         private void tmrMain_Tick(object sender, EventArgs e)
         {
             int winner = -1;
-            int framesReceived = videoSourcePlayer1.VideoSource.FramesReceived;
-            this.lblTimingValue.Text = framesReceived.ToString();
-            this.lblEventCalls.Text = string.Format($"{this._callCounter}-{this._zeroesCounter}-{this._zeroAtNoonCounter}");
+            this._timerTicks++;
+            if (this._timerTicks > 1)
+            {
+                this._timerTicks = 0;
+                int framesReceived = videoSourcePlayer1.VideoSource.FramesReceived;
+                //if (this._rpmCounter > 0)
+                //{
+                //    // 1 min = 60000 msec => 60000 msec / 40 msec = 1500
+                //    this._rpm = 600 / this._rpmCounter;
+                //    this._rpmCounter = 0;
+                //}
+                //    this.lblTimingValue.Text = framesReceived.ToString();
+                //    this.lblEventCalls.Text = string.Format($"{this._callCounter}-{this._zeroesCounter}-{this._zeroAtNoonCounter}");
 
-            this._callCounter = 0;
-            this._zeroesCounter = 0;
-            this._zeroAtNoonCounter = 0;
+                this._callCounter = 0;
+                this._zeroesCounter = 0;
+                this._zeroAtNoonCounter = 0;
+            }
 
             this.estadoMesa = juego.GetGameState(this._rpm, this.IsCameraOn, this.bDebouncedBallFound);
             if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.WINNING_NUMBER)
@@ -674,6 +685,7 @@ namespace VideoRecolector
             this.label16.Size = new System.Drawing.Size(53, 13);
             this.label16.TabIndex = 137;
             this.label16.Text = "C -  Z -  N";
+            this.label16.Visible = false;
             // 
             // lblEventCalls
             // 
@@ -685,6 +697,7 @@ namespace VideoRecolector
             this.lblEventCalls.Size = new System.Drawing.Size(65, 15);
             this.lblEventCalls.TabIndex = 136;
             this.lblEventCalls.Text = "00-00-00";
+            this.lblEventCalls.Visible = false;
             // 
             // chkbGuardarLog
             // 
@@ -739,6 +752,7 @@ namespace VideoRecolector
             this.lblTiming.Size = new System.Drawing.Size(74, 13);
             this.lblTiming.TabIndex = 132;
             this.lblTiming.Text = "Frames (12.5):";
+            this.lblTiming.Visible = false;
             // 
             // lblTimingValue
             // 
@@ -750,6 +764,7 @@ namespace VideoRecolector
             this.lblTimingValue.Size = new System.Drawing.Size(22, 15);
             this.lblTimingValue.TabIndex = 131;
             this.lblTimingValue.Text = "---";
+            this.lblTimingValue.Visible = false;
             // 
             // lblVideoStatus
             // 

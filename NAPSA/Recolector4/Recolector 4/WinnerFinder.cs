@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,10 @@ namespace VideoRecolector
 {
     class WinnerFinder
     {
+        
+        // Winner number variables
+        int winnerDA = -1;
+        int winnerXY = -1;
 
         public WinnerFinder()
         {
@@ -91,11 +96,12 @@ namespace VideoRecolector
         {
 
             int winner = -1;
-            // Angle range at 0 is awkard
-            if (angle != 0)
+
+            // Angle range at 0 and at 359 are awkard
+            if (angle != 0 && angle != 359)
             {
-                int min_angle = ((angle - DIFF_ANGLE) + 360) % 360;
-                int max_angle = ((angle + DIFF_ANGLE) + 360) % 360;
+                int min_angle = (angle - DIFF_ANGLE);
+                int max_angle = (angle + DIFF_ANGLE);
 
                 // For some reason, Atan2() is 0 when it shouldn't probably
                 for (int i = 0; i < 37; i++)
@@ -112,7 +118,6 @@ namespace VideoRecolector
                         }
                     }
                 }
-
             }
 
             return winner;
@@ -140,6 +145,61 @@ namespace VideoRecolector
             }
 
             return winner;
+        }
+ 
+        public int FindWinnerNumber(Point ZeroPosToCenter, int ZeroAngleToCenter, Point BallPosToCenter, int BallAngleToCenter, JuegoRuleta juego)
+        {
+            int winner = -1;
+
+            winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
+            if (winnerXY != -1)
+            {
+                juego.SetNewWinnerNumber(winnerXY);
+            }
+
+            int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
+            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - 90);
+
+            if (CorrectedAngleToCenter < 0)
+                CorrectedAngleToCenter = 359;
+
+            if (CorrectedAngleToCenter > 359)
+                CorrectedAngleToCenter = 0;
+
+            winnerDA = FindNumberByAngle(DistanceZeroBall, CorrectedAngleToCenter);
+            if (winnerDA != -1)
+            {
+                juego.SetNewWinnerNumber(winnerDA);
+            }
+
+            if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
+            {
+                winner = winnerDA;
+                juego.SetNewWinnerNumber(winner);
+            }
+
+            return winner;
+        }
+
+        public void FindWinnerNumber(Point ZeroPosToCenter, int ZeroAngleToCenter, Point BallPosToCenter, int BallAngleToCenter, ref int winner)
+        {
+            winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
+
+            int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
+            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - 90);
+
+            if (CorrectedAngleToCenter < 0)
+                CorrectedAngleToCenter = 359;
+
+            if (CorrectedAngleToCenter > 359)
+                CorrectedAngleToCenter = 0;
+
+            winnerDA = FindNumberByAngle(DistanceZeroBall, CorrectedAngleToCenter);
+
+            if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
+            {
+                winner = winnerDA;
+            }
         }
 
         public void SetNumberCoordinates(int num, int x, int y, int distance, int angle)
