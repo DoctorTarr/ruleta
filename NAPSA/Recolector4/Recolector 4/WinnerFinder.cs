@@ -32,7 +32,11 @@ namespace VideoRecolector
         */
         public int GetAngleOfPointToZero(System.Drawing.Point p)
         {
-            return (int)(Math.Round(Math.Atan2(p.Y, p.X) * radian) + 360) % 360;
+            double angle = Math.Round(Math.Atan2(p.Y, p.X) * radian) % 360.0;
+            if (angle < 0.0)
+                angle = angle + 360.0;
+
+            return (int)angle;
         }
 
 
