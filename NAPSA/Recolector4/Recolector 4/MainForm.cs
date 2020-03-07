@@ -337,7 +337,7 @@ namespace VideoRecolector
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
 
             Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
-            Pen _penviolet = new Pen(Color.Black, ipenWidth);
+            Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+6);
             Pen _penred = new Pen(Color.Red, ipenWidth);
             Pen _penblue = new Pen(Color.Blue, ipenWidth);
 
@@ -350,7 +350,7 @@ namespace VideoRecolector
             _g.DrawEllipse(_penred, _ballPocketsArea);
             _g.DrawRectangle(_penred, _centerPoint.X, _centerPoint.Y, 1, 1);
 
-            _g.DrawRectangle(_penblue, _zeroNumberArea);
+            _g.DrawRectangle(_pengreen, _zeroNumberArea);
         }
 
         #region app config access
@@ -420,7 +420,7 @@ namespace VideoRecolector
 
             // Base ruleta sin aro negro - radius 164 color red
             _bowlArea = new Rectangle(160, 93, 307, 307);
-            _numbersArea = new Rectangle(217, 150, 196, 196);
+            _numbersArea = new Rectangle(214, 150, 200, 200);
             _ballPocketsArea = new Rectangle(238, 171, 154, 154);
             _centerArea = new Rectangle(266, 198, 100, 100);
             _centerPoint = _centerArea.Center();
@@ -432,6 +432,8 @@ namespace VideoRecolector
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
                 graph.FillRectangle(Brushes.White, ImageSize);
                 graph.FillEllipse(Brushes.Black, _bowlArea);
+                //Pen _penwhite = new Pen(Color.White, 12);
+                //graph.DrawEllipse(_penwhite, _numbersArea);
                 graph.FillEllipse(Brushes.White, _centerArea);
             }
 
@@ -487,18 +489,29 @@ namespace VideoRecolector
 
         private void CalculateRPM()
         {
-            if (this._lastRpmCounter != 0)
+            if (bZeroFoundAt12)
             {
-                float delta = (float)_rpmCounter / (float)_lastRpmCounter;
-                if (delta > 2)
-                    _rpmCounter /= (int)delta;
+                this._zeroAtNoonCounter++;
+                if (_rpmCounter > 0)
+                {
+                    if (this._lastRpmCounter != 0)
+                    {
+                        float delta = (float)_rpmCounter / (float)_lastRpmCounter;
+                        if (delta > 2)
+                            _rpmCounter /= (int)delta;
+                    }
+                    // 1 min = 60000 msec => 60000 msec / 40 msec = 1500
+                    this._rpm = 1500 / this._rpmCounter;
+                    if (_rpm > 60)
+                        _rpm = 60;
+                    _lastRpmCounter = _rpmCounter;
+                    this._rpmCounter = 0;
+                }
             }
-            // 1 min = 60000 msec => 60000 msec / 40 msec = 1500
-            this._rpm = 1500 / this._rpmCounter;
-            if (_rpm > 60)
-                _rpm = 60;
-            _lastRpmCounter = _rpmCounter;
-            this._rpmCounter = 0;
+            else
+            {
+                this._rpmCounter++;
+            }
         }
 
         private void get_Frame(object sender, NewFrameEventArgs args)
@@ -531,27 +544,18 @@ namespace VideoRecolector
                     if (this.bZeroFound)
                     {
                         this._zeroesCounter++;
-
-                        if (bZeroFoundAt12)
-                        {
-                            this._zeroAtNoonCounter++;
-                            if (this._rpmCounter > 0)
-                            {
-                                CalculateRPM();
-                            }
-                        }
-                        else
-                        {
-                            this._rpmCounter++;
-                        }
+                        CalculateRPM();
                     }
                 }
 
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
                 DebounceBallInSlot();
-                if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
+                if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS)
                 {
-                    winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, juego);
+                    if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
+                    {
+                        winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, juego);
+                    }
                 }
 
                 args.Frame = _BsourceFrame;
@@ -563,34 +567,6 @@ namespace VideoRecolector
                 //}
                 //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
             }
-        }
-
-        private void DisplayValues()
-        {
-            int winner = -1;
-            if (_ZeroAngleToCenter != 720)
-            {
-                this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
-                this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
-                this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
-            }
-
-            if (_BallAngleToCenter != 720)
-            {
-                this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
-                this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
-                this.lblBallPosAngle.Text = _BallAngleToCenter.ToString();
-            }
-
-            if ((_ZeroAngleToCenter != 720) && (_BallAngleToCenter != 720))
-            {
-                _DistanceZeroBall = winfinder.FindDistance(ZeroPosToCenter, BallPosToCenter);
-                this.lblDistZeroBall.Text = _DistanceZeroBall.ToString();
-
-                winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, ref winner);
-            }
-
-            lblFound.Text = winner != -1 ? winner.ToString() : "---";
         }
 
         private void get_Frame_Calibration(object sender, NewFrameEventArgs args)
@@ -630,22 +606,7 @@ namespace VideoRecolector
                     if (this.bZeroFound)
                     {
                         this._zeroesCounter++;
-
-                        if (bZeroFoundAt12)
-                        {
-                            this._zeroAtNoonCounter++;
-                            if (this._rpmCounter > 0)
-                            {
-                                if (this._rpmCounter > 0)
-                                {
-                                    CalculateRPM();
-                                }
-                            }
-                        }
-                        else
-                        {
-                            this._rpmCounter++;
-                        }
+                        CalculateRPM();
                     }
                 }
 
@@ -679,6 +640,35 @@ namespace VideoRecolector
                 }
             }
         }
+
+        private void DisplayValues()
+        {
+            int winner = -1;
+            if (_ZeroAngleToCenter != 720)
+            {
+                this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
+                this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+            }
+
+            if (_BallAngleToCenter != 720)
+            {
+                this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
+                this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
+                this.lblBallPosAngle.Text = _BallAngleToCenter.ToString();
+            }
+
+            if ((_ZeroAngleToCenter != 720) && (_BallAngleToCenter != 720))
+            {
+                _DistanceZeroBall = winfinder.FindDistance(ZeroPosToCenter, BallPosToCenter);
+                this.lblDistZeroBall.Text = _DistanceZeroBall.ToString();
+
+                winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, ref winner);
+            }
+
+            lblFound.Text = winner != -1 ? winner.ToString() : "---";
+        }
+
 
         //For blob recognition, there is a demo application which you will find after you download all the source code.
         //Adding features to it was easy.Typically, you would need to perform some other transformations to the image 
