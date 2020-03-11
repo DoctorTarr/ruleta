@@ -432,8 +432,9 @@ namespace VideoRecolector
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
                 graph.FillRectangle(Brushes.White, ImageSize);
                 graph.FillEllipse(Brushes.Black, _bowlArea);
-                //Pen _penwhite = new Pen(Color.White, 12);
-                //graph.DrawEllipse(_penwhite, _numbersArea);
+                Pen _penwhite = new Pen(Color.White, 6);
+                //graph.DrawEllipse(_penwhite, _ballPocketsArea);
+                //graph.DrawLine(_penwhite, _centerArea.X, _centerArea.Y, _centerArea.X + 50, _centerArea.Y + 50);
                 graph.FillEllipse(Brushes.White, _centerArea);
             }
 
@@ -528,6 +529,8 @@ namespace VideoRecolector
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
+                //Difference _subtractFilter = new Difference(subtractImage);
+                //_subtractFilter.ApplyInPlace(_BsourceFrame);
 
                 // Detect movement
                 this.movePercentage = detector.ProcessFrame(_BsourceFrame);
@@ -622,13 +625,6 @@ namespace VideoRecolector
                     AcumulateCalibration();
                 }
 
-                //stopWatch.Stop();
-
-                //if (stopWatch.ElapsedMilliseconds > 40)
-                //{
-                //    MessageBox.Show($"Exceeded: {stopWatch.ElapsedMilliseconds.ToString()}");
-                //}
-                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
                 if (IsCalibratingCamera)
                 {
                     CalibrateCamera(_BsourceFrame);
@@ -638,20 +634,27 @@ namespace VideoRecolector
                 {
                     DisplayValues();
                 }
+                //stopWatch.Stop();
+
+                //if (stopWatch.ElapsedMilliseconds > 40)
+                //{
+                //    MessageBox.Show($"Exceeded: {stopWatch.ElapsedMilliseconds.ToString()}");
+                //}
+                //lblZeroBlobDetectionTime.Text = stopWatch.ElapsedMilliseconds.ToString();
             }
         }
 
         private void DisplayValues()
         {
             int winner = -1;
-            if (_ZeroAngleToCenter != 720)
+            if (this.bZeroFound)
             {
                 this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
                 this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
                 this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
             }
 
-            if (_BallAngleToCenter != 720)
+            if (this.bBallFound)
             {
                 this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
                 this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
@@ -826,27 +829,26 @@ namespace VideoRecolector
 
             
             this.countCalibrationSamples = 0;
-            this.CalibrationInProgress = true;
             this.capturedFrame = null;
+            this.CalibrationInProgress = true;
+
 
         }
 
         private void AcumulateCalibration()
         {
-            this.countCalibrationSamples++;
-            lblTestCount.Text = this.countCalibrationSamples.ToString();
 
-            countDistance++;
-            acumDist += this._DistanceZeroBall;
-
-            if (this._BallAngleToCenter != 720)
+            if (this.bBallFound)
             {
+                this.countCalibrationSamples++;
+                lblTestCount.Text = this.countCalibrationSamples.ToString();
+
+                countDistance++;
+                acumDist += this._DistanceZeroBall;
+
                 acumAngle += this._BallAngleToCenter;
                 countAngle++;
-            }
 
-            if (BallPosToCenter.X != 720)
-            {
                 this.countX++;
                 this.acumX += BallPosToCenter.X;
                 this.countY++;
@@ -867,6 +869,18 @@ namespace VideoRecolector
 
                     this.averageY = this.acumY / this.countY;
                     this.lblAvgY.Text = this.averageY.ToString();
+
+                    if (this.bZeroFound)
+                    {
+                        winfinder.SetZeroCoordinates(ZeroPosToCenter.X, ZeroPosToCenter.Y, this._ZeroAngleToCenter);
+                    }
+                    else
+                    {
+                        int x = Int32.Parse(lblZeroPosX.Text);
+                        int y = Int32.Parse(lblZeroPosY.Text);
+                        int angle = Int32.Parse(lblZeroPosAngle.Text);
+                        winfinder.SetZeroCoordinates(x, y, angle);
+                    }
 
                     this.CalibrationInProgress = false;
                 }
@@ -916,7 +930,9 @@ namespace VideoRecolector
                     this.numCalibrated++;
                     lblChkCount.Text = this.numCalibrated.ToString();
                 }
-                MessageBox.Show("Numero " + num.ToString() + " actualizado", "Número Calibrado");
+
+                MessageBox.Show($"Numero {num} actualizado:\nX: {this.averageX}\n Y:{this.averageY}\nA:{this.averageAngle}\nD:{this.averageDist}", "Número Calibrado");
+
                 if (this.comboBox1.SelectedIndex < this.comboBox1.Items.Count - 1)
                 {
                     this.comboBox1.SelectedIndex = this.comboBox1.SelectedIndex + 1;

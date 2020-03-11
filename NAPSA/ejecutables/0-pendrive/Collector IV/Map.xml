@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-03-06T20:50:44</timestamp>
+        <timestamp>2020-03-11T05:37:16</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -6671,6 +6671,11 @@
                         <newname>a</newname>
                     </method>
                     <method>
+                        <signature>void(int32, int32, int32)</signature>
+                        <name>SetZeroCoordinates</name>
+                        <newname>a</newname>
+                    </method>
+                    <method>
                         <signature>void()</signature>
                         <name>WriteNumbersTable</name>
                         <newname>b</newname>
@@ -6680,27 +6685,27 @@
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_ANGLE</name>
-                        <newname>h</newname>
+                        <newname>i</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_DIST</name>
-                        <newname>g</newname>
+                        <newname>h</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_XY</name>
-                        <newname>i</newname>
+                        <newname>j</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
                         <name>NumbersByDistAngle</name>
-                        <newname>d</newname>
+                        <newname>e</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
                         <name>NumbersByXY</name>
-                        <newname>e</newname>
+                        <newname>f</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
@@ -6708,9 +6713,14 @@
                         <newname>c</newname>
                     </field>
                     <field>
+                        <signature>int32[]</signature>
+                        <name>ZeroPosition</name>
+                        <newname>d</newname>
+                    </field>
+                    <field>
                         <signature>float64</signature>
                         <name>radian</name>
-                        <newname>f</newname>
+                        <newname>g</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
@@ -6735,11 +6745,11 @@
         </statisticline>
         <statisticline>
             <description>Total Methods</description>
-            <statistic>712</statistic>
+            <statistic>713</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields</description>
-            <statistic>483</statistic>
+            <statistic>484</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties</description>
@@ -6756,13 +6766,13 @@
         </statisticline>
         <statisticline>
             <description>Total Methods Renamed</description>
-            <statistic>163</statistic>
-            <statistic>22.89 %</statistic>
+            <statistic>164</statistic>
+            <statistic>23.00 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields Renamed</description>
-            <statistic>319</statistic>
-            <statistic>66.05 %</statistic>
+            <statistic>320</statistic>
+            <statistic>66.12 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties Renamed</description>
@@ -6776,8 +6786,8 @@
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'a'</description>
-            <statistic>50</statistic>
-            <statistic>7.02 %</statistic>
+            <statistic>51</statistic>
+            <statistic>7.15 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'b'</description>

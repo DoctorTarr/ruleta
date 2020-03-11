@@ -85,6 +85,9 @@ namespace VideoRecolector
         //Triple-zero wheel 
         //0-000-00-32-15-19-4-21-2-25-17-34-6-27-13-36-11-30-8-23-10-5-24-16-33-1-20-14-31-9-22-18-29-7-28-12-35-3-26
 
+        // Zero location [0] = X, [1] = Y, [2] = AngleToZero
+        private int[] ZeroPosition;
+
         // Numbers by Angle
         private int[,] NumbersByDistAngle;
 
@@ -162,7 +165,7 @@ namespace VideoRecolector
             }
 
             int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - 90);
+            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
 
             if (CorrectedAngleToCenter < 0)
                 CorrectedAngleToCenter = 359;
@@ -190,7 +193,7 @@ namespace VideoRecolector
             winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
 
             int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - 90);
+            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
 
             if (CorrectedAngleToCenter < 0)
                 CorrectedAngleToCenter = 359;
@@ -204,6 +207,13 @@ namespace VideoRecolector
             {
                 winner = winnerDA;
             }
+        }
+
+        public void SetZeroCoordinates(int x, int y, int angle)
+        {
+            ZeroPosition[0] = x;
+            ZeroPosition[1] = y;
+            ZeroPosition[2] = angle;
         }
 
         public void SetNumberCoordinates(int num, int x, int y, int distance, int angle)
@@ -237,6 +247,11 @@ namespace VideoRecolector
 
         private void ReadNumbersTable()
         {
+            // Read Zero's X, Y and Angle to Center data
+            using (var stream = new StreamReader(@"./dataZE.json"))
+            {
+                this.ZeroPosition = JsonConvert.DeserializeObject<int[]>(stream.ReadToEnd());
+            }
             // Read numbers data for distance and angle detection
             using (var stream = new StreamReader(@"./dataDA.json"))
             {
@@ -251,6 +266,12 @@ namespace VideoRecolector
 
         public void WriteNumbersTable()
         {
+            // write the data (overwrites) for Zero's X, Y and Angle to Center 
+            using (var stream = new StreamWriter(@"./dataZE.json", append: false))
+            {
+                stream.Write(JsonConvert.SerializeObject(this.ZeroPosition));
+                stream.Flush();
+            }
             // write the data (overwrites) distance and angle detection data
             using (var stream = new StreamWriter(@"./dataDA.json", append: false))
             {
