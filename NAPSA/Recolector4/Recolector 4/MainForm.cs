@@ -269,10 +269,14 @@ namespace VideoRecolector
                 lblDisplayWinner.Text = "";
                 lblDisplayWinner.ForeColor = Color.Black;
                 lblEstadoRuleta.Text = "";
-                lblBolaPosX.Text = "";
-                lblBolaPosY.Text = "";
-                lblZeroPosX.Text = "";
-                lblZeroPosY.Text = "";
+                lblBolaPosX.Text = "---";
+                lblBolaPosY.Text = "---";
+                lblZeroPosX.Text = "---";
+                lblZeroPosY.Text = "---";
+                lblBallAbsX.Text = "---";
+                lblBallAbsY.Text = "---";
+                lblZeroAbsX.Text = "---";
+                lblZeroAbsY.Text = "---";
                 lblBallOn.Text = "";
                 this.bDebouncedBallFound = false;
                 this.bBallStateChanged = true;
@@ -337,12 +341,13 @@ namespace VideoRecolector
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
 
             Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
+            Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
             Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+6);
             Pen _penred = new Pen(Color.Red, ipenWidth);
             Pen _penblue = new Pen(Color.Blue, ipenWidth);
 
             // Cilindro -incluye numeros - radius 204 color red
-            _g.DrawEllipse(_pengreen, _bowlArea);
+            _g.DrawEllipse(_penyellow, _bowlArea);
 
             _g.DrawEllipse(_penviolet, _numbersArea);
 
@@ -446,18 +451,17 @@ namespace VideoRecolector
             }
             this.comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             this.comboBox1.SelectedIndex = this.comboBox1.FindStringExact("0");
-
-
         }
 
+
         const int CHECK_MSEC = 40; // Read hardware every 5 msec
-        const int BALL_FOUND_MSEC = 1 * 25 *CHECK_MSEC; // Stable time before registering pressed
-        const int BALL_NOT_FOUND_MSEC = 2 * 25 * CHECK_MSEC; // Stable time before registering released
+        const int BALL_FOUND_MSEC = 2 * 25 * CHECK_MSEC; // Stable time before registering pressed
+        const int BALL_NOT_FOUND_MSEC = 4 * 25 * CHECK_MSEC; // Stable time before registering released
 
         // This function reads the key state from the hardware.
         bool RawBallFound()
         {
-            return (_ballPocketsArea.Contains(BallPos) && bBallFound);
+            return (_ballPocketsArea.Contains(BallPos));
         }
 
 
@@ -587,6 +591,10 @@ namespace VideoRecolector
                 _BsourceFrame = _resizeFilter.Apply(_BsourceFrame); // new Bitmap(args.Frame, _pbSize);
                 Subtract _subtractFilter = new Subtract(subtractImage);
                 _subtractFilter.ApplyInPlace(_BsourceFrame);
+                if (IsCalibratingCamera)
+                {
+                    CalibrateCamera(_BsourceFrame);
+                }
 
                 if (this.CalibrationInProgress)
                 {
@@ -625,10 +633,6 @@ namespace VideoRecolector
                     AcumulateCalibration();
                 }
 
-                if (IsCalibratingCamera)
-                {
-                    CalibrateCamera(_BsourceFrame);
-                }
                 args.Frame = _BsourceFrame;
                 if (bShowText)
                 {
@@ -652,6 +656,8 @@ namespace VideoRecolector
                 this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
                 this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
                 this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
+                this.lblZeroAbsX.Text = ZeroPos.X.ToString();
+                this.lblZeroAbsY.Text = ZeroPos.Y.ToString();
             }
 
             if (this.bBallFound)
@@ -659,6 +665,8 @@ namespace VideoRecolector
                 this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
                 this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
                 this.lblBallPosAngle.Text = _BallAngleToCenter.ToString();
+                this.lblBallAbsX.Text = BallPos.X.ToString();
+                this.lblBallAbsY.Text = BallPos.Y.ToString();
             }
 
             if ((_ZeroAngleToCenter != 720) && (_BallAngleToCenter != 720))

@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-03-11T05:37:16</timestamp>
+        <timestamp>2020-03-12T05:58:10</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -6209,8 +6209,28 @@
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
+                        <name>label27</name>
+                        <newname>dq</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label28</name>
+                        <newname>dr</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label29</name>
+                        <newname>du</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
                         <name>label3</name>
                         <newname>bn</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>label30</name>
+                        <newname>dv</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
@@ -6281,6 +6301,16 @@
                         <signature>System.Windows.Forms.Label</signature>
                         <name>lblAvgY</name>
                         <newname>ci</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBallAbsX</name>
+                        <newname>dt</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblBallAbsY</name>
+                        <newname>ds</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
@@ -6366,6 +6396,16 @@
                         <signature>System.Windows.Forms.Label</signature>
                         <name>lblWinCount</name>
                         <newname>ct</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblZeroAbsX</name>
+                        <newname>dp</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Label</signature>
+                        <name>lblZeroAbsY</name>
+                        <newname>dn</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Label</signature>
@@ -6749,7 +6789,7 @@
         </statisticline>
         <statisticline>
             <description>Total Fields</description>
-            <statistic>484</statistic>
+            <statistic>492</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties</description>
@@ -6771,8 +6811,8 @@
         </statisticline>
         <statisticline>
             <description>Total Fields Renamed</description>
-            <statistic>320</statistic>
-            <statistic>66.12 %</statistic>
+            <statistic>328</statistic>
+            <statistic>66.67 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties Renamed</description>
