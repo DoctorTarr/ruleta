@@ -397,6 +397,7 @@ namespace VideoRecolector
             this.pbZero = new System.Windows.Forms.PictureBox();
             this.videoSourcePlayer1 = new Accord.Controls.VideoSourcePlayer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnSavePNG = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.lblEventCalls = new System.Windows.Forms.Label();
             this.chkbGuardarLog = new System.Windows.Forms.CheckBox();
@@ -584,7 +585,7 @@ namespace VideoRecolector
             this.lblBallPosAngle.AutoSize = true;
             this.lblBallPosAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBallPosAngle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblBallPosAngle.Location = new System.Drawing.Point(450, 17);
+            this.lblBallPosAngle.Location = new System.Drawing.Point(439, 17);
             this.lblBallPosAngle.Name = "lblBallPosAngle";
             this.lblBallPosAngle.Size = new System.Drawing.Size(22, 15);
             this.lblBallPosAngle.TabIndex = 53;
@@ -596,16 +597,16 @@ namespace VideoRecolector
             this.label25.ForeColor = System.Drawing.SystemColors.WindowText;
             this.label25.Location = new System.Drawing.Point(423, 19);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(29, 13);
+            this.label25.Size = new System.Drawing.Size(17, 13);
             this.label25.TabIndex = 52;
-            this.label25.Text = "Ang:";
+            this.label25.Text = "A:";
             // 
             // lblDistZeroBall
             // 
             this.lblDistZeroBall.AutoSize = true;
             this.lblDistZeroBall.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDistZeroBall.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblDistZeroBall.Location = new System.Drawing.Point(500, 17);
+            this.lblDistZeroBall.Location = new System.Drawing.Point(482, 17);
             this.lblDistZeroBall.Name = "lblDistZeroBall";
             this.lblDistZeroBall.Size = new System.Drawing.Size(22, 15);
             this.lblDistZeroBall.TabIndex = 51;
@@ -615,11 +616,11 @@ namespace VideoRecolector
             // 
             this.label20.AutoSize = true;
             this.label20.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label20.Location = new System.Drawing.Point(477, 19);
+            this.label20.Location = new System.Drawing.Point(468, 19);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(28, 13);
+            this.label20.Size = new System.Drawing.Size(18, 13);
             this.label20.TabIndex = 50;
-            this.label20.Text = "Al 0:";
+            this.label20.Text = "D:";
             // 
             // lblBolaPosY
             // 
@@ -777,6 +778,7 @@ namespace VideoRecolector
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnSavePNG);
             this.groupBox3.Controls.Add(this.label16);
             this.groupBox3.Controls.Add(this.lblEventCalls);
             this.groupBox3.Controls.Add(this.chkbGuardarLog);
@@ -807,6 +809,17 @@ namespace VideoRecolector
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cámara en Vivo";
+            // 
+            // btnSavePNG
+            // 
+            this.btnSavePNG.Location = new System.Drawing.Point(489, 459);
+            this.btnSavePNG.Name = "btnSavePNG";
+            this.btnSavePNG.Size = new System.Drawing.Size(100, 23);
+            this.btnSavePNG.TabIndex = 138;
+            this.btnSavePNG.Text = "Guardar PNG";
+            this.btnSavePNG.UseVisualStyleBackColor = true;
+            this.btnSavePNG.Visible = false;
+            this.btnSavePNG.Click += new System.EventHandler(this.btnSavePNG_Click);
             // 
             // label16
             // 
@@ -1271,7 +1284,7 @@ namespace VideoRecolector
             this.lblAvgY.AutoSize = true;
             this.lblAvgY.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgY.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAvgY.Location = new System.Drawing.Point(25, 93);
+            this.lblAvgY.Location = new System.Drawing.Point(21, 93);
             this.lblAvgY.Name = "lblAvgY";
             this.lblAvgY.Size = new System.Drawing.Size(19, 13);
             this.lblAvgY.TabIndex = 124;
@@ -1283,7 +1296,7 @@ namespace VideoRecolector
             this.lblAvgX.AutoSize = true;
             this.lblAvgX.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgX.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAvgX.Location = new System.Drawing.Point(25, 81);
+            this.lblAvgX.Location = new System.Drawing.Point(21, 81);
             this.lblAvgX.Name = "lblAvgX";
             this.lblAvgX.Size = new System.Drawing.Size(19, 13);
             this.lblAvgX.TabIndex = 123;
@@ -1315,7 +1328,7 @@ namespace VideoRecolector
             this.lblAvgAngle.AutoSize = true;
             this.lblAvgAngle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgAngle.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAvgAngle.Location = new System.Drawing.Point(25, 106);
+            this.lblAvgAngle.Location = new System.Drawing.Point(21, 106);
             this.lblAvgAngle.Name = "lblAvgAngle";
             this.lblAvgAngle.Size = new System.Drawing.Size(19, 13);
             this.lblAvgAngle.TabIndex = 120;
@@ -1327,7 +1340,7 @@ namespace VideoRecolector
             this.lblAvgDist.AutoSize = true;
             this.lblAvgDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAvgDist.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblAvgDist.Location = new System.Drawing.Point(25, 120);
+            this.lblAvgDist.Location = new System.Drawing.Point(21, 120);
             this.lblAvgDist.Name = "lblAvgDist";
             this.lblAvgDist.Size = new System.Drawing.Size(19, 13);
             this.lblAvgDist.TabIndex = 119;
@@ -1518,6 +1531,7 @@ namespace VideoRecolector
         private Label lblBallAbsX;
         private Label label29;
         private Label label30;
+        private Button btnSavePNG;
     }
 }
 

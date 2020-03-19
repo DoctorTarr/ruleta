@@ -985,6 +985,7 @@ namespace VideoRecolector
                 ShowNumbersCheckBox();
                 this.pnlCalibration.Visible = true;
                 this.btnSaveCSV.Visible = true;
+                this.btnSavePNG.Visible = true;
                 radioButton1.PerformClick();
                 btnUpdateRGB.Visible = true;
                 btnUpdateRGB.Enabled = true;
@@ -997,6 +998,7 @@ namespace VideoRecolector
             {
                 this.pnlCalibration.Visible = false;
                 this.btnSaveCSV.Visible = false;
+                this.btnSavePNG.Visible = false;
                 btnUpdateRGB.Visible = false;
                 btnUpdateRGB.Enabled = false;
                 //lblTiming.Visible = false;
@@ -1102,6 +1104,13 @@ namespace VideoRecolector
         private void numUpDownGreen_ValueChanged(object sender, EventArgs e)
         {
             //UpdateColorFilter();
+        }
+
+        private void btnSavePNG_Click(object sender, EventArgs e)
+        {
+            Bitmap frame = videoSourcePlayer1.GetCurrentVideoFrame();
+            frame.Save(Common.Parametros.LogRuta + @"./frame_00.png", ImageFormat.Png);
+            MessageBox.Show("PNG Guardado");
         }
 
         private void numUpDownBlue_ValueChanged(object sender, EventArgs e)

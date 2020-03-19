@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DASYS.Recolector.BLL;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -248,17 +249,17 @@ namespace VideoRecolector
         private void ReadNumbersTable()
         {
             // Read Zero's X, Y and Angle to Center data
-            using (var stream = new StreamReader(@"./dataZE.json"))
+            using (var stream = new StreamReader(Common.Parametros.LogRuta + @"./dataZE.json"))
             {
                 this.ZeroPosition = JsonConvert.DeserializeObject<int[]>(stream.ReadToEnd());
             }
             // Read numbers data for distance and angle detection
-            using (var stream = new StreamReader(@"./dataDA.json"))
+            using (var stream = new StreamReader(Common.Parametros.LogRuta + @"./dataDA.json"))
             {
                 this.NumbersByDistAngle = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
             }
             // Read numbers' data for ball's X & Y detection
-            using (var stream = new StreamReader(@"./dataXY.json"))
+            using (var stream = new StreamReader(Common.Parametros.LogRuta + @"./dataXY.json"))
             {
                 this.NumbersByXY = JsonConvert.DeserializeObject<int[,]>(stream.ReadToEnd());
             }
@@ -267,19 +268,19 @@ namespace VideoRecolector
         public void WriteNumbersTable()
         {
             // write the data (overwrites) for Zero's X, Y and Angle to Center 
-            using (var stream = new StreamWriter(@"./dataZE.json", append: false))
+            using (var stream = new StreamWriter(Common.Parametros.LogRuta + @"./dataZE.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.ZeroPosition));
                 stream.Flush();
             }
             // write the data (overwrites) distance and angle detection data
-            using (var stream = new StreamWriter(@"./dataDA.json", append: false))
+            using (var stream = new StreamWriter(Common.Parametros.LogRuta + @"./dataDA.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.NumbersByDistAngle));
                 stream.Flush();
             }
             // write the data (overwrites) X & Y detection data
-            using (var stream = new StreamWriter(@"./dataXY.json", append: false))
+            using (var stream = new StreamWriter(Common.Parametros.LogRuta + @"./dataXY.json", append: false))
             {
                 stream.Write(JsonConvert.SerializeObject(this.NumbersByXY));
                 stream.Flush();
@@ -289,7 +290,7 @@ namespace VideoRecolector
 
         public void SaveCSV()
         {
-            using (var w = new StreamWriter(@"./dataDA.csv", append: false))
+            using (var w = new StreamWriter(Common.Parametros.LogRuta + @"./dataDA.csv", append: false))
             {
                 for (int i = 0; i < 37; i++)
                 {
