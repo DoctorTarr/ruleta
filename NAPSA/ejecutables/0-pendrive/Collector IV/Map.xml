@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-03-12T05:58:10</timestamp>
+        <timestamp>2020-03-21T07:42:01</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -5469,7 +5469,7 @@
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>ClickCheckBox</name>
-                        <newname>w</newname>
+                        <newname>x</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
@@ -5603,22 +5603,27 @@
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnCalibrateNumber_Click</name>
-                        <newname>t</newname>
+                        <newname>u</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnSaveCSV_Click</name>
-                        <newname>p</newname>
+                        <newname>q</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
+                        <name>btnSavePNG_Click</name>
+                        <newname>l</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnSetNumber_Click</name>
-                        <newname>s</newname>
+                        <newname>t</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>btnStartCamara_Click</name>
-                        <newname>v</newname>
+                        <newname>w</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
@@ -5628,12 +5633,12 @@
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>cbCalibrateCamera_CheckedChanged</name>
-                        <newname>u</newname>
+                        <newname>v</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>cbCalibrateNumbers_CheckedChanged</name>
-                        <newname>r</newname>
+                        <newname>s</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
@@ -5648,7 +5653,7 @@
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>comboBox1_SelectedIndexChanged</name>
-                        <newname>q</newname>
+                        <newname>r</newname>
                     </method>
                     <method>
                         <signature>void(object, Accord.Video.NewFrameEventArgs)</signature>
@@ -5688,22 +5693,22 @@
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>numUpDownGreen_ValueChanged</name>
-                        <newname>l</newname>
-                    </method>
-                    <method>
-                        <signature>void(object, System.EventArgs)</signature>
-                        <name>numUpDownRed_ValueChanged</name>
                         <newname>m</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
+                        <name>numUpDownRed_ValueChanged</name>
+                        <newname>n</newname>
+                    </method>
+                    <method>
+                        <signature>void(object, System.EventArgs)</signature>
                         <name>radioButton1_CheckedChanged</name>
-                        <newname>o</newname>
+                        <newname>p</newname>
                     </method>
                     <method>
                         <signature>void(object, System.EventArgs)</signature>
                         <name>radioButton2_CheckedChanged</name>
-                        <newname>n</newname>
+                        <newname>o</newname>
                     </method>
                     <method>
                         <signature>void(bool)</signature>
@@ -6011,6 +6016,11 @@
                         <signature>System.Windows.Forms.Button</signature>
                         <name>btnSaveCSV</name>
                         <newname>c6</newname>
+                    </field>
+                    <field>
+                        <signature>System.Windows.Forms.Button</signature>
+                        <name>btnSavePNG</name>
+                        <newname>dw</newname>
                     </field>
                     <field>
                         <signature>System.Windows.Forms.Button</signature>
@@ -6633,7 +6643,7 @@
                 <newname>e</newname>
                 <methodlist>
                     <method>
-                        <signature>void()</signature>
+                        <signature>void(System.Drawing.Point)</signature>
                         <name>.ctor</name>
                     </method>
                     <method>
@@ -6688,7 +6698,7 @@
                     <method>
                         <signature>int32(int32)</signature>
                         <name>GetNumberY</name>
-                        <newname>d</newname>
+                        <newname>c</newname>
                     </method>
                     <method>
                         <signature>int32(int32)</signature>
@@ -6703,7 +6713,7 @@
                     <method>
                         <signature>void()</signature>
                         <name>SaveCSV</name>
-                        <newname>d</newname>
+                        <newname>c</newname>
                     </method>
                     <method>
                         <signature>void(int32, int32, int32, int32, int32)</signature>
@@ -6725,42 +6735,47 @@
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_ANGLE</name>
-                        <newname>i</newname>
+                        <newname>j</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_DIST</name>
-                        <newname>h</newname>
+                        <newname>i</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
                         <name>DIFF_XY</name>
-                        <newname>j</newname>
+                        <newname>k</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
                         <name>NumbersByDistAngle</name>
-                        <newname>e</newname>
-                    </field>
-                    <field>
-                        <signature>int32[0...,0...]</signature>
-                        <name>NumbersByXY</name>
                         <newname>f</newname>
                     </field>
                     <field>
                         <signature>int32[0...,0...]</signature>
+                        <name>NumbersByXY</name>
+                        <newname>g</newname>
+                    </field>
+                    <field>
+                        <signature>int32[0...,0...]</signature>
                         <name>RouletteNumbers</name>
-                        <newname>c</newname>
+                        <newname>d</newname>
                     </field>
                     <field>
                         <signature>int32[]</signature>
                         <name>ZeroPosition</name>
-                        <newname>d</newname>
+                        <newname>e</newname>
+                    </field>
+                    <field>
+                        <signature>System.Drawing.Point</signature>
+                        <name>_centerPoint</name>
+                        <newname>c</newname>
                     </field>
                     <field>
                         <signature>float64</signature>
                         <name>radian</name>
-                        <newname>g</newname>
+                        <newname>h</newname>
                     </field>
                     <field>
                         <signature>int32</signature>
@@ -6785,11 +6800,11 @@
         </statisticline>
         <statisticline>
             <description>Total Methods</description>
-            <statistic>713</statistic>
+            <statistic>714</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields</description>
-            <statistic>492</statistic>
+            <statistic>494</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties</description>
@@ -6806,13 +6821,13 @@
         </statisticline>
         <statisticline>
             <description>Total Methods Renamed</description>
-            <statistic>164</statistic>
-            <statistic>23.00 %</statistic>
+            <statistic>165</statistic>
+            <statistic>23.11 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields Renamed</description>
-            <statistic>328</statistic>
-            <statistic>66.67 %</statistic>
+            <statistic>330</statistic>
+            <statistic>66.80 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Properties Renamed</description>
@@ -6827,17 +6842,17 @@
         <statisticline>
             <description>Methods Renamed to 'a'</description>
             <statistic>51</statistic>
-            <statistic>7.15 %</statistic>
+            <statistic>7.14 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'b'</description>
             <statistic>22</statistic>
-            <statistic>3.09 %</statistic>
+            <statistic>3.08 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'd'</description>
-            <statistic>20</statistic>
-            <statistic>2.81 %</statistic>
+            <statistic>18</statistic>
+            <statistic>2.52 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'e'</description>
@@ -6845,14 +6860,14 @@
             <statistic>1.54 %</statistic>
         </statisticline>
         <statisticline>
+            <description>Methods Renamed to 'c'</description>
+            <statistic>9</statistic>
+            <statistic>1.26 %</statistic>
+        </statisticline>
+        <statisticline>
             <description>Methods Renamed to 'f'</description>
             <statistic>8</statistic>
             <statistic>1.12 %</statistic>
-        </statisticline>
-        <statisticline>
-            <description>Methods Renamed to 'c'</description>
-            <statistic>7</statistic>
-            <statistic>0.98 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'g'</description>

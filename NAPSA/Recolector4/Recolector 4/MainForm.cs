@@ -380,7 +380,6 @@ namespace VideoRecolector
         // All the filters etc are configured here
         private void setupDetectionVariables()
         {
-            winfinder = new WinnerFinder();
 
             // Configure Zero Color Filter
             RGB zeroColor = new RGB(Byte.Parse(GetSetting("ZeroRed")),
@@ -430,7 +429,8 @@ namespace VideoRecolector
             _centerArea = new Rectangle(266, 198, 100, 100);
             _centerPoint = _centerArea.Center();
             _zeroNumberArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);
-            
+
+            winfinder = new WinnerFinder(_centerPoint);
 
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
@@ -454,7 +454,7 @@ namespace VideoRecolector
         }
 
 
-        const int CHECK_MSEC = 40; // Read hardware every 5 msec
+        const int CHECK_MSEC = 100; //40; // Read hardware every 5 msec
         const int BALL_FOUND_MSEC = 2 * 25 * CHECK_MSEC; // Stable time before registering pressed
         const int BALL_NOT_FOUND_MSEC = 4 * 25 * CHECK_MSEC; // Stable time before registering released
 
@@ -561,7 +561,7 @@ namespace VideoRecolector
                 {
                     if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
                     {
-                        winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, juego);
+                        winfinder.FindWinnerNumber(ZeroPos, _ZeroAngleToCenter, BallPos, _BallAngleToCenter, juego);
                     }
                 }
 
@@ -1109,7 +1109,8 @@ namespace VideoRecolector
         private void btnSavePNG_Click(object sender, EventArgs e)
         {
             Bitmap frame = videoSourcePlayer1.GetCurrentVideoFrame();
-            frame.Save(Common.Parametros.LogRuta + @"./frame_00.png", ImageFormat.Png);
+            int num = int.Parse(this.comboBox1.SelectedItem.ToString());
+            frame.Save(Common.Parametros.LogRuta + $"./frame_{num.ToString("D2")}.png", ImageFormat.Png);
             MessageBox.Show("PNG Guardado");
         }
 

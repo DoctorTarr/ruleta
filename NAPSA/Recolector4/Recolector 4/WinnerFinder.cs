@@ -13,14 +13,16 @@ namespace VideoRecolector
 {
     class WinnerFinder
     {
-        
-        // Winner number variables
-        int winnerDA = -1;
-        int winnerXY = -1;
 
-        public WinnerFinder()
+        // Winner number variables
+        private int winnerDA = -1;
+        private int winnerXY = -1;
+        private System.Drawing.Point _centerPoint;
+
+        public WinnerFinder(System.Drawing.Point center)
         {
             ReadNumbersTable();
+            _centerPoint = center;
         }
 
         ~WinnerFinder()
@@ -155,9 +157,10 @@ namespace VideoRecolector
             return winner;
         }
  
-        public int FindWinnerNumber(Point ZeroPosToCenter, int ZeroAngleToCenter, Point BallPosToCenter, int BallAngleToCenter, JuegoRuleta juego)
+        public int FindWinnerNumber(Point ZeroPos, int ZeroAngleToCenter, Point BallPos, int BallAngleToCenter, JuegoRuleta juego)
         {
             int winner = -1;
+            Point BallPosToCenter = new Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
 
             winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
             if (winnerXY != -1)
@@ -165,7 +168,10 @@ namespace VideoRecolector
                 juego.SetNewWinnerNumber(winnerXY);
             }
 
+            Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+
             int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
+            int DistanceZeroBall2 = FindDistance(ZeroPos, BallPos);
             int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
 
             if (CorrectedAngleToCenter < 0)
