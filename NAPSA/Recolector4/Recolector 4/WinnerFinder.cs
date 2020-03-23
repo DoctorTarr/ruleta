@@ -157,10 +157,11 @@ namespace VideoRecolector
             return winner;
         }
  
-        public int FindWinnerNumber(Point ZeroPos, int ZeroAngleToCenter, Point BallPos, int BallAngleToCenter, JuegoRuleta juego)
+        public int FindWinnerNumber(Point ZeroPos, Point BallPos, JuegoRuleta juego)
         {
             int winner = -1;
             Point BallPosToCenter = new Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
+            int BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
 
             winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
             if (winnerXY != -1)
@@ -169,9 +170,9 @@ namespace VideoRecolector
             }
 
             Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
 
-            int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
-            int DistanceZeroBall2 = FindDistance(ZeroPos, BallPos);
+            int DistanceZeroBall = FindDistance(ZeroPos, BallPos);
             int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
 
             if (CorrectedAngleToCenter < 0)
@@ -195,9 +196,15 @@ namespace VideoRecolector
             return winner;
         }
 
-        public void FindWinnerNumber(Point ZeroPosToCenter, int ZeroAngleToCenter, Point BallPosToCenter, int BallAngleToCenter, ref int winner)
+        public void FindWinnerNumber(Point ZeroPos, Point BallPos, ref int winner)
         {
+            Point BallPosToCenter = new Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
+            int BallAngleToCenter = GetAngleOfPointToZero(BallPosToCenter);
+
             winnerXY = FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
+
+            Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
 
             int DistanceZeroBall = FindDistance(ZeroPosToCenter, BallPosToCenter);
             int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
@@ -214,6 +221,17 @@ namespace VideoRecolector
             {
                 winner = winnerDA;
             }
+        }
+
+        public bool IsZeroAtNoon(Point ZeroPos)
+        {
+            bool bIsAtNoon = false;
+
+            Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+            bIsAtNoon = (ZeroAngleToCenter >= 88 && ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
+
+            return (bIsAtNoon);
         }
 
         public void SetZeroCoordinates(int x, int y, int angle)

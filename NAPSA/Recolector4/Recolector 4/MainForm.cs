@@ -58,10 +58,10 @@ namespace VideoRecolector
 
 
         // Positioning variables
-        private System.Drawing.Point ZeroPos, ZeroPosToCenter, BallPos, BallPosToCenter;
+        private System.Drawing.Point ZeroPos, BallPos;
         private int _ZeroAngleToCenter = 0;
         // Measurement variables
-        private int _DistanceZeroBall = 0, _BallAngleToCenter = 0;
+        //private int _DistanceZeroBall = 0, _BallAngleToCenter = 0;
 
         private bool bZeroFound = false;
         private bool bBallFound = false;
@@ -559,9 +559,11 @@ namespace VideoRecolector
                 DebounceBallInSlot();
                 if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS)
                 {
+                    bZeroFoundAt12 = winfinder.IsZeroAtNoon(ZeroPos);
+
                     if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
                     {
-                        winfinder.FindWinnerNumber(ZeroPos, _ZeroAngleToCenter, BallPos, _BallAngleToCenter, juego);
+                        winfinder.FindWinnerNumber(ZeroPos, BallPos, juego);
                     }
                 }
 
@@ -625,7 +627,7 @@ namespace VideoRecolector
                 DebounceBallInSlot();
                 if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
                 {
-                    winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, ref winner);
+                    winfinder.FindWinnerNumber(ZeroPos, BallPos, ref winner);
                 }
 
                 if (this.CalibrationInProgress)
@@ -653,8 +655,10 @@ namespace VideoRecolector
             int winner = -1;
             if (this.bZeroFound)
             {
+                System.Drawing.Point ZeroPosToCenter = new System.Drawing.Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
                 this.lblZeroPosX.Text = ZeroPosToCenter.X.ToString();
                 this.lblZeroPosY.Text = ZeroPosToCenter.Y.ToString();
+                _ZeroAngleToCenter = winfinder.GetAngleOfPointToZero(ZeroPosToCenter);
                 this.lblZeroPosAngle.Text = _ZeroAngleToCenter.ToString();
                 this.lblZeroAbsX.Text = ZeroPos.X.ToString();
                 this.lblZeroAbsY.Text = ZeroPos.Y.ToString();
@@ -662,19 +666,21 @@ namespace VideoRecolector
 
             if (this.bBallFound)
             {
+                System.Drawing.Point BallPosToCenter = new System.Drawing.Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
                 this.lblBolaPosX.Text = BallPosToCenter.X.ToString();
                 this.lblBolaPosY.Text = BallPosToCenter.Y.ToString();
-                this.lblBallPosAngle.Text = _BallAngleToCenter.ToString();
+                int BallAngleToCenter = winfinder.GetAngleOfPointToZero(BallPosToCenter);
+                this.lblBallPosAngle.Text = BallAngleToCenter.ToString();
                 this.lblBallAbsX.Text = BallPos.X.ToString();
                 this.lblBallAbsY.Text = BallPos.Y.ToString();
             }
 
-            if ((_ZeroAngleToCenter != 720) && (_BallAngleToCenter != 720))
+            if (this.bZeroFound && this.bBallFound)
             {
-                _DistanceZeroBall = winfinder.FindDistance(ZeroPosToCenter, BallPosToCenter);
+                int _DistanceZeroBall = winfinder.FindDistance(ZeroPos, BallPos);
                 this.lblDistZeroBall.Text = _DistanceZeroBall.ToString();
 
-                winfinder.FindWinnerNumber(ZeroPosToCenter, _ZeroAngleToCenter, BallPosToCenter, _BallAngleToCenter, ref winner);
+                winfinder.FindWinnerNumber(ZeroPos, BallPos, ref winner);
             }
 
             lblFound.Text = winner != -1 ? winner.ToString() : "---";
@@ -725,19 +731,14 @@ namespace VideoRecolector
                 {
                     Rectangle objectRect = rects[0];
                     ZeroPos = objectRect.Center();
-                    ZeroPosToCenter.X = ZeroPos.X - _centerPoint.X;
-                    ZeroPosToCenter.Y = _centerPoint.Y - ZeroPos.Y;
                     bZeroFound = true;
-                    _ZeroAngleToCenter = winfinder.GetAngleOfPointToZero(ZeroPosToCenter);
-                    bZeroFoundAt12 = (_ZeroAngleToCenter >= 88 && _ZeroAngleToCenter <= 92); //_zeroNumberArea.Contains(ZeroPos);
                     //Graphics _g = Graphics.FromImage(_colorFilterImage);
                     //Pen ballPen = new Pen(Color.FromArgb(_zeroColorFilter.CenterColor.Red, _zeroColorFilter.CenterColor.Green, _zeroColorFilter.CenterColor.Blue), 5);
                     //_g.DrawRectangle(ballPen, rects[0]);
                 }
                 else
                 {
-                    ZeroPosToCenter = System.Drawing.Point.Empty;
-                    _ZeroAngleToCenter = 720;
+                    ZeroPos = System.Drawing.Point.Empty;
                     bZeroFound = false;
                     bZeroFoundAt12 = false;
                 }
@@ -769,18 +770,15 @@ namespace VideoRecolector
                 if ((objectRect.Width >= _ballBlobCounter.MinWidth) && (objectRect.Width <= _ballBlobCounter.MaxWidth))
                 {
                     BallPos = objectRect.Center();
-                    BallPosToCenter.X = BallPos.X - _centerPoint.X;
-                    BallPosToCenter.Y = _centerPoint.Y - BallPos.Y;
                     bBallFound = true;
-                    _BallAngleToCenter = winfinder.GetAngleOfPointToZero(BallPosToCenter);
+
                     //Graphics _g = Graphics.FromImage(_colorFilterImage);
                     //Pen ballPen = new Pen(Color.FromArgb(_ballColorFilter.CenterColor.Red, _ballColorFilter.CenterColor.Green, _ballColorFilter.CenterColor.Blue), 5);
                     //_g.DrawRectangle(ballPen, rects[0]);
                 }
                 else
                 {
-                    BallPosToCenter = System.Drawing.Point.Empty;
-                    _BallAngleToCenter = 720;
+                    BallPos = System.Drawing.Point.Empty;
                     bBallFound = false;
                 }
             }
@@ -790,11 +788,10 @@ namespace VideoRecolector
 
         #endregion
 
-        #region Finding Winner Number
+        #region Calibration boolean
         public bool IsCalibratingNumbers { get => _IsCalibratingNumbers; set => _IsCalibratingNumbers = value; }
         public bool IsCalibratingCamera { get => _IsCalibratingCamera; set => _IsCalibratingCamera = value; }
         public bool LogDetectedNumbers { get => _LogDetectedNumbers; set => _LogDetectedNumbers = value; }
-
         #endregion
 
         #region Game state handling
@@ -845,16 +842,19 @@ namespace VideoRecolector
 
         private void AcumulateCalibration()
         {
-
+            System.Drawing.Point ZeroPosToCenter = new System.Drawing.Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            System.Drawing.Point BallPosToCenter = new System.Drawing.Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
             if (this.bBallFound)
             {
                 this.countCalibrationSamples++;
                 lblTestCount.Text = this.countCalibrationSamples.ToString();
 
                 countDistance++;
-                acumDist += this._DistanceZeroBall;
+                int DistanceZeroBall = winfinder.FindDistance(ZeroPosToCenter, BallPosToCenter);
+                acumDist += DistanceZeroBall;
 
-                acumAngle += this._BallAngleToCenter;
+                int BallAngleToCenter = winfinder.GetAngleOfPointToZero(BallPosToCenter);
+                acumAngle += BallAngleToCenter;
                 countAngle++;
 
                 this.countX++;
@@ -918,6 +918,7 @@ namespace VideoRecolector
                 }
 
                 // Check if X and Y values are already assigned to another number
+                System.Drawing.Point BallPosToCenter = new System.Drawing.Point(BallPos.X - _centerPoint.X, _centerPoint.Y - BallPos.Y);
                 winner = winfinder.FindNumberByXY(BallPosToCenter.X, BallPosToCenter.Y);
                 if ((winner != -1) && (winner != num))
                 {

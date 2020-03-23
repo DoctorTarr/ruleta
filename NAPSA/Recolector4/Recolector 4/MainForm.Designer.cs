@@ -501,7 +501,7 @@ namespace VideoRecolector
             this.lblBallAbsY.AutoSize = true;
             this.lblBallAbsY.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBallAbsY.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblBallAbsY.Location = new System.Drawing.Point(633, 17);
+            this.lblBallAbsY.Location = new System.Drawing.Point(628, 17);
             this.lblBallAbsY.Name = "lblBallAbsY";
             this.lblBallAbsY.Size = new System.Drawing.Size(22, 15);
             this.lblBallAbsY.TabIndex = 61;
@@ -512,7 +512,7 @@ namespace VideoRecolector
             this.lblBallAbsX.AutoSize = true;
             this.lblBallAbsX.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBallAbsX.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.lblBallAbsX.Location = new System.Drawing.Point(569, 17);
+            this.lblBallAbsX.Location = new System.Drawing.Point(564, 17);
             this.lblBallAbsX.Name = "lblBallAbsX";
             this.lblBallAbsX.Size = new System.Drawing.Size(22, 15);
             this.lblBallAbsX.TabIndex = 60;
@@ -522,7 +522,7 @@ namespace VideoRecolector
             // 
             this.label29.AutoSize = true;
             this.label29.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label29.Location = new System.Drawing.Point(599, 19);
+            this.label29.Location = new System.Drawing.Point(594, 19);
             this.label29.Name = "label29";
             this.label29.Size = new System.Drawing.Size(38, 13);
             this.label29.TabIndex = 59;
@@ -532,7 +532,7 @@ namespace VideoRecolector
             // 
             this.label30.AutoSize = true;
             this.label30.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label30.Location = new System.Drawing.Point(532, 19);
+            this.label30.Location = new System.Drawing.Point(527, 19);
             this.label30.Name = "label30";
             this.label30.Size = new System.Drawing.Size(38, 13);
             this.label30.TabIndex = 58;
