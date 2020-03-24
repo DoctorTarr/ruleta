@@ -454,9 +454,9 @@ namespace VideoRecolector
         }
 
 
-        const int CHECK_MSEC = 100; //40; // Read hardware every 5 msec
-        const int BALL_FOUND_MSEC = 2 * 25 * CHECK_MSEC; // Stable time before registering pressed
-        const int BALL_NOT_FOUND_MSEC = 4 * 25 * CHECK_MSEC; // Stable time before registering released
+        const int CHECK_MSEC = 40; // Read hardware every 5 msec
+        const int BALL_FOUND_MSEC = 2 * 12 * CHECK_MSEC; // Stable time before registering pressed
+        const int BALL_NOT_FOUND_MSEC = 4 * 12 * CHECK_MSEC; // Stable time before registering released
 
         // This function reads the key state from the hardware.
         bool RawBallFound()
@@ -494,6 +494,8 @@ namespace VideoRecolector
 
         private void CalculateRPM()
         {
+            bZeroFoundAt12 = winfinder.IsZeroAtNoon(ZeroPos);
+
             if (bZeroFoundAt12)
             {
                 this._zeroAtNoonCounter++;
@@ -559,8 +561,6 @@ namespace VideoRecolector
                 DebounceBallInSlot();
                 if (estadoMesa == JuegoRuleta.ESTADO_JUEGO.NO_MORE_BETS)
                 {
-                    bZeroFoundAt12 = winfinder.IsZeroAtNoon(ZeroPos);
-
                     if ((this.bZeroFoundAt12) && (this.bDebouncedBallFound))
                     {
                         winfinder.FindWinnerNumber(ZeroPos, BallPos, juego);
@@ -880,15 +880,15 @@ namespace VideoRecolector
 
                     if (this.bZeroFound)
                     {
-                        winfinder.SetZeroCoordinates(ZeroPosToCenter.X, ZeroPosToCenter.Y, this._ZeroAngleToCenter);
+                        winfinder.SetZeroCoordinates(ZeroPos);
                     }
-                    else
-                    {
-                        int x = Int32.Parse(lblZeroPosX.Text);
-                        int y = Int32.Parse(lblZeroPosY.Text);
-                        int angle = Int32.Parse(lblZeroPosAngle.Text);
-                        winfinder.SetZeroCoordinates(x, y, angle);
-                    }
+                    //else
+                    //{
+                    //    int x = Int32.Parse(lblZeroPosX.Text);
+                    //    int y = Int32.Parse(lblZeroPosY.Text);
+                    //    int angle = Int32.Parse(lblZeroPosAngle.Text);
+                    //    winfinder.SetZeroCoordinates(x, y, angle);
+                    //}
 
                     this.CalibrationInProgress = false;
                 }

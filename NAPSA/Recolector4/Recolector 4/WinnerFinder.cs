@@ -169,23 +169,25 @@ namespace VideoRecolector
                 juego.SetNewWinnerNumber(winnerXY);
             }
 
-            Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
-            int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+            //Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            //int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
 
-            int DistanceZeroBall = FindDistance(ZeroPos, BallPos);
-            int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
+            //int DistanceZeroBall = FindDistance(ZeroPos, BallPos);
+            //int CorrectedAngleToCenter = BallAngleToCenter + (ZeroAngleToCenter - ZeroPosition[2]);
 
-            if (CorrectedAngleToCenter < 0)
-                CorrectedAngleToCenter = 359;
+            //if (CorrectedAngleToCenter < 0)
+            //    CorrectedAngleToCenter = 359;
 
-            if (CorrectedAngleToCenter > 359)
-                CorrectedAngleToCenter = 0;
+            //if (CorrectedAngleToCenter > 359)
+            //    CorrectedAngleToCenter = 0;
 
-            winnerDA = FindNumberByAngle(DistanceZeroBall, CorrectedAngleToCenter);
-            if (winnerDA != -1)
-            {
-                juego.SetNewWinnerNumber(winnerDA);
-            }
+            //winnerDA = FindNumberByAngle(DistanceZeroBall, CorrectedAngleToCenter);
+            //if (winnerDA != -1)
+            //{
+            //    juego.SetNewWinnerNumber(winnerDA);
+            //}
+
+            winnerDA = winnerXY;
 
             if ((winnerXY != -1) && (winnerDA != -1) && (winnerXY == winnerDA))
             {
@@ -234,11 +236,16 @@ namespace VideoRecolector
             return (bIsAtNoon);
         }
 
-        public void SetZeroCoordinates(int x, int y, int angle)
+        public void SetZeroCoordinates(Point ZeroPos)
         {
-            ZeroPosition[0] = x;
-            ZeroPosition[1] = y;
-            ZeroPosition[2] = angle;
+            Point ZeroPosToCenter = new Point(ZeroPos.X - _centerPoint.X, _centerPoint.Y - ZeroPos.Y);
+            int ZeroAngleToCenter = GetAngleOfPointToZero(ZeroPosToCenter);
+            if (ZeroAngleToCenter >= 88 && ZeroAngleToCenter <= 92)
+            {
+                ZeroPosition[0] = ZeroPosToCenter.X;
+                ZeroPosition[1] = ZeroPosToCenter.Y;
+                ZeroPosition[2] = ZeroAngleToCenter;
+            }
         }
 
         public void SetNumberCoordinates(int num, int x, int y, int distance, int angle)
