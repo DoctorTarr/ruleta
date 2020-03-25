@@ -342,7 +342,7 @@ namespace VideoRecolector
 
             Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
             Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
-            Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+6);
+            Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+10);
             Pen _penred = new Pen(Color.Red, ipenWidth);
             Pen _penblue = new Pen(Color.Blue, ipenWidth);
 
@@ -423,15 +423,42 @@ namespace VideoRecolector
             Pen ballPen = new Pen(Color.FromArgb(ballColor.Red, ballColor.Green, ballColor.Blue), 5);
 
             // Base ruleta sin aro negro - radius 164 color red
-            _bowlArea = new Rectangle(160, 93, 307, 307);
-            _numbersArea = new Rectangle(214, 150, 200, 200);
-            _ballPocketsArea = new Rectangle(238, 171, 154, 154);
-            _centerArea = new Rectangle(266, 198, 100, 100);
-            _centerPoint = _centerArea.Center();
-            _zeroNumberArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);
+            // Area where the ball rolls before getting into a pocket
+            int bowlX = subtractImage.Width / 4; // 640 / 4 = 160
+            int bowlY = 90;
+            int bowlWidthHeight = 310;
+            _bowlArea = new Rectangle(bowlX, bowlY, bowlWidthHeight, bowlWidthHeight);     
+
+            int numsAreaX = bowlX + 58;                                         // 160 + 58 = 218
+            int numsAreaY = bowlY + 62;                                         // 90 + 62 = 152
+            int numsAreaWH = bowlWidthHeight - 114;                             // 310 - 114 = 196
+            // Include the ring outside the numbers
+            numsAreaX -= 10;                                                    // 218 - 10 = 208
+            numsAreaY -= 10;                                                    // 152 - 10 = 142
+            numsAreaWH += 20;                                                   // 196 + 20 = 218
+            // Area where all the numbers are
+            _numbersArea = new Rectangle(numsAreaX, numsAreaY, numsAreaWH, numsAreaWH);
+
+            // Cylinder area to detect ball presence
+            int ballPocketsX = bowlX + 78;                                      // 160 + 78 = 238
+            int ballPocketsY = bowlY + 80;                                      // 90 + 80 = 170
+            int ballPocketsWH = bowlWidthHeight - 152;                          // 310 - 152 = 158
+            _ballPocketsArea = new Rectangle(ballPocketsX, ballPocketsY, ballPocketsWH, ballPocketsWH);
+
+            // Center of the roulette area
+            int centerAreaX = bowlX + 102;                                      // 160 + 102 = 262
+            int centerAreaY = bowlY + 106;                                      //  90 + 106 = 196
+            int centerAreaWH = bowlWidthHeight - 202;                           // 310 - 202 = 108
+            _centerArea = new Rectangle(centerAreaX, centerAreaY, centerAreaWH, centerAreaWH);
+
+            _centerPoint = _centerArea.Center();                                // Center of the roulette area rectangle
+
+            _zeroNumberArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);     // Where the zero is at 12 am
 
             winfinder = new WinnerFinder(_centerPoint);
 
+            // Mask the image around the roulette to avoid false positives 
+            // substractImage masking drawing here
             using (Graphics graph = Graphics.FromImage(subtractImage))
             {
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
@@ -442,7 +469,7 @@ namespace VideoRecolector
                 //graph.DrawLine(_penwhite, _centerArea.X, _centerArea.Y, _centerArea.X + 50, _centerArea.Y + 50);
                 graph.FillEllipse(Brushes.White, _centerArea);
             }
-
+            // Required to apply filters to the full frame
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
 
             for (int i = 0; i < 37; i++)
@@ -541,20 +568,20 @@ namespace VideoRecolector
                 // Detect movement
                 this.movePercentage = detector.ProcessFrame(_BsourceFrame);
                 _isMoving = (this.movePercentage > 0.01f);
-                if (!_isMoving)
-                {
-                    this._rpmCounter = 0;
-                    this._rpm = 0;
-                }
 
                 pbZero.Image = ZeroBlobDetection(_BsourceFrame);
-                if (this._isMoving)
+                if (_isMoving)
                 {
                     if (this.bZeroFound)
                     {
                         this._zeroesCounter++;
                         CalculateRPM();
                     }
+                }
+                else
+                {
+                    this._rpmCounter = 0;
+                    this._rpm = 0;
                 }
 
                 pbBall.Image = BallBlobDetection(_BsourceFrame);
