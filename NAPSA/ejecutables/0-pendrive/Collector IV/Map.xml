@@ -2,7 +2,7 @@
 <!DOCTYPE dotfuscatorMap SYSTEM "http://www.preemptive.com/dotfuscator/dtd/dotfuscatorMap_v1.2.dtd">
 <dotfuscatorMap version="1.1">
     <header>
-        <timestamp>2020-03-25T04:37:26</timestamp>
+        <timestamp>2020-03-26T05:09:27</timestamp>
         <product version="5.44.0.10087" user="Hugo Daniel Caro" serial="296894-391">Dotfuscator Community</product>
     </header>
     <mapping>
@@ -5459,7 +5459,7 @@
                     <method>
                         <signature>void(System.Drawing.Bitmap)</signature>
                         <name>CalibrateCamera</name>
-                        <newname>f</newname>
+                        <newname>g</newname>
                     </method>
                     <method>
                         <signature>void()</signature>
@@ -5499,6 +5499,11 @@
                     <method>
                         <signature>void(bool)</signature>
                         <name>Dispose</name>
+                    </method>
+                    <method>
+                        <signature>void(System.Drawing.Bitmap)</signature>
+                        <name>DrawZeroArea</name>
+                        <newname>f</newname>
                     </method>
                     <method>
                         <signature>string(string)</signature>
@@ -6785,7 +6790,7 @@
         </statisticline>
         <statisticline>
             <description>Total Methods</description>
-            <statistic>715</statistic>
+            <statistic>716</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields</description>
@@ -6806,8 +6811,8 @@
         </statisticline>
         <statisticline>
             <description>Total Methods Renamed</description>
-            <statistic>166</statistic>
-            <statistic>23.22 %</statistic>
+            <statistic>167</statistic>
+            <statistic>23.32 %</statistic>
         </statisticline>
         <statisticline>
             <description>Total Fields Renamed</description>
@@ -6827,17 +6832,17 @@
         <statisticline>
             <description>Methods Renamed to 'a'</description>
             <statistic>50</statistic>
-            <statistic>6.99 %</statistic>
+            <statistic>6.98 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'b'</description>
             <statistic>23</statistic>
-            <statistic>3.22 %</statistic>
+            <statistic>3.21 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'd'</description>
             <statistic>18</statistic>
-            <statistic>2.52 %</statistic>
+            <statistic>2.51 %</statistic>
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'e'</description>
@@ -6856,8 +6861,8 @@
         </statisticline>
         <statisticline>
             <description>Methods Renamed to 'g'</description>
-            <statistic>5</statistic>
-            <statistic>0.70 %</statistic>
+            <statistic>6</statistic>
+            <statistic>0.84 %</statistic>
         </statisticline>
     </statistics>
 </dotfuscatorMap>

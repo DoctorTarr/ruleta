@@ -186,11 +186,13 @@ namespace VideoRecolector
                 this.GuardarEstado(estadoMesa, juego.GetLastWinnerNumber(), 0, 0);
                 IsCalibratingCamera = true;
                 this.lblFPS.Visible = true;
+                lblEventCalls.Visible = true;
                 StopCamera();
                 StartCameraCalibration();
             }
             else
             {
+                lblEventCalls.Visible = false;
                 IsCalibratingCamera = false;
                 this.pnlCalibration.Visible = false;
                 this.lblFPS.Visible = false;
@@ -340,7 +342,7 @@ namespace VideoRecolector
 
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
 
-            Pen _pengreen = new Pen(Color.LimeGreen, ipenWidth);
+            
             Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
             Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+10);
             Pen _penred = new Pen(Color.Red, ipenWidth);
@@ -354,9 +356,22 @@ namespace VideoRecolector
             // Casillas - radius 204 color blue
             _g.DrawEllipse(_penred, _ballPocketsArea);
             _g.DrawRectangle(_penred, _centerPoint.X, _centerPoint.Y, 1, 1);
-
-            _g.DrawRectangle(_pengreen, _zeroNumberArea);
+            lblEventCalls.Text = $"{_centerPoint.X},{_centerPoint.Y}";
+            DrawZeroArea(_bitmapSourceImage);
         }
+
+        private void DrawZeroArea( Bitmap _bitmapSourceImage )
+        {
+            int ipenWidth = 5;
+
+            Graphics _g = Graphics.FromImage(_bitmapSourceImage);
+            Pen _pengreen = new Pen(Color.FromArgb(Byte.Parse(GetSetting("ZeroRed")),
+                                                   Byte.Parse(GetSetting("ZeroGreen")),
+                                                   Byte.Parse(GetSetting("ZeroBlue"))), ipenWidth);
+            _g.DrawRectangle(_pengreen, _zeroNumberArea);
+
+        }
+
 
         #region app config access
         private static string GetSetting(string key)
@@ -375,12 +390,11 @@ namespace VideoRecolector
         #endregion
 
         #region Blob Detection
-
-
         // All the filters etc are configured here
         private void setupDetectionVariables()
         {
 
+            // Configure Zero Color Filter
             // Configure Zero Color Filter
             RGB zeroColor = new RGB(Byte.Parse(GetSetting("ZeroRed")),
                                     Byte.Parse(GetSetting("ZeroGreen")),
@@ -451,9 +465,13 @@ namespace VideoRecolector
             int centerAreaWH = bowlWidthHeight - 202;                           // 310 - 202 = 108
             _centerArea = new Rectangle(centerAreaX, centerAreaY, centerAreaWH, centerAreaWH);
 
-            _centerPoint = _centerArea.Center();                                // Center of the roulette area rectangle
+            _centerPoint = _bowlArea.Center(); // _centerArea.Center();                                // Center of the roulette area rectangle
 
-            _zeroNumberArea = new Rectangle(_centerPoint.X-7, 148, 14, 25);     // Where the zero is at 12 am
+            int zeroAtNoonX = bowlX + 150;                                      // 160 + 150 = 310
+            int zeroAtNoonY = bowlY + 62;                                       //  90 + 62  = 152
+            int zeroAtNoonW = 12;
+            int zeroAtNoowH = 20;
+            _zeroNumberArea = new Rectangle(zeroAtNoonX, zeroAtNoonY, zeroAtNoonW, zeroAtNoowH);     // Where the zero is at 12 am
 
             winfinder = new WinnerFinder(_centerPoint);
 
@@ -625,10 +643,17 @@ namespace VideoRecolector
                     CalibrateCamera(_BsourceFrame);
                 }
 
+                if (IsCalibratingNumbers)
+                {
+                    DrawZeroArea(_BsourceFrame);
+                }
+
                 if (this.CalibrationInProgress)
                 {
                     if (this.capturedFrame == null)
+                    {
                         this.capturedFrame = _BsourceFrame;
+                    }
 
                     _BsourceFrame = this.capturedFrame;
                 }
@@ -1138,8 +1163,9 @@ namespace VideoRecolector
         {
             Bitmap frame = videoSourcePlayer1.GetCurrentVideoFrame();
             int num = int.Parse(this.comboBox1.SelectedItem.ToString());
-            frame.Save(Common.Parametros.LogRuta + $"./frame_{num.ToString("D2")}.png", ImageFormat.Png);
-            MessageBox.Show("PNG Guardado");
+            String filename = $"./frame_{num.ToString("D2")}.png";
+            frame.Save(Common.Parametros.LogRuta + filename, ImageFormat.Png);
+            MessageBox.Show($"Captura {filename} Guardada");
         }
 
         private void numUpDownBlue_ValueChanged(object sender, EventArgs e)
