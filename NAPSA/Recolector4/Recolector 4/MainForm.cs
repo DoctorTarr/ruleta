@@ -341,7 +341,6 @@ namespace VideoRecolector
             int ipenWidth = 5;
 
             Graphics _g = Graphics.FromImage(_bitmapSourceImage);
-
             
             Pen _penyellow = new Pen(Color.Yellow, ipenWidth);
             Pen _penviolet = new Pen(Color.DarkViolet, ipenWidth+10);
@@ -463,6 +462,11 @@ namespace VideoRecolector
             int centerAreaX = bowlX + 102;                                      // 160 + 102 = 262
             int centerAreaY = bowlY + 106;                                      //  90 + 106 = 196
             int centerAreaWH = bowlWidthHeight - 202;                           // 310 - 202 = 108
+
+            // Make the center bigger
+            centerAreaX -= 6;
+            centerAreaY -= 6;
+            centerAreaWH += 12;
             _centerArea = new Rectangle(centerAreaX, centerAreaY, centerAreaWH, centerAreaWH);
 
             _centerPoint = _bowlArea.Center(); // _centerArea.Center();                                // Center of the roulette area rectangle
@@ -482,10 +486,11 @@ namespace VideoRecolector
                 Rectangle ImageSize = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
                 graph.FillRectangle(Brushes.White, ImageSize);
                 graph.FillEllipse(Brushes.Black, _bowlArea);
-                Pen _penwhite = new Pen(Color.White, 6);
-                //graph.DrawEllipse(_penwhite, _ballPocketsArea);
-                //graph.DrawLine(_penwhite, _centerArea.X, _centerArea.Y, _centerArea.X + 50, _centerArea.Y + 50);
                 graph.FillEllipse(Brushes.White, _centerArea);
+                Pen _penwhite = new Pen(Color.White, 20);
+                graph.DrawEllipse(_penwhite, _numbersArea);
+                //Pen _penwhite2 = new Pen(Color.White, 4);
+                //graph.DrawEllipse(_penwhite2, _ballPocketsArea);
             }
             // Required to apply filters to the full frame
             _frameArea = new Rectangle(0, 0, subtractImage.Width, subtractImage.Height);
